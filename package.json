@@ -1,0 +1,24 @@
+{
+  "name": "ssrg-tools-base",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.19",
+    "mysql2": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.158",
+    "@types/node": "^14.0.27",
+    "ts-node": "^8.10.2",
+    "typeorm-model-generator": "^0.4.2-no-engines",
+    "typescript": "^3.9.7"
+  }
+}
