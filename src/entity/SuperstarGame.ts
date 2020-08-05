@@ -4,36 +4,36 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { LeagueRanking } from "./LeagueRanking";
-import { LogCredits } from "./LogCredits";
-import { LogDiamonds } from "./LogDiamonds";
-import { LogDiamondsAds } from "./LogDiamondsAds";
-import { LogDrops } from "./LogDrops";
-import { Songs } from "./Songs";
-import { Themes } from "./Themes";
+} from 'typeorm';
+import { LeagueRanking } from './LeagueRanking';
+import { LogCredits } from './LogCredit';
+import { LogDiamonds } from './LogDiamond';
+import { LogDiamondsAds } from './LogDiamondAd';
+import { LogDrops } from './CardDrop';
+import { Songs } from './Song';
+import { Themes } from './Theme';
 
-@Index("guid", ["guid"], { unique: true })
-@Entity("superstar_games", { schema: "superstar_log" })
+@Index('guid', ['guid'], { unique: true })
+@Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGames {
-  @PrimaryGeneratedColumn({ type: "int", name: "id", unsigned: true })
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
-  @Column("varchar", {
-    name: "name",
+  @Column('varchar', {
+    name: 'name',
     length: 255,
-    default: () => "'SuperStar '",
+    default: () => '\'SuperStar \'',
   })
   name: string;
 
-  @Column("varchar", { name: "comment", nullable: true, length: 255 })
+  @Column('varchar', { name: 'comment', nullable: true, length: 255 })
   comment: string | null;
 
-  @Column("longtext", { name: "meta", nullable: true })
+  @Column('longtext', { name: 'meta', nullable: true })
   meta: string | null;
 
-  @Column("varchar", {
-    name: "guid",
+  @Column('varchar', {
+    name: 'guid',
     nullable: true,
     unique: true,
     length: 255,
