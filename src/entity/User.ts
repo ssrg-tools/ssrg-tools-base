@@ -50,23 +50,23 @@ export class User {
   guid: string;
 
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.user)
-  leagueRankings: LeagueRanking[] = [];
+  leagueRankings: LeagueRanking[];
 
   @OneToMany(() => LogCredits, (logCredits) => logCredits.user)
-  logCredits: LogCredits[] = [];
+  logCredits: LogCredits[];
 
   @OneToMany(() => LogDiamonds, (logDiamonds) => logDiamonds.user)
-  logDiamonds: LogDiamonds[] = [];
+  logDiamonds: LogDiamonds[];
 
   @OneToMany(() => LogDiamondsAds, (logDiamondsAds) => logDiamondsAds.user)
-  logDiamondsAds: LogDiamondsAds[] = [];
+  logDiamondsAds: LogDiamondsAds[];
 
   @OneToMany(() => LogDrops, (logDrops) => logDrops.user)
-  logDrops: LogDrops[] = [];
+  logDrops: LogDrops[];
 
   @OneToMany(() => SongClearsV2, (songClearsV2) => songClearsV2.user)
-  songClearsVs: SongClearsV2[] = [];
+  songClearsVs: SongClearsV2[];
 
   @OneToMany(() => UserCredentials, (userCredentials) => userCredentials.user)
-  userCredentials: UserCredentials[] = [];
+  userCredentials: UserCredentials[];
 }
