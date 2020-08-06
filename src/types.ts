@@ -172,3 +172,13 @@ export class Theme
         public album: string,
     ) {}
 }
+
+export class IdReference
+{
+  id: number;
+}
+
+export class GuidReference
+{
+  guid: string;
+}
