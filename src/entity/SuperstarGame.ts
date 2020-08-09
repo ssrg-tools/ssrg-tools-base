@@ -32,8 +32,15 @@ export class SuperstarGames {
   @Column('longtext', { name: 'meta', nullable: true })
   meta: string | null;
 
-  @Column('varchar', {
-    name: 'guid',
+  @Column("smallint", {
+    name: "max_r_level",
+    nullable: true,
+    unsigned: true,
+  })
+  maxRLevel: string | null;
+
+  @Column("varchar", {
+    name: "guid",
     nullable: true,
     unique: true,
     length: 255,
