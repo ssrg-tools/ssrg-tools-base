@@ -11,7 +11,7 @@ import { Song } from './Song';
 import { Division } from './Division';
 import { User } from './User';
 import { SongClearCard } from './SongClearCard';
-import { SqlBool } from 'src/types';
+import { SqlBool } from '../types';
 
 @Index(['guid'], { unique: true })
 @Index(['songId'], {})
