@@ -6,17 +6,18 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SongClearsV2 } from './SongClear';
-import { Themes } from './Theme';
+import { SongClear } from './SongClear';
+import { Theme } from './Theme';
+import { Grade, MembersGFriend } from './../types';
 
-@Index('song_clear_id_member', ['songClearId', 'member'], { unique: true })
-@Index('song_clear_id_rotation_order', ['songClearId', 'rotationOrder'], {
+@Index(['songClearId', 'member'], { unique: true })
+@Index(['songClearId', 'rotationOrder'], {
   unique: true,
 })
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_song_clear_cards_themes', ['themeId'], {})
+@Index(['guid'], { unique: true })
+@Index(['themeId'], {})
 @Entity('song_clear_cards', { schema: 'superstar_log' })
-export class SongClearCards {
+export class SongClearCard {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -32,9 +33,9 @@ export class SongClearCards {
 
   @Column('enum', {
     name: 'member',
-    enum: ['Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji'],
+    enum: MembersGFriend.values,
   })
-  member: 'Sowon' | 'Yerin' | 'Eunha' | 'Yuju' | 'SinB' | 'Umji';
+  member: typeof MembersGFriend.type;
 
   @Column('int', { name: 'score', unsigned: true })
   score: number;
@@ -45,19 +46,19 @@ export class SongClearCards {
   @Column('enum', {
     name: 'grade',
     enum: ['None', 'C', 'B', 'A', 'S', 'R'],
-    default: () => '\'S\'',
+    default: '\'S\'',
   })
-  grade: 'None' | 'C' | 'B' | 'A' | 'S' | 'R';
+  grade: Grade;
 
   @Column('smallint', {
     name: 'level',
     nullable: true,
     unsigned: true,
-    default: () => '\'1\'',
+    default: 1,
   })
   level: number | null;
 
-  @Column('tinyint', { name: 'is_prism', unsigned: true, default: () => '\'0\'' })
+  @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
   isPrism: number;
 
   @Column('varchar', {
@@ -69,17 +70,17 @@ export class SongClearCards {
   guid: string | null;
 
   @ManyToOne(
-    () => SongClearsV2,
+    () => SongClear,
     (songClearsV2) => songClearsV2.songClearCards,
     { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
   )
   @JoinColumn([{ name: 'song_clear_id', referencedColumnName: 'id' }])
-  songClear: SongClearsV2;
+  songClear: SongClear;
 
-  @ManyToOne(() => Themes, (themes) => themes.songClearCards, {
+  @ManyToOne(() => Theme, (themes) => themes.songClearCards, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
-  theme: Themes;
+  theme: Theme;
 }

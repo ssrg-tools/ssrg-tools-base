@@ -6,14 +6,14 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGames } from './SuperstarGame';
+import { SuperstarGame } from './SuperstarGame';
 import { User } from './User';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_log_credits_users', ['userId'], {})
-@Index('FK_log_credits_superstar_games', ['gameId'], {})
+@Index(['guid'], { unique: true })
+@Index(['userId'], {})
+@Index(['gameId'], {})
 @Entity('log_credits', { schema: 'superstar_log' })
-export class LogCredits {
+export class LogCredit {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -38,11 +38,11 @@ export class LogCredits {
   @Column('int', {
     name: 'user_id',
     unsigned: true,
-    default: () => '\'20150115\'',
+    default: 20150115,
   })
   userId: number;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: () => '\'1\'' })
+  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
 
   @Column('varchar', {
@@ -54,12 +54,12 @@ export class LogCredits {
   guid: string | null;
 
   @ManyToOne(
-    () => SuperstarGames,
+    () => SuperstarGame,
     (superstarGames) => superstarGames.logCredits,
     { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
   )
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGames;
+  game: SuperstarGame;
 
   @ManyToOne(() => User, (users) => users.logCredits, {
     onDelete: 'RESTRICT',

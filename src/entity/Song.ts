@@ -7,13 +7,14 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGames } from './SuperstarGame';
-import { SongClearsV2 } from './SongClear';
+import { SuperstarGame } from './SuperstarGame';
+import { SongClear } from './SongClear';
+import { SongByDifficulty } from './SongByDifficulty';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_songs_superstar_games', ['gameId'], {})
+@Index(['guid'], { unique: true })
+@Index(['gameId'], {})
 @Entity('songs', { schema: 'superstar_log' })
-export class Songs {
+export class Song {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -40,7 +41,7 @@ export class Songs {
   })
   lengthNominal: string | null;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: () => '\'1\'' })
+  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
 
   @Column('varchar', {
@@ -51,13 +52,50 @@ export class Songs {
   })
   guid: string | null;
 
-  @ManyToOne(() => SuperstarGames, (superstarGames) => superstarGames.songs, {
+  @Column('varchar', {
+    name: 'dalcom_song_id',
+    comment: 'game internal song id',
+    unique: true,
+    length: 255,
+    default: '\'\'',
+  })
+  internalSongId: string;
+
+  @Column('varchar', {
+    name: 'dalcom_song_filename',
+    comment: 'game internal song filename',
+    unique: true,
+    length: 255,
+    default: '\'\'',
+  })
+  songFilename: string;
+
+  @Column('varchar', {
+    name: 'beatmap_fingerprint',
+    comment: 'game internal song filename',
+    unique: true,
+    length: 255,
+    default: '\'\'',
+  })
+  beatmapFingerprint: string;
+
+  @Column('datetime', {
+    name: 'beatmap_date_processed',
+    comment: 'date when the beatmaps had been processed',
+    nullable: true,
+  })
+  beatmapDateProcessed: Date;
+
+  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.songs, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGames;
+  game: SuperstarGame;
 
-  @OneToMany(() => SongClearsV2, (songClearsV2) => songClearsV2.song)
-  songClearsVs: SongClearsV2[];
+  @OneToMany(() => SongByDifficulty, (songByDifficulty) => songByDifficulty.song)
+  byDifficulties: SongByDifficulty[];
+
+  @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.song)
+  songClearsVs: SongClear[];
 }

@@ -6,23 +6,23 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
-import { LogCredits } from './LogCredit';
-import { LogDiamonds } from './LogDiamond';
-import { LogDiamondsAds } from './LogDiamondAd';
-import { LogDrops } from './CardDrop';
-import { Songs } from './Song';
-import { Themes } from './Theme';
+import { LogCredit } from './LogCredit';
+import { LogDiamond } from './LogDiamond';
+import { LogDiamondAd } from './LogDiamondAd';
+import { CardDrop } from './CardDrop';
+import { Song } from './Song';
+import { Theme } from './Theme';
 
-@Index('guid', ['guid'], { unique: true })
+@Index(['guid'], { unique: true })
 @Entity('superstar_games', { schema: 'superstar_log' })
-export class SuperstarGames {
+export class SuperstarGame {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
   @Column('varchar', {
     name: 'name',
     length: 255,
-    default: () => '\'SuperStar \'',
+    default: 'SuperStar ',
   })
   name: string;
 
@@ -32,15 +32,16 @@ export class SuperstarGames {
   @Column('longtext', { name: 'meta', nullable: true })
   meta: string | null;
 
-  @Column("smallint", {
-    name: "max_r_level",
+  @Column('smallint', {
+    name: 'max_r_level',
     nullable: true,
     unsigned: true,
+    default: 50,
   })
   maxRLevel: string | null;
 
-  @Column("varchar", {
-    name: "guid",
+  @Column('varchar', {
+    name: 'guid',
     nullable: true,
     unique: true,
     length: 255,
@@ -50,21 +51,21 @@ export class SuperstarGames {
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.game)
   leagueRankings: LeagueRanking[];
 
-  @OneToMany(() => LogCredits, (logCredits) => logCredits.game)
-  logCredits: LogCredits[];
+  @OneToMany(() => LogCredit, (logCredits) => logCredits.game)
+  logCredits: LogCredit[];
 
-  @OneToMany(() => LogDiamonds, (logDiamonds) => logDiamonds.game)
-  logDiamonds: LogDiamonds[];
+  @OneToMany(() => LogDiamond, (logDiamonds) => logDiamonds.game)
+  logDiamonds: LogDiamond[];
 
-  @OneToMany(() => LogDiamondsAds, (logDiamondsAds) => logDiamondsAds.game)
-  logDiamondsAds: LogDiamondsAds[];
+  @OneToMany(() => LogDiamondAd, (logDiamondsAds) => logDiamondsAds.game)
+  logDiamondsAds: LogDiamondAd[];
 
-  @OneToMany(() => LogDrops, (logDrops) => logDrops.game)
-  logDrops: LogDrops[];
+  @OneToMany(() => CardDrop, (logDrops) => logDrops.game)
+  logDrops: CardDrop[];
 
-  @OneToMany(() => Songs, (songs) => songs.game)
-  songs: Songs[];
+  @OneToMany(() => Song, (songs) => songs.game)
+  songs: Song[];
 
-  @OneToMany(() => Themes, (themes) => themes.game)
-  themes: Themes[];
+  @OneToMany(() => Theme, (themes) => themes.game)
+  themes: Theme[];
 }

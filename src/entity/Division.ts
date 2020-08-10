@@ -6,25 +6,25 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
-import { SongClearsV2 } from './SongClear';
+import { SongClear } from './SongClear';
 
-@Index('guid', ['guid'], { unique: true })
+@Index(['guid'], { unique: true })
 @Entity('divisions', { schema: 'superstar_log' })
-export class Divisions {
+export class Division {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
-  @Column('enum', { name: 'group', enum: ['Bronze', 'Silver', 'Gold'] })
-  group: 'Bronze' | 'Silver' | 'Gold';
+  @Column('enum', { name: 'group', enum: ['Bronze', 'Silver', 'Gold', 'Platinum'] })
+  group: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
 
   @Column('varchar', { name: 'name', length: 255 })
   name: string;
 
   @Column('decimal', {
     name: 'rp_bonus',
-    precision: 1,
+    precision: 2,
     scale: 1,
-    default: () => '\'0.0\'',
+    default: 0.0,
   })
   rpBonus: string;
 
@@ -49,6 +49,6 @@ export class Divisions {
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.division)
   leagueRankings: LeagueRanking[];
 
-  @OneToMany(() => SongClearsV2, (songClearsV2) => songClearsV2.division)
-  songClearsVs: SongClearsV2[];
+  @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.division)
+  songClearsVs: SongClear[];
 }

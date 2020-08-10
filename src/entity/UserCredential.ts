@@ -8,18 +8,18 @@ import {
 } from 'typeorm';
 import { User } from './User';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_user_credentials_users', ['userId'], {})
+@Index(['guid'], { unique: true })
+@Index(['userId'], {})
 @Entity('user_credentials', { schema: 'superstar_log' })
-export class UserCredentials {
+export class UserCredential {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
   @Column('int', { name: 'user_id', unsigned: true })
   userId: number;
 
-  @Column('varbinary', { name: 'guid', unique: true, length: 255 })
-  guid: Buffer;
+  @Column('varchar', { name: 'guid', unique: true, length: 255 })
+  guid: string;
 
   @Column('varchar', { name: 'type', length: 255 })
   type: string;

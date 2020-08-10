@@ -6,17 +6,17 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGames } from './SuperstarGame';
-import { Themes } from './Theme';
+import { SuperstarGame } from './SuperstarGame';
+import { Theme } from './Theme';
 import { User } from './User';
-import { GradeNonEmpty } from '../types';
+import { GradeNonEmpty, MembersGFriend, SqlBool } from '../types';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_log_drops_themes', ['themeId'], {})
-@Index('FK_log_drops_users', ['userId'], {})
-@Index('FK_log_drops_superstar_games', ['gameId'], {})
+@Index(['guid'], { unique: true })
+@Index(['themeId'], {})
+@Index(['userId'], {})
+@Index(['gameId'], {})
 @Entity('log_drops', { schema: 'superstar_log' })
-export class LogDrops {
+export class CardDrop {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -44,24 +44,24 @@ export class LogDrops {
 
   @Column('enum', {
     name: 'member',
-    enum: ['Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji', 'Power Up'],
+    enum: [...MembersGFriend.values, 'Power Up'],
   })
-  member: 'Sowon' | 'Yerin' | 'Eunha' | 'Yuju' | 'SinB' | 'Umji' | 'Power Up';
+  member: typeof MembersGFriend.type | 'Power Up';
 
   @Column('int', { name: 'theme_id', nullable: true, unsigned: true })
   themeId: number | null;
 
   @Column('enum', {
     name: 'grade',
-    enum: ['C', 'B', 'A', 'S', 'R', '30%', '100%'],
+    enum: [...GradeNonEmpty.values, '30%', '100%'],
   })
-  grade: GradeNonEmpty | "30%" | "100%";
+  grade: GradeNonEmpty | '30%' | '100%';
 
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column('tinyint', { name: 'is_prism', unsigned: true, default: () => '\'0\'' })
-  isPrism: number;
+  @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
+  isPrism: SqlBool;
 
   @Column('text', { name: 'comment', nullable: true })
   comment: string | null;
@@ -69,11 +69,11 @@ export class LogDrops {
   @Column('int', {
     name: 'user_id',
     unsigned: true,
-    default: () => '\'20150115\'',
+    default: 20150115,
   })
   userId: number;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: () => '\'1\'' })
+  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
 
   @Column('varchar', {
@@ -85,19 +85,19 @@ export class LogDrops {
   guid: string | null;
 
   @ManyToOne(
-    () => SuperstarGames,
+    () => SuperstarGame,
     (superstarGames) => superstarGames.logDrops,
     { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
   )
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGames;
+  game: SuperstarGame;
 
-  @ManyToOne(() => Themes, (themes) => themes.logDrops, {
+  @ManyToOne(() => Theme, (themes) => themes.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
-  theme: Themes;
+  theme: Theme;
 
   @ManyToOne(() => User, (users) => users.logDrops, {
     onDelete: 'RESTRICT',

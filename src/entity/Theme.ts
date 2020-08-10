@@ -7,14 +7,14 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { LogDrops } from './CardDrop';
-import { SongClearCards } from './SongClearCard';
-import { SuperstarGames } from './SuperstarGame';
+import { CardDrop } from './CardDrop';
+import { SongClearCard } from './SongClearCard';
+import { SuperstarGame } from './SuperstarGame';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK_themes_superstar_games', ['gameId'], {})
+@Index(['guid'], { unique: true })
+@Index(['gameId'], {})
 @Entity('themes', { schema: 'superstar_log' })
-export class Themes {
+export class Theme {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -24,7 +24,7 @@ export class Themes {
   @Column('varchar', { name: 'album', length: 255 })
   album: string;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: () => '\'1\'' })
+  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
 
   @Column('varchar', {
@@ -35,16 +35,16 @@ export class Themes {
   })
   guid: string | null;
 
-  @OneToMany(() => LogDrops, (logDrops) => logDrops.theme)
-  logDrops: LogDrops[];
+  @OneToMany(() => CardDrop, (logDrops) => logDrops.theme)
+  logDrops: CardDrop[];
 
-  @OneToMany(() => SongClearCards, (songClearCards) => songClearCards.theme)
-  songClearCards: SongClearCards[];
+  @OneToMany(() => SongClearCard, (songClearCards) => songClearCards.theme)
+  songClearCards: SongClearCard[];
 
-  @ManyToOne(() => SuperstarGames, (superstarGames) => superstarGames.themes, {
+  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.themes, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGames;
+  game: SuperstarGame;
 }

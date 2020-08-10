@@ -1,8 +1,17 @@
+import { StringUnion } from './string-union';
 
-export type GradeNonEmpty = 'C' | 'B' | 'A' | 'S' | 'R';
-export type Grade = 'None' | GradeNonEmpty;
+export const GradeNonEmpty = StringUnion('C', 'B', 'A', 'S', 'R');
+export type GradeNonEmpty = typeof GradeNonEmpty.type;
+export const Grade = StringUnion('None', ...GradeNonEmpty.values);
+export type Grade = typeof Grade.type;
 
 export type CardSystem = 50 | 99;
+
+
+export type SqlBool = 0 | 1;
+
+export const MembersGFriend = StringUnion('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji');
+export type MembersGFriend = typeof MembersGFriend.type;
 
 export class Card
 {

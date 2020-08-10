@@ -7,17 +7,18 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Songs } from './Song';
-import { Divisions } from './Division';
+import { Song } from './Song';
+import { Division } from './Division';
 import { User } from './User';
-import { SongClearCards } from './SongClearCard';
+import { SongClearCard } from './SongClearCard';
+import { SqlBool } from 'src/types';
 
-@Index('guid', ['guid'], { unique: true })
-@Index('FK__songs', ['songId'], {})
-@Index('FK_song_clears_v2_divisions', ['divisionId'], {})
-@Index('FK_song_clears_v2_users', ['userId'], {})
+@Index(['guid'], { unique: true })
+@Index(['songId'], {})
+@Index(['divisionId'], {})
+@Index(['userId'], {})
 @Entity('song_clears_v2', { schema: 'superstar_log' })
-export class SongClearsV2 {
+export class SongClear {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -58,13 +59,13 @@ export class SongClearsV2 {
   @Column('int', { name: 'score_bonus', nullable: true, unsigned: true })
   scoreBonus: number | null;
 
-  @Column('int', { name: 'stars', unsigned: true, default: () => '\'3\'' })
+  @Column('int', { name: 'stars', unsigned: true, default: 3 })
   stars: number;
 
   @Column('enum', {
     name: 'difficulty',
     enum: ['Easy', 'Normal', 'Hard'],
-    default: () => '\'Normal\'',
+    default: '\'Normal\'',
   })
   difficulty: 'Easy' | 'Normal' | 'Hard';
 
@@ -78,7 +79,7 @@ export class SongClearsV2 {
     name: 'hit_good',
     nullable: true,
     unsigned: true,
-    default: () => '\'0\'',
+    default: 0,
   })
   hitGood: number | null;
 
@@ -86,85 +87,91 @@ export class SongClearsV2 {
     name: 'hit_miss',
     nullable: true,
     unsigned: true,
-    default: () => '\'0\'',
+    default: 0,
   })
   hitMiss: number | null;
 
-  @Column('int', { name: 'hit_score', nullable: true, unsigned: true })
+  @Column({
+    type: 'int',
+    unsigned: false,
+    name: 'hit_score',
+    generatedType: 'VIRTUAL',
+    asExpression: '2 * `hit_super_perfect` + 1 * `hit_perfect` + 0.5 * `hit_good` + -10 * `hit_miss`',
+  })
   hitScore: number | null;
 
-  @Column('int', { name: 'theme_level', unsigned: true, default: () => '\'3\'' })
+  @Column('int', { name: 'theme_level', unsigned: true, default: 3 })
   themeLevel: number;
 
   @Column('tinyint', {
     name: 'is_challenge',
     unsigned: true,
-    default: () => '\'0\'',
+    default: 0,
   })
-  isChallenge: number;
+  isChallenge: SqlBool;
 
   @Column('tinyint', {
     name: 'has_bonus',
     unsigned: true,
-    default: () => '\'0\'',
+    default: 0,
   })
-  hasBonus: number;
+  hasBonus: SqlBool;
 
   @Column('tinyint', {
     name: 'watched_ads',
     unsigned: true,
-    default: () => '\'1\'',
+    default: 1,
   })
-  watchedAds: number;
+  watchedAds: SqlBool;
 
   @Column('int', {
     name: 'theme_buff_bonus',
     unsigned: true,
-    default: () => '\'5000\'',
+    default: 5000,
   })
   themeBuffBonus: number;
 
   @Column('int', {
     name: 'score_theme_grade_bonus',
     unsigned: true,
-    default: () => '\'545000\'',
+    default: 545000,
   })
   scoreThemeGradeBonus: number;
 
-  @Column('int', { name: 'division_id', unsigned: true, default: () => '\'5\'' })
+  @Column('int', { name: 'division_id', unsigned: true, default: 5 })
   divisionId: number;
 
   @Column('int', {
     name: 'user_id',
     unsigned: true,
-    default: () => '\'20150115\'',
+    default: 20150115,
   })
   userId: number;
 
-  @Column('longtext', { name: 'meta', default: () => '\'{}\'' })
+  @Column('longtext', { name: 'meta', default: '\'{}\'' })
   meta: string;
 
-  @Column('varbinary', {
+  @Column('varchar', {
     name: 'guid',
     nullable: true,
     unique: true,
     length: 255,
   })
-  guid: Buffer | null;
+  guid?: string;
 
-  @ManyToOne(() => Songs, (songs) => songs.songClearsVs, {
+  @ManyToOne(() => Song, (songs) => songs.songClearsVs, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
-  song: Songs;
+  song: Song;
 
-  @ManyToOne(() => Divisions, (divisions) => divisions.songClearsVs, {
+  @ManyToOne(() => Division, (divisions) => divisions.songClearsVs, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'division_id', referencedColumnName: 'id' }])
-  division: Divisions;
+  division: Division;
 
   @ManyToOne(() => User, (users) => users.songClearsVs, {
     onDelete: 'RESTRICT',
@@ -173,6 +180,6 @@ export class SongClearsV2 {
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => SongClearCards, (songClearCards) => songClearCards.songClear)
-  songClearCards: SongClearCards[];
+  @OneToMany(() => SongClearCard, (songClearCard) => songClearCard.songClear)
+  songClearCards: SongClearCard[];
 }
