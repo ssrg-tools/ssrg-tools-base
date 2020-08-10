@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { SongClear } from './SongClear';
-import { SongByDifficulty } from './SongByDifficulty';
+import { SongBeatmap } from './SongBeatmap';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
@@ -37,9 +37,18 @@ export class Song {
     nullable: true,
     comment: 'length in (fractions of) minutes',
     precision: 10,
-    scale: 3,
+    scale: 6,
   })
   lengthNominal: string | null;
+
+  @Column('decimal', {
+    name: 'length_seconds',
+    nullable: true,
+    comment: 'length in seconds',
+    precision: 10,
+    scale: 3,
+  })
+  lengthSeconds: string | null;
 
   @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
@@ -57,7 +66,8 @@ export class Song {
     comment: 'game internal song id',
     unique: true,
     length: 255,
-    default: '\'\'',
+    nullable: true,
+    default: null,
   })
   internalSongId: string;
 
@@ -66,7 +76,8 @@ export class Song {
     comment: 'game internal song filename',
     unique: true,
     length: 255,
-    default: '\'\'',
+    nullable: true,
+    default: null,
   })
   songFilename: string;
 
@@ -75,7 +86,8 @@ export class Song {
     comment: 'game internal song filename',
     unique: true,
     length: 255,
-    default: '\'\'',
+    nullable: true,
+    default: null,
   })
   beatmapFingerprint: string;
 
@@ -93,8 +105,8 @@ export class Song {
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => SongByDifficulty, (songByDifficulty) => songByDifficulty.song)
-  byDifficulties: SongByDifficulty[];
+  @OneToMany(() => SongBeatmap, (songByDifficulty) => songByDifficulty.song)
+  beatmaps: SongBeatmap[];
 
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.song)
   songClearsVs: SongClear[];

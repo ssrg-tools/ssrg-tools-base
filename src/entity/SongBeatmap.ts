@@ -3,8 +3,8 @@ import { Song } from './Song';
 
 @Index(['guid'], { unique: true })
 @Index(['songId'], {})
-@Entity('songs_by_difficulty', { schema: 'superstar_log' })
-export class SongByDifficulty {
+@Entity('song_beatmaps', { schema: 'superstar_log' })
+export class SongBeatmap {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
@@ -22,6 +22,12 @@ export class SongByDifficulty {
 
   @Column('varchar', { name: 'dalcom_beatmap_fingerprint', length: 255 })
   beatmapFingerprint: string;
+
+  @Column('int', { name: 'index_beat_max', unsigned: true, })
+  indexBeatMax: number;
+
+  @Column('int', { name: 'index_beat_min', unsigned: true, })
+  indexBeatMin: number;
 
   @Column('int', { name: 'count_notes_total', unsigned: true, })
   countNotesTotal: number;
@@ -56,7 +62,7 @@ export class SongByDifficulty {
   })
   guid: string | null;
 
-  @ManyToOne(() => Song, (songs) => songs.byDifficulties, {
+  @ManyToOne(() => Song, (songs) => songs.beatmaps, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

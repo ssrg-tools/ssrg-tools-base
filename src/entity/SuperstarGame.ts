@@ -26,12 +26,6 @@ export class SuperstarGame {
   })
   name: string;
 
-  @Column('varchar', { name: 'comment', nullable: true, length: 255 })
-  comment: string | null;
-
-  @Column('longtext', { name: 'meta', nullable: true })
-  meta: string | null;
-
   @Column('smallint', {
     name: 'max_r_level',
     nullable: true,
@@ -39,6 +33,20 @@ export class SuperstarGame {
     default: 50,
   })
   maxRLevel: string | null;
+
+  @Column('varchar', {
+    name: 'key',
+    length: 50,
+    nullable: true,
+    comment: 'used for urls and internal tools',
+  })
+  key: string;
+
+  @Column('varchar', { name: 'comment', nullable: true, length: 255 })
+  comment: string | null;
+
+  @Column('longtext', { name: 'meta', nullable: true })
+  meta: string | null;
 
   @Column('varchar', {
     name: 'guid',
