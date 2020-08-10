@@ -1,25 +1,23 @@
+module.exports = (() => {
+  const _ = require('lodash');
 
-// import _ from 'lodash';
-
-const _ =  require('lodash');
-
-
-module.exports = _.extend({
-  type: 'mysql',
-  synchronize: false,
-  logging: false,
-  entities: [
-    'src/entity/**/*.ts'
-  ],
-  migrations: [
-    'src/migration/**/*.ts'
-  ],
-  subscribers: [
-    'src/subscriber/**/*.ts'
-  ],
-  cli: {
-    entitiesDir: 'src/entity',
-    migrationsDir: 'src/migration',
-    subscribersDir: 'src/subscriber'
-  }
-}, require('./config.database.json'));
+  return _.extend({
+    type: 'mysql',
+    synchronize: false,
+    logging: false,
+    entities: [
+      'src/entity/**/*.ts'
+    ],
+    migrations: [
+      'src/migration/**/*.ts'
+    ],
+    subscribers: [
+      'src/subscriber/**/*.ts'
+    ],
+    cli: {
+      entitiesDir: 'src/entity',
+      migrationsDir: 'src/migration',
+      subscribersDir: 'src/subscriber'
+    }
+  }, require('./config.database.json'));
+})();
