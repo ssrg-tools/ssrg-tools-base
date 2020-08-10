@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { SongClear } from './SongClear';
 import { Theme } from './Theme';
-import { Grade, MembersGFriend } from './../types';
+import { Grade, MembersGFriend, SqlBool } from './../types';
 
 @Index(['songClearId', 'member'], { unique: true })
 @Index(['songClearId', 'rotationOrder'], {
@@ -59,7 +59,7 @@ export class SongClearCard {
   level: number | null;
 
   @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
-  isPrism: number;
+  isPrism: SqlBool;
 
   @Column('varchar', {
     name: 'guid',

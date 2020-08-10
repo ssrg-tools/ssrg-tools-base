@@ -12,7 +12,7 @@ import { LogDiamondAd } from './LogDiamondAd';
 import { CardDrop } from './CardDrop';
 import { SongClear } from './SongClear';
 import { UserCredential } from './UserCredential';
-import { SqlBool } from 'src/types';
+import { SqlBool } from '../types';
 
 @Index(['username'], { unique: true })
 @Index(['id'], { unique: true })
