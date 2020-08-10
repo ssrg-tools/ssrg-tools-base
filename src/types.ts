@@ -1,5 +1,6 @@
 
-export type Grade = 'None' | 'C' | 'B' | 'A' | 'S' | 'R';
+export type GradeNonEmpty = 'C' | 'B' | 'A' | 'S' | 'R';
+export type Grade = 'None' | GradeNonEmpty;
 
 export type CardSystem = 50 | 99;
 

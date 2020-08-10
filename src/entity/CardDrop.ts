@@ -9,6 +9,7 @@ import {
 import { SuperstarGames } from './SuperstarGame';
 import { Themes } from './Theme';
 import { User } from './User';
+import { GradeNonEmpty } from '../types';
 
 @Index('guid', ['guid'], { unique: true })
 @Index('FK_log_drops_themes', ['themeId'], {})
@@ -54,7 +55,7 @@ export class LogDrops {
     name: 'grade',
     enum: ['C', 'B', 'A', 'S', 'R', '30%', '100%'],
   })
-  grade: 'C' | 'B' | 'A' | 'S' | 'R' | '30%' | '100%';
+  grade: GradeNonEmpty | "30%" | "100%";
 
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
