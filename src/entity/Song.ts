@@ -32,12 +32,14 @@ export class Song {
   })
   lengthDisplay: string | null;
 
+  /** deprecated */
   @Column('decimal', {
     name: 'length_nominal',
     nullable: true,
     comment: 'length in (fractions of) minutes',
     precision: 10,
     scale: 6,
+    select: false,
   })
   lengthNominal: string | null;
 
@@ -78,6 +80,7 @@ export class Song {
     length: 255,
     nullable: true,
     default: null,
+    select: false,
   })
   songFilename: string;
 
@@ -88,6 +91,7 @@ export class Song {
     length: 255,
     nullable: true,
     default: null,
+    select: false,
   })
   beatmapFingerprint: string;
 
@@ -95,6 +99,7 @@ export class Song {
     name: 'beatmap_date_processed',
     comment: 'date when the beatmaps had been processed',
     nullable: true,
+    select: false,
   })
   beatmapDateProcessed: Date;
 
