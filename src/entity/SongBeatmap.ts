@@ -8,20 +8,14 @@ export class SongBeatmap {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
+  @Column('int', { name: 'song_id', unsigned: true })
+  songId: number;
+
   @Column('varchar', { name: 'difficulty', length: 255 })
   difficulty: string;
 
-  @Column('smallint', {
-    name: 'difficulty_id',
-    unsigned: true,
-  })
-  difficultyId: string;
-
   @Column('varchar', { name: 'dalcom_beatmap_filename', length: 255 })
   beatmapFilename: string;
-
-  @Column('varchar', { name: 'dalcom_beatmap_fingerprint', length: 255 })
-  beatmapFingerprint: string;
 
   @Column('int', { name: 'index_beat_max', unsigned: true, })
   indexBeatMax: number;
@@ -51,8 +45,14 @@ export class SongBeatmap {
   })
   beatmapDateProcessed: Date;
 
-  @Column('int', { name: 'song_id', unsigned: true })
-  songId: number;
+  @Column('smallint', {
+    name: 'difficulty_id',
+    unsigned: true,
+  })
+  difficultyId: string;
+
+  @Column('varchar', { name: 'dalcom_beatmap_fingerprint', length: 255 })
+  beatmapFingerprint: string;
 
   @Column('varchar', {
     name: 'guid',

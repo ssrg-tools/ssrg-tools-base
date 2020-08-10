@@ -6,10 +6,9 @@ export class SongBeatmapInfo1597072188176 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`CREATE TABLE \`song_beatmaps\` (
       \`id\` int UNSIGNED NOT NULL AUTO_INCREMENT,
+      \`song_id\` int UNSIGNED NOT NULL,
       \`difficulty\` varchar(255) NOT NULL,
-      \`difficulty_id\` smallint UNSIGNED NOT NULL,
       \`dalcom_beatmap_filename\` varchar(255) NOT NULL,
-      \`dalcom_beatmap_fingerprint\` varchar(255) NOT NULL,
       \`index_beat_min\` int UNSIGNED NOT NULL,
       \`index_beat_max\` int UNSIGNED NOT NULL,
       \`count_notes_total\` int UNSIGNED NOT NULL,
@@ -18,7 +17,8 @@ export class SongBeatmapInfo1597072188176 implements MigrationInterface {
       \`count_sliders_nocombo\` int UNSIGNED NOT NULL,
       \`count_sliders_total\` int UNSIGNED NOT NULL,
       \`beatmap_date_processed\` datetime NOT NULL COMMENT 'date when the beatmap has been processed' DEFAULT CURRENT_TIMESTAMP,
-      \`song_id\` int UNSIGNED NOT NULL,
+      \`difficulty_id\` smallint UNSIGNED NOT NULL,
+      \`dalcom_beatmap_fingerprint\` varchar(255) NOT NULL,
       \`guid\` varchar(255) NULL,
       INDEX \`IDX_c8d12ea5178e0709deb03433d8\` (\`song_id\`),
       UNIQUE INDEX \`IDX_83862467ad0a3afd66f49af374\` (\`guid\`),
