@@ -118,7 +118,8 @@ export class SyncWithTypeORM1597024245848 implements MigrationInterface {
     await queryRunner.query('ALTER TABLE `league_ranking` CHANGE `comment` `comment` varchar(255) NULL');
     await queryRunner.query('ALTER TABLE `league_ranking` CHANGE `meta` `meta` longtext NULL');
     await queryRunner.query('ALTER TABLE `league_ranking` CHANGE `guid` `guid` varchar(255) NULL');
-    await queryRunner.query('ALTER TABLE `divisions` CHANGE `group` `group` enum (\'Bronze\', \'Silver\', \'Gold\', \'Platinum\') NOT NULL');
+    await queryRunner.query('ALTER TABLE `divisions` CHANGE `group` `group` enum '
+      + '(\'Bronze\', \'Silver\', \'Gold\', \'Platinum\') NOT NULL');
     await queryRunner.query('ALTER TABLE `divisions` CHANGE `rp_bonus` `rp_bonus` decimal(2,1) NOT NULL DEFAULT 0');
     await queryRunner.query('ALTER TABLE `divisions` CHANGE `order` `order` int UNSIGNED NOT NULL');
     await queryRunner.query('ALTER TABLE `divisions` CHANGE `group_order` `group_order` int UNSIGNED NOT NULL COMMENT \'order within the group\'');
@@ -152,7 +153,8 @@ export class SyncWithTypeORM1597024245848 implements MigrationInterface {
     await queryRunner.query('CREATE INDEX `IDX_9be7492417d7ba450d31b0a8a2` ON `song_clears_v2` (`division_id`)');
     await queryRunner.query('CREATE INDEX `IDX_77e940a36ec0d2880e9abd1381` ON `song_clears_v2` (`song_id`)');
     await queryRunner.query('CREATE INDEX `IDX_5d02077d4941019273995220b5` ON `song_clear_cards` (`theme_id`)');
-    await queryRunner.query('CREATE UNIQUE INDEX `IDX_4f9d43eacf66b2187dc3a4d3e6` ON `song_clear_cards` (`song_clear_id`, `rotation_order`)');
+    await queryRunner.query('CREATE UNIQUE INDEX `IDX_4f9d43eacf66b2187dc3a4d3e6` ON `song_clear_cards` '
+      + '(`song_clear_id`, `rotation_order`)');
     await queryRunner.query('CREATE UNIQUE INDEX `IDX_f62dd5d3f81795ad257e35c5d4` ON `song_clear_cards` (`song_clear_id`, `member`)');
     await queryRunner.query('CREATE INDEX `IDX_200c5368f75e3f5fab815d2ba2` ON `themes` (`game_id`)');
     await queryRunner.query('CREATE INDEX `IDX_7b72c0e6f5438539635fa2706d` ON `log_drops` (`game_id`)');
