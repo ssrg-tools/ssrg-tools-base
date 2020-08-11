@@ -10,6 +10,7 @@ import {
 import { SuperstarGame } from './SuperstarGame';
 import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
+import { SongWorldRecord } from './SongWorldRecord';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
@@ -112,6 +113,9 @@ export class Song {
 
   @OneToMany(() => SongBeatmap, (beatmap) => beatmap.song)
   beatmaps: SongBeatmap[];
+
+  @OneToMany(() => SongWorldRecord, (worldRecord) => worldRecord.song)
+  worldRecords: SongWorldRecord[];
 
   @OneToMany(() => SongClear, (songClear) => songClear.song)
   songClears: SongClear[];
