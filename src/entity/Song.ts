@@ -110,9 +110,9 @@ export class Song {
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => SongBeatmap, (songByDifficulty) => songByDifficulty.song)
+  @OneToMany(() => SongBeatmap, (beatmap) => beatmap.song)
   beatmaps: SongBeatmap[];
 
-  @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.song)
-  songClearsVs: SongClear[];
+  @OneToMany(() => SongClear, (songClear) => songClear.song)
+  songClears: SongClear[];
 }

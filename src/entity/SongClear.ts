@@ -159,7 +159,7 @@ export class SongClear {
   })
   guid?: string;
 
-  @ManyToOne(() => Song, (songs) => songs.songClearsVs, {
+  @ManyToOne(() => Song, (songs) => songs.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
