@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';import { Song } from './Song';
+import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';
+import { Song } from './Song';
 import { CardDisplay } from './CardDisplay';
 
 @Entity('song_world_records', { schema: 'superstar_log' })
@@ -23,16 +24,16 @@ export class SongWorldRecord {
   profileImage: number;
 
   @Column(type => CardDisplay)
-  leaderCard: CardDisplay;
+  leaderCard?: CardDisplay;
 
   @Column('int', { unsigned: true })
   highscore: number;
 
   @Index()
   @Column('datetime', { name: 'date_recorded' })
-  dateRecorded: number;
+  dateRecorded: Date;
 
-  @Column('longtext', { name: 'meta', default: '\'{}\'' })
+  @Column('longtext', { name: 'meta', default: '{}' })
   meta: string;
 
   @Column('varchar', {
