@@ -1,0 +1,12 @@
+
+:root {
+  --size-card-small-width: 85;
+  --size-card-small-height: 120;
+  --size-card-large-width: 226;
+  --size-card-large-height: 318;
+
+  --size-card-frame-small-width: 116;
+  --size-card-frame-small-height: 156;
+  --size-card-frame-large-width: var(--size-card-large-width);
+  --size-card-frame-large-height: var(--size-card-large-height);
+}
