@@ -38,7 +38,7 @@ createConnection().then(async connection => {
       const song = await songs.createQueryBuilder('song')
         .innerJoin('song.game', 'game')
         .leftJoinAndSelect('song.beatmaps', 'beatmaps')
-        .addSelect([ 'lengthNominal', 'songFilename', 'beatmapFingerprint', 'beatmapDateProcessed' ])
+        .addSelect([ 'song.lengthNominal', 'song.songFilename', 'song.beatmapFingerprint', 'song.beatmapDateProcessed' ])
         .where('song.dalcom_song_id = :dalcomSongId', { dalcomSongId })
         .andWhere('game.key = :gameKey', { gameKey })
         .getOne()
