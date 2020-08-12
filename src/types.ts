@@ -28,7 +28,7 @@ export class Card
 
   set level(_level) {
     this._level = _level;
-    if (this.grade == 'R' && this._level > this.maxRLevel) {
+    if (this.grade === 'R' && this._level > this.maxRLevel) {
       this._level = this.maxRLevel;
     }
     if (this._level < 1) {
@@ -42,7 +42,7 @@ export class Card
     let levelBonus = 4;
     switch (this.grade) {
       case 'R':
-        base = 101;
+        base = 99;
         levelBonus = 2;
         break;
       case 'S':
@@ -61,10 +61,13 @@ export class Card
       default:
         return -1;
     }
-    return base
+    const fromLevel = this.level * levelBonus
+      / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1);
+    const rLevel = (this.level - 0) / 5;
+    const calculated = base
       * (this.is_prism ? 1.1 : 1)
-      + this.level * levelBonus
-        / (this.grade == 'R' && this.maxRLevel == 99 ? 2 : 1);
+      + fromLevel + rLevel;
+    return Math.floor(calculated);
   }
 
   get canIncreaseGrade()
@@ -147,7 +150,7 @@ export class Card
   increaseLevel()
   {
     this.level++;
-    if (this.grade == 'None') {
+    if (this.grade === 'None') {
       this.increaseGrade();
     }
     if (['C', 'B', 'A', 'S'].includes(this.grade) && this._level > 5) {
@@ -160,7 +163,7 @@ export class Card
     this._level--;
     if (this._level < 1) {
       this.decreaseGrade();
-      if (this.grade != 'None') {
+      if (this.grade !== 'None') {
         this.level = 5;
       }
     }
