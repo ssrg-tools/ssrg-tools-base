@@ -8,6 +8,7 @@ export type Grade = typeof Grade.type;
 export type CardSystem = 50 | 99;
 
 
+export type NumberLike = number | string;
 export type SqlBool = 0 | 1;
 
 export const MembersGFriend = StringUnion('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji');
@@ -20,7 +21,7 @@ export class Card
     private _level = 1,
     public is_prism = false,
     public member?: string,
-    public theme?: Theme,
+    public theme?: BasicTheme,
     public maxRLevel: CardSystem = 50,
   ) { }
 
@@ -170,7 +171,7 @@ export class Card
   }
 }
 
-export class Song
+export class BasicSong
 {
     constructor(
         public name: string,
@@ -178,7 +179,7 @@ export class Song
     ) {}
 }
 
-export class Theme
+export class BasicTheme
 {
     constructor(
         public name: string,
