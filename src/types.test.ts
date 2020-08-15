@@ -5,13 +5,21 @@ import 'jasmine';
 const dataCardScore: [Card, number][] = [
   // SSGF - R50
   [new Card('R'), 101],
+  [new Card('R', 2), 103],
+  [new Card('R', 3), 105],
   [new Card('R', 5), 109],
   [new Card('R', 9), 117],
+  [new Card('R', 35), 169],
+  [new Card('R', 50), 199],
+
   [new Card('R', 1, true), 111],
+  [new Card('R', 5, true), 119],
   [new Card('R', 6, true), 122],
   [new Card('R', 7, true), 124],
   [new Card('R', 9, true), 128],
   [new Card('R', 10, true), 130],
+  [new Card('R', 35, true), 185],
+  [new Card('R', 50, true), 218],
 
   // currently we only guarantee scores for R cards
   // [new Card('C', 1, true), 12],

@@ -64,11 +64,8 @@ export class Card
     }
     const fromLevel = this.level * levelBonus
       / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1);
-    const rLevel = (this.level - 0) / 5;
-    const calculated = base
-      * (this.is_prism ? 1.1 : 1)
-      + fromLevel + rLevel;
-    return Math.floor(calculated);
+    const calculated = base + fromLevel;
+    return Math.floor(calculated * (this.is_prism ? 1.1 : 1));
   }
 
   get canIncreaseGrade()
