@@ -1,9 +1,9 @@
 import { Card } from './types';
 import _ from 'lodash';
 
-export function calculateIdealScore(cards: Card[], theme_bonus: number, cardbook_bonus: number)
+export function calculateIdealScore(cards: Card[], themeBonus: number, cardbookBonus = 0)
 {
-  return ((_.meanBy(cards, 'score') + 3) * 29000) + theme_bonus + cardbook_bonus;
+  return ((_.meanBy(cards, 'score') + 3) * 29000) + themeBonus + cardbookBonus;
 }
 
 export function calculateThemeBonus(cards: Card[])
