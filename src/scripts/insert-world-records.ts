@@ -40,7 +40,7 @@ createConnection().then(async connection => {
     await Promise.all(files.map(async file => {
       const filepath = path.join(inputPath, file);
       const isDir = (await fs.promises.lstat(filepath)).isDirectory();
-      const isWr = /^wr-/.test(file);
+      const isWr = /^wr-|^133928$/.test(file);
 
       if (isDir && isWr) {
         wrFolders.push(filepath);
@@ -56,22 +56,12 @@ createConnection().then(async connection => {
       }
       const relpath = path.join(wrFolder, file);
       const filepath = path.resolve(relpath);
-      console.log(`Processing '${filepath}'`);
+      // console.log(`Processing '${filepath}'`);
       const dalcomWR: WRRecord = require(filepath);
       const mentionedSong = songsByCode[dalcomWR.code];
 
       if (!mentionedSong) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code}' was not found.`);
-      }
-
-      // Find out if it's already been inserted
-      const exists = (await SongWorldRecords.createQueryBuilder('wr')
-        .where('song_id = :songId', { songId: mentionedSong.id })
-        .andWhere('JSON_VALUE(`meta`, \'$.path\') = :relpath', { relpath })
-        .getCount()) > 0;
-      if (exists) {
-        console.warn(`Record '${relpath}' already inserted.`);
-        skipped++;
         return;
       }
 
@@ -80,6 +70,19 @@ createConnection().then(async connection => {
       wr.meta = JSON.stringify({ path: relpath });
 
       wr.dateRecorded = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
+
+      // Find out if it's already been inserted
+      const exists = (await SongWorldRecords.createQueryBuilder('wr')
+        .cache(false)
+        .where('song_id = :songId', { songId: mentionedSong.id })
+        .andWhere('object_id = :objectId', { objectId: wr.objectID })
+        .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
+        .getCount()) > 0;
+      if (exists) {
+        console.warn(`Record '${relpath}' already inserted.`);
+        skipped++;
+        return;
+      }
 
       const leaderCard = dalcomWR.rankDataRaw.ranking[0].leaderCard;
       if (leaderCard) {
@@ -95,8 +98,18 @@ createConnection().then(async connection => {
     }));
   }));
 
+  // De-duplicate new entries
+  const deduplicated = _.uniqBy(worldRecords, wr => {
+    return JSON.stringify({
+      songId: wr.songId,
+      objectID: wr.objectID,
+      highscore: wr.highscore,
+      dateRecorded: wr.dateRecorded,
+    });
+  });
+
   console.log(wrFolders, worldRecords.length);
-  const saved = await SongWorldRecords.save(worldRecords);
+  const saved = await SongWorldRecords.save(deduplicated);
   console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);
 }).then(() => process.exit(0)).catch((reason) => {
   console.error(reason);
