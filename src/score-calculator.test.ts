@@ -42,6 +42,30 @@ const testData: {
     themeBonus: 545000,
     expectedScore: 6954000,
   },
+  { // 6x R1
+    cards: [
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+    ],
+    themeBonus: 545000,
+    expectedScore: 3561000,
+  },
+  { // 1x A1 5x R1
+    cards: [
+      new Card('A', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+    ],
+    themeBonus: 545000,
+    expectedScore: 3295167,
+  },
 ];
 
 describe('Score calculator basic test', () => {
