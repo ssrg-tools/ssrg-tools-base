@@ -8,6 +8,7 @@ const testData: {
   rpBonus: number;
   scoreTotal: number;
   difficulty: DifficultyName;
+  isChallenge: boolean;
   divisionId: number;
   divisionBonus: number;
 }[] = [
@@ -17,15 +18,7 @@ const testData: {
     rpBonus: 146,
     scoreTotal: 2136318,
     difficulty: 'Hard',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 2413,
-    rpTotal: 3549,
-    rpBonus: 723,
-    scoreTotal: 2357322,
-    difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -35,6 +28,7 @@ const testData: {
     rpBonus: 80,
     scoreTotal: 174990,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -44,6 +38,7 @@ const testData: {
     rpBonus: 80,
     scoreTotal: 166031,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -53,6 +48,7 @@ const testData: {
     rpBonus: 80,
     scoreTotal: 169631,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -62,6 +58,7 @@ const testData: {
     rpBonus: 80,
     scoreTotal: 174034,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -71,15 +68,7 @@ const testData: {
     rpBonus: 83,
     scoreTotal: 351269,
     difficulty: 'Normal',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 2944,
-    rpTotal: 4271,
-    rpBonus: 883,
-    scoreTotal: 2826591,
-    difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -89,6 +78,7 @@ const testData: {
     rpBonus: 165,
     scoreTotal: 3069288,
     difficulty: 'Hard',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -98,6 +88,7 @@ const testData: {
     rpBonus: 165,
     scoreTotal: 3105277,
     difficulty: 'Hard',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -107,6 +98,7 @@ const testData: {
     rpBonus: 87,
     scoreTotal: 530098,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -116,6 +108,7 @@ const testData: {
     rpBonus: 112,
     scoreTotal: 1807351,
     difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -125,42 +118,7 @@ const testData: {
     rpBonus: 136,
     scoreTotal: 3012920,
     difficulty: 'Normal',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 3486,
-    rpTotal: 5017,
-    rpBonus: 1045,
-    scoreTotal: 3460564,
-    difficulty: 'Normal',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 2486,
-    rpTotal: 3717,
-    rpBonus: 745,
-    scoreTotal: 3462560,
-    difficulty: 'Normal',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 3304,
-    rpTotal: 4599,
-    rpBonus: 991,
-    scoreTotal: 730021,
-    difficulty: 'Normal',
-    divisionId: 4,
-    divisionBonus: 0.3
-  },
-  {
-    rpBase: 2466,
-    rpTotal: 3671,
-    rpBonus: 739,
-    scoreTotal: 3159553,
-    difficulty: 'Normal',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -170,6 +128,7 @@ const testData: {
     rpBonus: 166,
     scoreTotal: 3160850,
     difficulty: 'Hard',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   },
@@ -179,6 +138,7 @@ const testData: {
     rpBonus: 168,
     scoreTotal: 3233094,
     difficulty: 'Hard',
+    isChallenge: false,
     divisionId: 4,
     divisionBonus: 0.3
   }
@@ -186,7 +146,7 @@ const testData: {
 
 describe('Base RP calculator basic test', () => {
   testData.forEach((test) => {
-    describe('Calculating base rp for ${test.scoreTotal}', () => {
+    it(`calculates base rp for ${test.scoreTotal}`, () => {
       expect(calcBaseRP(test.scoreTotal, difficultyToEnum(test.difficulty))).toBe(test.rpBase);
     });
   });
