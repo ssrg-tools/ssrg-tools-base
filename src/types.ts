@@ -7,6 +7,25 @@ export type Grade = typeof Grade.type;
 
 export type CardSystem = 50 | 99;
 
+export const DifficultyName = StringUnion('Easy', 'Normal', 'Hard');
+export type DifficultyName = typeof DifficultyName.type;
+export enum Difficulty {
+  Easy = 4,
+  Normal = 7,
+  Hard = 13,
+}
+
+export function difficultyToEnum(difficulty: DifficultyName): Difficulty
+{
+  switch (difficulty) {
+    case 'Easy':
+      return Difficulty.Easy;
+    case 'Normal':
+      return Difficulty.Normal;
+    case 'Hard':
+      return Difficulty.Hard;
+  }
+}
 
 export type NumberLike = number | string;
 export type SqlBool = 0 | 1;
@@ -19,7 +38,7 @@ export class Card
   constructor(
     public grade: Grade,
     private _level = 1,
-    public is_prism = false,
+    public isPrism = false,
     public member?: string,
     public theme?: BasicTheme,
     public maxRLevel: CardSystem = 50,
@@ -65,7 +84,7 @@ export class Card
     const fromLevel = this.level * levelBonus
       / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1);
     const calculated = base + fromLevel;
-    return Math.floor(calculated * (this.is_prism ? 1.1 : 1));
+    return Math.floor(calculated * (this.isPrism ? 1.1 : 1));
   }
 
   get canIncreaseGrade()
@@ -114,7 +133,7 @@ export class Card
         break;
       case 'C':
         this.grade = 'None';
-        this.is_prism = false;
+        this.isPrism = false;
         break;
       case 'None':
         break;
