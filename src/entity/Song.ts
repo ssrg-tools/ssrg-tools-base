@@ -11,6 +11,7 @@ import { SuperstarGame } from './SuperstarGame';
 import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
 import { SongWorldRecord } from './SongWorldRecord';
+import { SqlBool } from 'src/types';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
@@ -53,16 +54,12 @@ export class Song {
   })
   lengthSeconds: string | null;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
-  gameId: number;
-
-  @Column('varchar', {
-    name: 'guid',
-    nullable: true,
-    unique: true,
-    length: 255,
+  @Column('tinyint', {
+    name: 'ingame',
+    unsigned: true,
+    default: 1,
   })
-  guid: string | null;
+  ingame: SqlBool;
 
   @Column('varchar', {
     name: 'dalcom_song_id',
@@ -85,6 +82,25 @@ export class Song {
   })
   songFilename: string;
 
+  @Column('datetime', {
+    name: 'beatmap_date_processed',
+    comment: 'date when the beatmaps had been processed',
+    nullable: true,
+    select: false,
+  })
+  beatmapDateProcessed: Date;
+
+  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
+  gameId: number;
+
+  @Column('varchar', {
+    name: 'guid',
+    nullable: true,
+    unique: true,
+    length: 255,
+  })
+  guid: string | null;
+
   @Column('varchar', {
     name: 'beatmap_fingerprint',
     comment: 'game internal song filename',
@@ -95,14 +111,6 @@ export class Song {
     select: false,
   })
   beatmapFingerprint: string;
-
-  @Column('datetime', {
-    name: 'beatmap_date_processed',
-    comment: 'date when the beatmaps had been processed',
-    nullable: true,
-    select: false,
-  })
-  beatmapDateProcessed: Date;
 
   @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.songs, {
     onDelete: 'RESTRICT',
