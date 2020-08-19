@@ -11,7 +11,7 @@ import { SuperstarGame } from './SuperstarGame';
 import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
 import { SongWorldRecord } from './SongWorldRecord';
-import { SqlBool } from 'src/types';
+import { SqlBool } from '../types';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
