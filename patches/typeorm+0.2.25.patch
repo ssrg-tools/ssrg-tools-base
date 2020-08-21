@@ -1,0 +1,42 @@
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js b/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js
+index 5f0535a..054a7b0 100644
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js
++++ b/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js
+@@ -78,7 +78,7 @@ var ReactNativeDriver = /** @class */ (function (_super) {
+      */
+     ReactNativeDriver.prototype.loadDependencies = function () {
+         try {
+-            this.sqlite = require("react-native-sqlite-storage");
++            
+         }
+         catch (e) {
+             throw new DriverPackageNotInstalledError("React-Native", "react-native-sqlite-storage");
+diff --git a/node_modules/typeorm/browser/platform/BrowserDisabledDriversDummy.js b/node_modules/typeorm/browser/platform/BrowserDisabledDriversDummy.js
+index 26fbcea..df3d159 100644
+--- a/node_modules/typeorm/browser/platform/BrowserDisabledDriversDummy.js
++++ b/node_modules/typeorm/browser/platform/BrowserDisabledDriversDummy.js
+@@ -55,12 +55,24 @@ var PostgresDriver = /** @class */ (function () {
+     }
+     return PostgresDriver;
+ }());
++// AAAA - workaround to avoid re-patching
+ export { PostgresDriver };
++/**
++ * DO NOT IMPORT THIS CLASS -
++ * This is a dummy class for replacement via `package.json` in browser builds
++ */
++var AuroraDataApiPostgresDriver = /** @class */ (function () {
++  function AuroraDataApiPostgresDriver() {
++  }
++  return AuroraDataApiPostgresDriver;
++}());
++export { AuroraDataApiPostgresDriver };
+ /**
+  * DO NOT IMPORT THIS CLASS -
+  * This is a dummy class for replacement via `package.json` in browser builds
+  */
+ var SqlServerDriver = /** @class */ (function () {
++// BBBB- workaround to avoid re-patching
+     function SqlServerDriver() {
+     }
+     return SqlServerDriver;
