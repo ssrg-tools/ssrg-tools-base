@@ -17,8 +17,8 @@ export class Division {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
-  @Column('enum', { name: 'group', enum: ['Bronze', 'Silver', 'Gold', 'Platinum'] })
-  group: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
+  @Column('enum', { name: 'group', enum: ['Bronze', 'Silver', 'Gold', 'Platinum', 'Master'] })
+  group: 'Bronze' | 'Silver' | 'Gold' | 'Platinum' | 'Master';
 
   @Column('varchar', { name: 'name', length: 255 })
   name: string;

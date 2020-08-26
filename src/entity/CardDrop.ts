@@ -28,6 +28,12 @@ export class CardDrop {
       'Purchase (RP)',
       'Purchase ($$$)',
       'Reward',
+      'Reward - Event',
+      'Reward - Gift', // appeared in your inbox suddenly
+      'Box Event - Normal',
+      'Box Event - Premium',
+      'Star Pass - Normal',
+      'Star Pass - Premium',
       'Challenge',
       'Clear',
     ],
@@ -37,6 +43,12 @@ export class CardDrop {
     | 'Purchase (RP)'
     | 'Purchase ($$$)'
     | 'Reward'
+    | 'Reward - Event'
+    | 'Reward - Gift' // appeared in your inbox suddenly
+    | 'Box Event - Normal'
+    | 'Box Event - Premium'
+    | 'Star Pass - Normal'
+    | 'Star Pass - Premium'
     | 'Challenge'
     | 'Clear';
 
