@@ -25,6 +25,18 @@ export class User {
   @Column('varchar', { name: 'username', unique: true, length: 100 })
   username: string;
 
+  @Column('tinyint', { unsigned: true, default: 0 })
+  profilePublic: SqlBool;
+
+  @Column('tinyint', { unsigned: true, default: 0 })
+  balancePublic: SqlBool;
+
+  @Column('tinyint', { unsigned: true, default: 0 })
+  dropsPublic: SqlBool;
+
+  @Column('tinyint', { unsigned: true, default: 0 })
+  playsPublic: SqlBool;
+
   @Column('datetime', { name: 'created', default: () => 'CURRENT_TIMESTAMP' })
   created: Date;
 

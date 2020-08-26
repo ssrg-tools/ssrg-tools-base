@@ -1,6 +1,7 @@
 import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';
 import { Song } from './Song';
-import { CardDisplay } from './CardDisplay';
+import { CardDisplay } from './CardDisplay.embed';
+import { WorldRecordSeason } from './WorldRecordSeason';
 
 @Entity('song_world_records', { schema: 'superstar_log' })
 export class SongWorldRecord {
@@ -29,9 +30,16 @@ export class SongWorldRecord {
   @Column('int', { unsigned: true })
   highscore: number;
 
-  @Index()
+  @Index('byDateRecorded')
   @Column('datetime', { name: 'date_recorded' })
   dateRecorded: Date;
+
+  @ManyToOne(() => WorldRecordSeason, (season) => season.entries, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'season_id', referencedColumnName: 'id' }])
+  season: WorldRecordSeason;
 
   @Column('longtext', { name: 'meta', default: '{}' })
   meta: string;

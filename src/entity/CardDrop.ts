@@ -20,6 +20,7 @@ export class CardDrop {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
+  @Index('bySource')
   @Column('enum', {
     name: 'source',
     enum: [
@@ -39,6 +40,7 @@ export class CardDrop {
     | 'Challenge'
     | 'Clear';
 
+  @Index('byType')
   @Column('varchar', { name: 'type', nullable: true, length: 255 })
   type: string | null;
 
@@ -57,9 +59,11 @@ export class CardDrop {
   })
   grade: GradeNonEmpty | '30%' | '100%';
 
+  @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
+  @Index('byPrism')
   @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
   isPrism: SqlBool;
 

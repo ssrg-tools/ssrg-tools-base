@@ -22,6 +22,7 @@ export class SongClear {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
+  @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
@@ -83,6 +84,7 @@ export class SongClear {
   })
   hitGood: number | null;
 
+  @Index('byHitMiss')
   @Column('int', {
     name: 'hit_miss',
     nullable: true,

@@ -12,6 +12,7 @@ import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
 import { SongWorldRecord } from './SongWorldRecord';
 import { SqlBool } from '../types';
+import { DateParts } from './DateParts.embed';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
@@ -53,6 +54,14 @@ export class Song {
     scale: 3,
   })
   lengthSeconds: string | null;
+
+  @Index('byDateReleasedGame')
+  @Column('datetime')
+  dateReleasedGame: Date;
+
+  @Index('byDateReleasedWorld')
+  @Column('datetime')
+  dateReleasedWorld: Date;
 
   @Column('tinyint', {
     name: 'ingame',

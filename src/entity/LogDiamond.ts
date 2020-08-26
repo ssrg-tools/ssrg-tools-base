@@ -23,9 +23,11 @@ export class LogDiamond {
   @Column('int', { name: 'diff', nullable: true })
   diff: number | null;
 
+  @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
+  @Index('byType')
   @Column('varchar', { name: 'event_type', length: 255 })
   eventType: string;
 

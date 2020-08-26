@@ -4,9 +4,12 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { SongClear } from './SongClear';
+import { SuperstarGame } from './SuperstarGame';
 
 @Index(['guid'], { unique: true })
 @Entity('divisions', { schema: 'superstar_log' })
@@ -51,4 +54,7 @@ export class Division {
 
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.division)
   songClearsVs: SongClear[];
+
+  @ManyToMany(type => SuperstarGame)
+  games: SuperstarGame[];
 }

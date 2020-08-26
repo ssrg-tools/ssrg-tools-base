@@ -10,7 +10,6 @@ import { SuperstarGame } from './SuperstarGame';
 import { User } from './User';
 
 @Index(['guid'], { unique: true })
-@Index(['date'], {})
 @Index(['userId'], {})
 @Index(['gameId'], {})
 @Entity('log_diamonds_ads', { schema: 'superstar_log' })
@@ -18,9 +17,11 @@ export class LogDiamondAd {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
   id: number;
 
+  @Index('byAmount')
   @Column('int', { name: 'amount', unsigned: true })
   amount: number;
 
+  @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 

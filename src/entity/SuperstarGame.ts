@@ -1,9 +1,12 @@
 import {
   Column,
-  Entity,
+
+ Entity,
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { LogCredit } from './LogCredit';
@@ -12,6 +15,8 @@ import { LogDiamondAd } from './LogDiamondAd';
 import { CardDrop } from './CardDrop';
 import { Song } from './Song';
 import { Theme } from './Theme';
+import { SqlBool } from '../types';
+import { Division } from './Division';
 
 @Index(['guid'], { unique: true })
 @Entity('superstar_games', { schema: 'superstar_log' })
@@ -34,6 +39,7 @@ export class SuperstarGame {
   })
   maxRLevel: string | null;
 
+  @Index('byKey')
   @Column('varchar', {
     name: 'key',
     length: 50,
@@ -41,6 +47,18 @@ export class SuperstarGame {
     comment: 'used for urls and internal tools',
   })
   key: string;
+
+  @Column('varchar', {
+    length: 255,
+  })
+  tagline: string;
+
+  @Column('tinyint', {
+    unsigned: true,
+    default: 1,
+    comment: 'whether this entry is active in the application and should be displayed and interacted with',
+  })
+  active: SqlBool;
 
   @Column('varchar', { name: 'comment', nullable: true, length: 255 })
   comment: string | null;
@@ -76,4 +94,8 @@ export class SuperstarGame {
 
   @OneToMany(() => Theme, (themes) => themes.game)
   themes: Theme[];
+
+  @ManyToMany(type => Division)
+  @JoinTable()
+  divisions: Division[];
 }

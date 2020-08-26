@@ -10,6 +10,8 @@ import {
 import { CardDrop } from './CardDrop';
 import { SongClearCard } from './SongClearCard';
 import { SuperstarGame } from './SuperstarGame';
+import { NumberLike } from '../types';
+import { DateParts } from './DateParts.embed';
 
 @Index(['guid'], { unique: true })
 @Index(['gameId'], {})
@@ -23,6 +25,16 @@ export class Theme {
 
   @Column('varchar', { name: 'album', length: 255 })
   album: string;
+
+  @Column('simple-array', { comment: 'contains theme tags like "Limited", "Event", "Original"' })
+  tags: string[];
+
+  @Column('simple-json', { comment: 'maps card IDs to prism and prism background and frame' })
+  prismMap: { [cardId: string]: { prismBg: NumberLike, frame: NumberLike } };
+
+  @Index('byDateReleased')
+  @Column('datetime')
+  dateReleased: Date;
 
   @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;

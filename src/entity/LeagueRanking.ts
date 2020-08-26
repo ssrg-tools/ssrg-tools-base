@@ -51,6 +51,7 @@ export class LeagueRanking {
   })
   scoreBelow: number | null;
 
+  @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
