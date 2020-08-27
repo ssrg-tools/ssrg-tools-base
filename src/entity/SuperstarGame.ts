@@ -67,6 +67,11 @@ export class SuperstarGame {
   meta: string | null;
 
   @Column('varchar', {
+    length: 255,
+  })
+  apkName: string;
+
+  @Column('varchar', {
     name: 'guid',
     nullable: true,
     unique: true,
