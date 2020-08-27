@@ -45,7 +45,7 @@ export class SongClearCard {
 
   @Column('enum', {
     name: 'grade',
-    enum: ['None', 'C', 'B', 'A', 'S', 'R'],
+    enum: Grade,
     default: '\'S\'',
   })
   grade: Grade;
@@ -71,7 +71,7 @@ export class SongClearCard {
 
   @ManyToOne(
     () => SongClear,
-    (songClearsV2) => songClearsV2.songClearCards,
+    (songClear) => songClear.cards,
     { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
   )
   @JoinColumn([{ name: 'song_clear_id', referencedColumnName: 'id' }])

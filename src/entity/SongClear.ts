@@ -183,5 +183,5 @@ export class SongClear {
   user: User;
 
   @OneToMany(() => SongClearCard, (songClearCard) => songClearCard.songClear)
-  songClearCards: SongClearCard[];
+  cards: SongClearCard[];
 }
