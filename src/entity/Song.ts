@@ -15,6 +15,7 @@ import { SqlBool } from '../types';
 import { DateParts } from './DateParts.embed';
 
 @Index(['guid'], { unique: true })
+@Index(['internalSongId', 'gameId'], { unique: true })
 @Index(['gameId'], {})
 @Entity('songs', { schema: 'superstar_log' })
 export class Song {
@@ -73,7 +74,6 @@ export class Song {
   @Column('varchar', {
     name: 'dalcom_song_id',
     comment: 'game internal song id',
-    unique: true,
     length: 255,
     nullable: true,
     default: null,
