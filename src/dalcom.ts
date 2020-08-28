@@ -1,9 +1,9 @@
 /** Stuff to map from Dalcom game data */
 
-import { Grade } from './types';
+import { GradeNonEmpty } from './types';
 
 // where is the None grade?
-export const dalcomGradeMap: { [dalcomId: number]: Grade } = {
+export const dalcomGradeMap: { [dalcomId: number]: GradeNonEmpty } = {
   0: 'C',
   1: 'B',
   2: 'A',
