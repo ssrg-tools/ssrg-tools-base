@@ -8,7 +8,9 @@ const dataCardScore: [Card, number][] = [
   [new Card('R', 2), 103],
   [new Card('R', 3), 105],
   [new Card('R', 5), 109],
+  [new Card('R', 8), 115],
   [new Card('R', 9), 117],
+  [new Card('R', 12), 123],
   [new Card('R', 35), 169],
   [new Card('R', 50), 199],
 
@@ -16,6 +18,7 @@ const dataCardScore: [Card, number][] = [
   [new Card('R', 5, true), 119],
   [new Card('R', 6, true), 122],
   [new Card('R', 7, true), 124],
+  [new Card('R', 8, true), 126],
   [new Card('R', 9, true), 128],
   [new Card('R', 10, true), 130],
   [new Card('R', 35, true), 185],
