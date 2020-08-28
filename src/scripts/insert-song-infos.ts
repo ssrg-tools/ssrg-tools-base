@@ -3,6 +3,8 @@ import * as path from 'path';
 
 import 'reflect-metadata';
 import { createConnection, getRepository } from 'typeorm';
+import _ from 'lodash';
+
 import { Song } from '../entity/Song';
 import { SongBeatmap } from '../entity/SongBeatmap';
 import { SongInfo } from '../SongInfo';
@@ -11,7 +13,6 @@ import { SongInfo } from '../SongInfo';
 // TODO: Detect data discrepancies when updating
 
 createConnection().then(async connection => {
-  const _ = require('lodash');
   const songs = getRepository(Song);
 
   const songInfoFile = path.resolve(process.argv[2]);
