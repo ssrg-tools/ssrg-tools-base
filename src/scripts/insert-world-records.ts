@@ -6,17 +6,22 @@ import { createConnection, getRepository } from 'typeorm';
 import { Song } from '../entity/Song';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import { WRRecord, dalcomGradeMap } from '../dalcom';
-import { LoDashStatic } from 'lodash';
+import _ from 'lodash';
+import { SuperstarGame } from '../entity/SuperstarGame';
+
+const verbose = false;
 
 createConnection().then(async connection => {
-  const _: LoDashStatic = require('lodash');
   const Songs = getRepository(Song);
   const SongWorldRecords = getRepository(SongWorldRecord);
 
-  const songsByCode = _.keyBy(await Songs.find({
-    select: ['id', 'internalSongId'],
+  const games = _.keyBy(await getRepository(SuperstarGame).find(), 'id');
+  const apkMap = _.keyBy(games, 'apkName');
+
+  const songsByGames = _.mapValues(_.groupBy(await Songs.find({
+    select: ['id', 'internalSongId', 'gameId', 'name', 'album'],
     where: 'dalcom_song_id IS NOT NULL'
-  }), 'internalSongId');
+  }), 'gameId'), songs => _.keyBy(songs, 'internalSongId'));
 
   const inputPaths = process.argv.slice(2);
   if (inputPaths.length === 0) {
@@ -40,7 +45,7 @@ createConnection().then(async connection => {
     await Promise.all(files.map(async file => {
       const filepath = path.join(inputPath, file);
       const isDir = (await fs.promises.lstat(filepath)).isDirectory();
-      const isWr = /^wr-|^133928$/.test(file);
+      const isWr = /^wr-|^(133928|9865992|674379|245395|16680625)$/.test(file);
 
       if (isDir && isWr) {
         wrFolders.push(filepath);
@@ -56,12 +61,29 @@ createConnection().then(async connection => {
       }
       const relpath = path.join(wrFolder, file);
       const filepath = path.resolve(relpath);
+
+      const pathparts = filepath.split(path.sep);
+      const dalcomfoldername = pathparts.find(part => part.match('dalcomsoft'));
+      const game = apkMap[dalcomfoldername];
+
+      if (!game) {
+        console.error(`[ERROR] Could not find game for ${relpath} (${dalcomfoldername})`);
+        console.error(apkMap);
+        return;
+      }
+
+      const songsForGame = songsByGames[game.id];
+      if (!songsForGame) {
+        console.error(`[ERROR] Could not find songs for game ${game.name} (${filepath})`);
+        return;
+      }
+
       // console.log(`Processing '${filepath}'`);
       const dalcomWR: WRRecord = require(filepath);
-      const mentionedSong = songsByCode[dalcomWR.code];
+      const mentionedSong = songsByGames[game.id][dalcomWR.code];
 
       if (!mentionedSong) {
-        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code}' was not found.`);
+        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`);
         return;
       }
 
