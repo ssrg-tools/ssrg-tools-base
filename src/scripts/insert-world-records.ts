@@ -79,7 +79,9 @@ createConnection().then(async connection => {
         .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
         .getCount()) > 0;
       if (exists) {
-        console.warn(`Record '${relpath}' already inserted.`);
+        if (verbose) {
+          console.warn(`Record '${relpath}' already inserted.`);
+        }
         skipped++;
         return;
       }
