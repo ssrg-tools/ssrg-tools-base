@@ -8,6 +8,7 @@ import { SongWorldRecord } from '../entity/SongWorldRecord';
 import { WRRecord, dalcomGradeMap } from '../dalcom';
 import _ from 'lodash';
 import { SuperstarGame } from '../entity/SuperstarGame';
+import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 
 const verbose = false;
 
@@ -90,15 +91,24 @@ createConnection().then(async connection => {
       const wr = SongWorldRecords.create(dalcomWR.rankDataRaw.ranking[0] as {});
       wr.songId = mentionedSong.id;
       wr.meta = JSON.stringify({ path: relpath });
+      wr.specialUserCode = wr.specialUserCode || 0;
+
+      if (!dalcomWR.rankDataRaw.ranking || !dalcomWR.rankDataRaw.ranking[0]) {
+        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no ranking data?. ${filepath}`);
+        return;
+      }
 
       wr.dateRecorded = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
 
       // Find out if it's already been inserted
       const exists = (await SongWorldRecords.createQueryBuilder('wr')
         .cache(false)
+        .innerJoin('wr.song', 'song')
+        .innerJoin('song.game', 'game')
         .where('song_id = :songId', { songId: mentionedSong.id })
         .andWhere('object_id = :objectId', { objectId: wr.objectID })
         .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
+        .andWhere('game.key = :gameKey', { gameKey: game.key })
         .getCount()) > 0;
       if (exists) {
         if (verbose) {
@@ -116,9 +126,25 @@ createConnection().then(async connection => {
           level: leaderCard.l,
         };
       }
+
+      const season = await getRepository(WorldRecordSeason)
+        .createQueryBuilder('season')
+        .cache(true)
+        .where('dateStart < NOW()')
+        .andWhere('dateEnd > NOW()')
+        .innerJoin('season.game', 'game')
+        .andWhere('game.key = :gameKey', { gameKey: game.key })
+        .getOne()
+        ;
+      wr.season = season;
+      if (!season) {
+        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no WR season found. ${filepath}`);
+        return;
+      }
       // console.log(dalcomWR, wr);
       worldRecords.push(wr);
       // await SongWorldRecords.save(wr);
+      console.log(`[INFO] inserting ${game.key}/${mentionedSong.album}/${mentionedSong.name} - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`);
     }));
   }));
 
@@ -132,7 +158,7 @@ createConnection().then(async connection => {
     });
   });
 
-  console.log(wrFolders, worldRecords.length);
+  // console.log(wrFolders, worldRecords.length);
   const saved = await SongWorldRecords.save(deduplicated);
   console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);
 }).then(() => process.exit(0)).catch((reason) => {
