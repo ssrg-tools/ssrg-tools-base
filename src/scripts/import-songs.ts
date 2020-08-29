@@ -10,6 +10,7 @@ import { SongInfo } from '../SongInfo';
 import { SuperstarGame } from '../entity/SuperstarGame';
 
 const verbose = false;
+const dryRun = true;
 const dateReleased = new Date('2020-01-01T09:00:00');
 
 // tslint:disable: object-literal-key-quotes
@@ -111,6 +112,9 @@ function parseSongName(originalFilename: string) {
 }
 
 createConnection().then(async connection => {
+  if (dryRun) {
+    console.log('Dry run enabled!');
+  }
   const songs = getRepository(Song);
 
   const songInfoFile = path.resolve(process.argv[2]);
@@ -174,11 +178,13 @@ createConnection().then(async connection => {
         dateReleasedWorld: dateReleased,
       });
 
-      if (verbose) {
+      if (verbose || dryRun) {
         console.log(
           `Would insert ${game.name}/${dalcomSongId} [${newSong.album}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`);
       }
-      console.log(await songs.save(newSong));
+      if (!dryRun) {
+        console.log(await songs.save(newSong));
+      }
       inserted++;
     }
   }
