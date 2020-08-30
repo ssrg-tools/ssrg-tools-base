@@ -22,3 +22,13 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
     this.pageSize = typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
   }
 }
+
+export interface GameSummary {
+  name: string;
+  key: string;
+  tagline: string;
+  songsCount: number;
+  themesCount: number;
+  dropsCount: number;
+  clearCount: number;
+}
