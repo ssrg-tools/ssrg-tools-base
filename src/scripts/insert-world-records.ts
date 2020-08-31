@@ -9,6 +9,7 @@ import { WRRecord, dalcomGradeMap } from '../dalcom';
 import _ from 'lodash';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { WorldRecordSeason } from '../entity/WorldRecordSeason';
+import { generate_guid } from '../guid';
 
 const verbose = false;
 
@@ -92,6 +93,7 @@ createConnection().then(async connection => {
       wr.songId = mentionedSong.id;
       wr.meta = JSON.stringify({ path: relpath });
       wr.specialUserCode = wr.specialUserCode || 0;
+      wr.guid = generate_guid();
 
       if (!dalcomWR.rankDataRaw.ranking || !dalcomWR.rankDataRaw.ranking[0]) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no ranking data?. ${filepath}`);

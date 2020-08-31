@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { Song } from '../entity/Song';
 import { SongInfo } from '../SongInfo';
 import { SuperstarGame } from '../entity/SuperstarGame';
+import { generate_guid } from '../guid';
 
 const verbose = false;
 const dryRun = true;
@@ -229,6 +230,7 @@ createConnection().then(async connection => {
         ingame: 1,
         dateReleasedGame: dateReleased,
         dateReleasedWorld: dateReleased,
+        guid: generate_guid(),
       });
 
       if (verbose || dryRun) {
