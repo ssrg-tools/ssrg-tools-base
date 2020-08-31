@@ -1,4 +1,5 @@
 import { NumberLike } from './types';
+import { SongWorldRecord } from './entity/SongWorldRecord';
 
 export interface BaseApiResponse<T> {
   data: T;
@@ -31,4 +32,5 @@ export interface GameSummary {
   themesCount: number;
   dropsCount: number;
   clearCount: number;
+  worldRecords?: SongWorldRecord[];
 }
