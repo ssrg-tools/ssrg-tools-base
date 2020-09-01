@@ -32,5 +32,6 @@ export interface GameSummary {
   themesCount: number;
   dropsCount: number;
   clearCount: number;
+  beatmapsCount: number;
   worldRecords?: SongWorldRecord[];
 }
