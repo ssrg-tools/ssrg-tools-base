@@ -84,8 +84,7 @@ export class Card
       default:
         return -1;
     }
-    const fromLevel = this.level * levelBonus
-      / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1);
+    const fromLevel = this.level * (levelBonus / ((this.grade === 'R' && this.maxRLevel === 99) ? 2 : 1));
     const calculated = base + fromLevel;
     return Math.floor(calculated * (this.isPrism ? 1.1 : 1));
   }

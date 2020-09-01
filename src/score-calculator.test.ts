@@ -66,12 +66,21 @@ const testData: {
     ],
     themeBonus: 545000,
     expectedScore: 3295167,
-    },
+  },
 
   // R99 tests - R99 FSP is 6,358,000
   //  (199 + 3) * 29,000 + 500,000
   {
     cards: [
+      new Card('R', 99, false, '', dummyTheme, 99),
+    ],
+    themeBonus: 500000,
+    expectedScore: 6358000,
+  },
+  {
+    cards: [
+      new Card('R', 99, false, '', dummyTheme, 99),
+      new Card('R', 99, false, '', dummyTheme, 99),
       new Card('R', 99, false, '', dummyTheme, 99),
     ],
     themeBonus: 500000,
