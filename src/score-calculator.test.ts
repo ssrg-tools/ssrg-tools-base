@@ -2,6 +2,7 @@ import { Card } from './types';
 import { calculateIdealScore } from './score-calculator';
 import 'jasmine';
 
+const dummyTheme = { name: 'foo', album: 'bar' };
 const testData: {
   cards: Card[],
   themeBonus: number,
@@ -44,27 +45,37 @@ const testData: {
   },
   { // 6x R1
     cards: [
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
     ],
     themeBonus: 545000,
     expectedScore: 3561000,
   },
   { // 1x A1 5x R1
     cards: [
-      new Card('A', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
-      new Card('R', 1, false, '', { name: 'foo', album: 'bar' }),
+      new Card('A', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
     ],
     themeBonus: 545000,
     expectedScore: 3295167,
+    },
+
+  // R99 tests - R99 FSP is 6,358,000
+  //  (199 + 3) * 29,000 + 500,000
+  {
+    cards: [
+      new Card('R', 99, false, '', dummyTheme, 99),
+    ],
+    themeBonus: 500000,
+    expectedScore: 6358000,
   },
 ];
 

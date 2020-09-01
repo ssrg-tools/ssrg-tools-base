@@ -64,6 +64,9 @@ export class Card
       case 'R':
         base = 99;
         levelBonus = 2;
+        if (this.maxRLevel === 99) {
+          base += 1;
+        }
         break;
       case 'S':
         base = 67;

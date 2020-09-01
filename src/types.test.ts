@@ -26,6 +26,10 @@ const dataCardScore: [Card, number][] = [
 
   // currently we only guarantee scores for R cards
   // [new Card('C', 1, true), 12],
+
+  // R99 tests
+  [new Card('R', 1, false, '', { name: '', album: '' }, 99), 101],
+  [new Card('R', 99, false, '', { name: '', album: '' }, 99), 199],
 ];
 
 describe('Card Score test', () => {
