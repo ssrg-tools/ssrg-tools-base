@@ -1,15 +1,12 @@
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './User';
 
-@Index(['guid'], { unique: true })
-@Index(['userId'], {})
 @Entity('user_credentials', { schema: 'superstar_log' })
 export class UserCredential {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
@@ -50,6 +47,9 @@ export class UserCredential {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updated: Date | null;
+
+  @Column('datetime', { nullable: true })
+  expired: Date;
 
   @ManyToOne(() => User, (users) => users.userCredentials, {
     onDelete: 'RESTRICT',

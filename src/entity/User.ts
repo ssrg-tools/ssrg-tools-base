@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  Index,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -14,9 +13,6 @@ import { SongClear } from './SongClear';
 import { UserCredential } from './UserCredential';
 import { SqlBool } from '../types';
 
-@Index(['username'], { unique: true })
-@Index(['id'], { unique: true })
-@Index(['guid'], { unique: true })
 @Entity('users', { schema: 'superstar_log' })
 export class User {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -58,6 +54,12 @@ export class User {
 
   @Column('tinyint', { name: 'active', default: () => 1 })
   active: SqlBool;
+
+  @Column('tinyint', { unsigned: true, default: 0 })
+  isAdmin: SqlBool;
+
+  @Column('tinyint', { unsigned: true, default: 0 })
+  isMod: SqlBool;
 
   @Column('varchar', { name: 'guid', unique: true, length: 255 })
   guid: string | null;
