@@ -83,7 +83,6 @@ export class Song {
   @Column('varchar', {
     name: 'dalcom_song_filename',
     comment: 'game internal song filename',
-    unique: true,
     length: 255,
     nullable: true,
     default: null,
