@@ -9,6 +9,8 @@ import { Song } from '../entity/Song';
 import { SongBeatmap } from '../entity/SongBeatmap';
 import { SongInfo } from '../SongInfo';
 
+const verbose = false;
+
 // TODO: Update existing data, while respecting version changes (e.g. beatmap changed)
 // TODO: Detect data discrepancies when updating
 
@@ -38,7 +40,7 @@ createConnection().then(async connection => {
       const [ gameKey, dalcomSongId ] = baseId.split('/');
 
       const song = await songs.createQueryBuilder('song')
-        .innerJoin('song.game', 'game')
+        .innerJoinAndSelect('song.game', 'game')
         .leftJoinAndSelect('song.beatmaps', 'beatmaps')
         .addSelect([ 'song.lengthNominal', 'song.songFilename', 'song.beatmapFingerprint', 'song.beatmapDateProcessed' ])
         .where('song.dalcom_song_id = :dalcomSongId', { dalcomSongId })
@@ -51,7 +53,9 @@ createConnection().then(async connection => {
       }
 
       if (song.beatmapFingerprint && song.beatmapFingerprint === songInfo.beatmap_fingerprint) {
-        console.log(`Skipping ${baseId} ${song.name} (${song.album}) - already inserted`);
+        if (verbose) {
+          console.log(`Skipping ${baseId} ${song.name} (${song.album}) - already inserted`);
+        }
         continue;
       }
 
@@ -102,10 +106,16 @@ createConnection().then(async connection => {
     }
   }
 
-  // console.log(updatedSongs);
-  console.log(await connection.getRepository(SongBeatmap).save(updatedBeatMaps));
-  console.log(await songs.save(updatedSongs));
-  console.log('Done.');
+  const savedBeatmaps = await connection.getRepository(SongBeatmap).save(updatedBeatMaps);
+  const savedBeatmapsBySong = _.groupBy(savedBeatmaps, 'songId');
+  const savedSongs = await songs.save(updatedSongs);
+
+  for (const song of savedSongs) {
+    console.log(`[${song.game.key}] ${song.internalSongId} ${song.album} - ${song.name}: ` +
+      ((savedBeatmapsBySong[song.id] || []).map(beatmap => beatmap.difficulty).sort().join(', ') || 'No beatmaps?'));
+  }
+
+  console.log(`Done. ${savedBeatmaps.length} beatmaps for ${savedSongs.length} songs.`);
 }).then(() => process.exit(0)).catch((reason) => {
   console.error(reason);
   process.abort();
