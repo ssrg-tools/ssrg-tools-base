@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Song } from './internal';
+import { Song } from './Song';
 
 @Entity('song_beatmaps', { schema: 'superstar_log' })
 export class SongBeatmap {

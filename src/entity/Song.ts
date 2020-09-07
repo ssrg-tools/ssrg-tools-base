@@ -7,7 +7,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame, SongClear, SongBeatmap, SongWorldRecord } from './internal';
+import { SuperstarGame } from './SuperstarGame';
+import { SongClear } from './SongClear';
+import { SongBeatmap } from './SongBeatmap';
+import { SongWorldRecord } from './SongWorldRecord';
 import { SqlBool } from '../types';
 
 @Index(['internalSongId', 'gameId'], { unique: true })

@@ -7,7 +7,14 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { LeagueRanking, LogCredit, LogDiamond, LogDiamondAd, CardDrop, Song, Theme, Division } from './internal';
+import { LeagueRanking } from './LeagueRanking';
+import { LogCredit } from './LogCredit';
+import { LogDiamond } from './LogDiamond';
+import { LogDiamondAd } from './LogDiamondAd';
+import { CardDrop } from './CardDrop';
+import { Song } from './Song';
+import { Theme } from './Theme';
+import { Division } from './Division';
 import { SqlBool } from '../types';
 
 @Entity('superstar_games', { schema: 'superstar_log' })

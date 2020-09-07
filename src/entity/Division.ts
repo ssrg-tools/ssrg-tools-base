@@ -5,7 +5,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
 } from 'typeorm';
-import { LeagueRanking, SongClear, SuperstarGame } from './internal';
+import { LeagueRanking } from './LeagueRanking';
+import { SongClear } from './SongClear';
+import { SuperstarGame } from './SuperstarGame';
 
 @Entity('divisions', { schema: 'superstar_log' })
 export class Division {

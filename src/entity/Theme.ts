@@ -7,7 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CardDrop, SongClearCard, SuperstarGame } from './internal';
+import { CardDrop } from './CardDrop';
+import { SongClearCard } from './SongClearCard';
+import { SuperstarGame } from './SuperstarGame';
 
 @Entity('themes', { schema: 'superstar_log' })
 export class Theme {

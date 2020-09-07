@@ -6,8 +6,15 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { LeagueRanking, LogCredit, LogDiamond, LogDiamondAd, CardDrop, SongClear, UserCredential, SuperstarGame } from './internal';
+import { LeagueRanking } from './LeagueRanking';
+import { LogCredit } from './LogCredit';
+import { LogDiamond } from './LogDiamond';
+import { LogDiamondAd } from './LogDiamondAd';
+import { CardDrop } from './CardDrop';
+import { SongClear } from './SongClear';
+import { UserCredential } from './UserCredential';
 import { SqlBool } from '../types';
+import { SuperstarGame } from './SuperstarGame';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {

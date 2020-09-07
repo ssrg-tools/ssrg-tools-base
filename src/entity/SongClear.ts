@@ -7,7 +7,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Song, Division, User, SongClearCard } from './internal';
+import { Song } from './Song';
+import { Division } from './Division';
+import { User } from './User';
+import { SongClearCard } from './SongClearCard';
 import { SqlBool } from '../types';
 
 @Entity('song_clears_v2', { schema: 'superstar_log' })

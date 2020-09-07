@@ -6,7 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame, Theme, User } from './internal';
+import { SuperstarGame } from './SuperstarGame';
+import { Theme } from './Theme';
+import { User } from './User';
 import { GradeNonEmpty, MembersGFriend, SqlBool } from '../types';
 
 @Entity('log_drops', { schema: 'superstar_log' })

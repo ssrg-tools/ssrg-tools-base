@@ -6,7 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame, User } from './internal';
+import { SuperstarGame } from './SuperstarGame';
+import { User } from './User';
 
 @Entity('log_diamonds', { schema: 'superstar_log' })
 export class LogDiamond {

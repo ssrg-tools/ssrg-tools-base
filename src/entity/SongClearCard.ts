@@ -6,7 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SongClear, Theme } from './internal';
+import { SongClear } from './SongClear';
+import { Theme } from './Theme';
 import { Grade, MembersGFriend, SqlBool } from './../types';
 
 @Index(['songClearId', 'member'], { unique: true })
