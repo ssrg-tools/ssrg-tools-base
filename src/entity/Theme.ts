@@ -35,6 +35,9 @@ export class Theme {
   cardIdStart: number;
 
   @Column('int', { unsigned: true, nullable: true })
+  prismCardIdStart: number;
+
+  @Column('int', { unsigned: true, nullable: true })
   cardCount: number;
 
   @Index('byDateReleased')

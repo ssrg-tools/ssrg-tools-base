@@ -19,6 +19,7 @@ export class RevampDB1599475866334 implements MigrationInterface {
     await queryRunner.query('ALTER TABLE `themes` ADD `frameId` int UNSIGNED NOT NULL COMMENT \'ID of the frame cards, for LE/Event cards\' DEFAULT 0');
     await queryRunner.query('ALTER TABLE `themes` ADD `prismId` int UNSIGNED NOT NULL COMMENT \'ID of the prism bg, GFriend prism cards\' DEFAULT 1');
     await queryRunner.query('ALTER TABLE `themes` ADD `cardIdStart` int UNSIGNED NULL');
+    await queryRunner.query('ALTER TABLE `themes` ADD `prismCardIdStart` int UNSIGNED NULL');
     await queryRunner.query('ALTER TABLE `themes` ADD `cardCount` int UNSIGNED NULL');
 
     await queryRunner.query('ALTER TABLE `log_drops` CHANGE `member` `member` enum (\'Sowon\', \'Yerin\', \'Eunha\', \'Yuju\', \'SinB\', \'Umji\', \'Power Up\') NULL');
