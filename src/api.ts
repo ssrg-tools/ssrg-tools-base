@@ -1,4 +1,4 @@
-import { NumberLike } from './types';
+import { NumberLike, DropSources, GradeNonEmpty, SqlBool } from './types';
 import { SongWorldRecord } from './entity/SongWorldRecord';
 
 export interface BaseApiResponse<T> {
@@ -34,4 +34,17 @@ export interface GameSummary {
   clearCount: number;
   beatmapsCount: number;
   worldRecords?: SongWorldRecord[];
+}
+
+export interface PostCardDropData {
+  type: string;
+  source: typeof DropSources.type;
+  comment?: string;
+  date: string | Date;
+  cards: {
+    grade: GradeNonEmpty | '30%' | '100%',
+    member: string | null,
+    themeGuid: string,
+    isPrism: SqlBool,
+  }[];
 }

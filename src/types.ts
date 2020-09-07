@@ -33,6 +33,25 @@ export type SqlBool = 0 | 1;
 export const MembersGFriend = StringUnion('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji');
 export type MembersGFriend = typeof MembersGFriend.type;
 
+export const DropSources = StringUnion(
+  'Purchase (Diamonds)',
+  'Purchase (RP)',
+  'Purchase ($$$)',
+  'Reward',
+  'Reward - Event',
+  'Reward - Gift', // appeared in your inbox suddenly
+  'Reward - Attendance',
+  'Mission - Daily',
+  'Mission - Weekly',
+  'Box Event - Normal',
+  'Box Event - Premium',
+  'Star Pass - Normal',
+  'Star Pass - Premium',
+  'Challenge',
+  'Clear',
+);
+export type DropSources = typeof DropSources.type;
+
 export class Card
 {
   constructor(
