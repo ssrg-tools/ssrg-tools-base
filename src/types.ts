@@ -43,6 +43,7 @@ export const DropSources = StringUnion(
   'Reward - Attendance',
   'Mission - Daily',
   'Mission - Weekly',
+  'Monthly Challenges',
   'Box Event - Normal',
   'Box Event - Premium',
   'Star Pass - Normal',
