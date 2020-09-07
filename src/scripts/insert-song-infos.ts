@@ -49,7 +49,8 @@ createConnection().then(async connection => {
       ;
 
       if (!song) {
-        throw new Error(`no song found for '${baseId}'`);
+        console.log(`[ERROR] no song found for '${baseId}'`);
+        continue;
       }
 
       if (song.beatmapFingerprint && song.beatmapFingerprint === songInfo.beatmap_fingerprint) {
@@ -80,6 +81,10 @@ createConnection().then(async connection => {
       for (const difficultyKey in songInfo.bydifficulties) {
         if (songInfo.bydifficulties.hasOwnProperty(difficultyKey)) {
           const songBeatmap = songInfo.bydifficulties[difficultyKey];
+          if (song.beatmaps.find(beatmap => beatmap.guid === songBeatmap.guid)) {
+            console.log(`Song ${baseId} ${song.name} (${song.album}) - ${songBeatmap.difficulty} - beatmap exists, skipping`);
+            continue;
+          }
 
           const beatmap = connection.getRepository(SongBeatmap).create();
           song.beatmaps.push(beatmap);
