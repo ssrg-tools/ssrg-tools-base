@@ -19,8 +19,8 @@ const testData: {
   // },
   // {
   //   cards: [
-  //     new Card('B', 1, false, '', { name: 'foo', album: 'bar' }),
-  //     new Card('B', 1, false, '', { name: 'foo', album: 'bar' }),
+  //     new Card('B', 1, false, '', dummyTheme),
+  //     new Card('B', 1, false, '', dummyTheme),
   //     new Card('None'),
   //     new Card('None'),
   //     new Card('None'),
@@ -95,3 +95,56 @@ describe('Score calculator basic test', () => {
     });
   });
 });
+
+const themeTestData = [
+  // R50
+  { // 6x R1
+    cards: [
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+      new Card('R', 1, false, '', dummyTheme),
+    ],
+    themeBonus: 545000,
+  },
+  {
+    cards: [
+      new Card('B', 1, false, '', dummyTheme),
+      new Card('B', 1, false, '', dummyTheme),
+      new Card('None'),
+      new Card('None'),
+      new Card('None'),
+      new Card('None'),
+    ],
+    themeBonus: 5000,
+  },
+
+  {
+    cards: [
+      new Card('None'),
+      new Card('None'),
+      new Card('None'),
+    ],
+    themeBonus: 0,
+  },
+
+  // R99
+  {
+    cards: [
+      new Card('S', 1, false, '', dummyTheme, 99),
+      new Card('S', 1, false, '', dummyTheme, 99),
+      new Card('S', 1, false, '', dummyTheme, 99),
+    ],
+    themeBonus: 250000,
+  },
+  {
+    cards: [
+      new Card('None', 1, false, '', dummyTheme, 99),
+      new Card('None', 1, false, '', dummyTheme, 99),
+      new Card('None', 1, false, '', dummyTheme, 99),
+    ],
+    themeBonus: 0,
+  },
+];
