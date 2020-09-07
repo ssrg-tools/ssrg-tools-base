@@ -176,10 +176,11 @@ function processSongName(input: string) {
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .map(word => word.trim())
+        .filter(x => x)
         .join(' ')
     );
 
-  processed[0] = artistMap[processed[0]] || processed[0];
+  processed[0] = (artistMap[processed[0]] || processed[0]).trim();
 
   return processed;
 }
