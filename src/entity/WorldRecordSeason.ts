@@ -1,6 +1,5 @@
 import { PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, OneToMany, Entity } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
-import { SongWorldRecord } from './SongWorldRecord';
+import { SuperstarGame, SongWorldRecord } from './internal';
 
 @Entity('world_record_seasons', { schema: 'superstar_log' })
 export class WorldRecordSeason {

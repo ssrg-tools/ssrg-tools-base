@@ -1,4 +1,4 @@
-import { Grade, GradeNonEmpty } from '../types';
+import { GradeNonEmpty } from '../types';
 import { Column } from 'typeorm';
 
 /**

@@ -6,16 +6,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SongClear } from './SongClear';
-import { Theme } from './Theme';
+import { SongClear, Theme } from './internal';
 import { Grade, MembersGFriend, SqlBool } from './../types';
 
 @Index(['songClearId', 'member'], { unique: true })
 @Index(['songClearId', 'rotationOrder'], {
   unique: true,
 })
-@Index(['guid'], { unique: true })
-@Index(['themeId'], {})
 @Entity('song_clear_cards', { schema: 'superstar_log' })
 export class SongClearCard {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -34,6 +31,7 @@ export class SongClearCard {
   @Column('enum', {
     name: 'member',
     enum: MembersGFriend.values,
+    nullable: true,
   })
   member: typeof MembersGFriend.type;
 

@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './User';
+import { User } from './internal';
 
 @Entity('user_credentials', { schema: 'superstar_log' })
 export class UserCredential {

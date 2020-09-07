@@ -7,16 +7,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
-import { SongClear } from './SongClear';
-import { SongBeatmap } from './SongBeatmap';
-import { SongWorldRecord } from './SongWorldRecord';
+import { SuperstarGame, SongClear, SongBeatmap, SongWorldRecord } from './internal';
 import { SqlBool } from '../types';
-import { DateParts } from './DateParts.embed';
 
-@Index(['guid'], { unique: true })
 @Index(['internalSongId', 'gameId'], { unique: true })
-@Index(['gameId'], {})
 @Entity('songs', { schema: 'superstar_log' })
 export class Song {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -57,11 +51,11 @@ export class Song {
   lengthSeconds: string | null;
 
   @Index('byDateReleasedGame')
-  @Column('datetime')
+  @Column('datetime', { nullable: true })
   dateReleasedGame: Date;
 
   @Index('byDateReleasedWorld')
-  @Column('datetime')
+  @Column('datetime', { nullable: true })
   dateReleasedWorld: Date;
 
   @Column('tinyint', {
@@ -79,6 +73,14 @@ export class Song {
     default: null,
   })
   internalSongId: string;
+
+  @Column('varchar', {
+    comment: 'defaults to game internal song id',
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  imageId: string;
 
   @Column('varchar', {
     name: 'dalcom_song_filename',

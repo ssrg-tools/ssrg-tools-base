@@ -1,17 +1,12 @@
 import {
   Column,
   Entity,
-  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
-import { LeagueRanking } from './LeagueRanking';
-import { SongClear } from './SongClear';
-import { SuperstarGame } from './SuperstarGame';
+import { LeagueRanking, SongClear, SuperstarGame } from './internal';
 
-@Index(['guid'], { unique: true })
 @Entity('divisions', { schema: 'superstar_log' })
 export class Division {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })

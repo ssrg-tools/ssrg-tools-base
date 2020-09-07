@@ -6,12 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
-import { User } from './User';
+import { SuperstarGame, User } from './internal';
 
-@Index(['guid'], { unique: true })
-@Index(['userId'], {})
-@Index(['gameId'], {})
 @Entity('log_credits', { schema: 'superstar_log' })
 export class LogCredit {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })

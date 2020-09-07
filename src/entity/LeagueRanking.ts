@@ -6,14 +6,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Division } from './Division';
-import { User } from './User';
-import { SuperstarGame } from './SuperstarGame';
+import { SuperstarGame, User, Division } from './internal';
 
-@Index(['guid'], { unique: true })
-@Index(['divisionId'], {})
-@Index(['userId'], {})
-@Index(['gameId'], {})
 @Entity('league_ranking', { schema: 'superstar_log' })
 export class LeagueRanking {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -67,9 +61,10 @@ export class LeagueRanking {
   @Column('int', {
     name: 'user_id',
     unsigned: true,
+    nullable: true,
     default: 20150115,
   })
-  userId: number;
+  userId?: number;
 
   @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;

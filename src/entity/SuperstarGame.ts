@@ -1,24 +1,15 @@
 import {
   Column,
-
- Entity,
+  Entity,
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { LeagueRanking } from './LeagueRanking';
-import { LogCredit } from './LogCredit';
-import { LogDiamond } from './LogDiamond';
-import { LogDiamondAd } from './LogDiamondAd';
-import { CardDrop } from './CardDrop';
-import { Song } from './Song';
-import { Theme } from './Theme';
+import { LeagueRanking, LogCredit, LogDiamond, LogDiamondAd, CardDrop, Song, Theme, Division } from './internal';
 import { SqlBool } from '../types';
-import { Division } from './Division';
 
-@Index(['guid'], { unique: true })
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })

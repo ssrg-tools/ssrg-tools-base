@@ -1,8 +1,6 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { Song } from './Song';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Song } from './internal';
 
-@Index(['guid'], { unique: true })
-@Index(['songId'], {})
 @Entity('song_beatmaps', { schema: 'superstar_log' })
 export class SongBeatmap {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })

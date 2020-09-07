@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { OAuthCode } from './OAuthCode';
-import { OAuthToken } from './OAuthToken';
+import { OAuthCode, OAuthToken } from './internal';
 
 @Entity('oauth_clients', { schema: 'superstar_log' })
 export class OAuthClient {

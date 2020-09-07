@@ -7,16 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Song } from './Song';
-import { Division } from './Division';
-import { User } from './User';
-import { SongClearCard } from './SongClearCard';
+import { Song, Division, User, SongClearCard } from './internal';
 import { SqlBool } from '../types';
 
-@Index(['guid'], { unique: true })
-@Index(['songId'], {})
-@Index(['divisionId'], {})
-@Index(['userId'], {})
 @Entity('song_clears_v2', { schema: 'superstar_log' })
 export class SongClear {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -129,7 +122,8 @@ export class SongClear {
   @Column('int', {
     name: 'theme_buff_bonus',
     unsigned: true,
-    default: 5000,
+    default: 6000,
+    nullable: true,
   })
   themeBuffBonus: number;
 
@@ -137,6 +131,7 @@ export class SongClear {
     name: 'score_theme_grade_bonus',
     unsigned: true,
     default: 545000,
+    nullable: true,
   })
   scoreThemeGradeBonus: number;
 

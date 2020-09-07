@@ -6,15 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
-import { Theme } from './Theme';
-import { User } from './User';
+import { SuperstarGame, Theme, User } from './internal';
 import { GradeNonEmpty, MembersGFriend, SqlBool } from '../types';
 
-@Index(['guid'], { unique: true })
-@Index(['themeId'], {})
-@Index(['userId'], {})
-@Index(['gameId'], {})
 @Entity('log_drops', { schema: 'superstar_log' })
 export class CardDrop {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -59,6 +53,7 @@ export class CardDrop {
   @Column('enum', {
     name: 'member',
     enum: [...MembersGFriend.values, 'Power Up'],
+    nullable: true,
   })
   member: typeof MembersGFriend.type | 'Power Up';
 

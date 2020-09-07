@@ -7,14 +7,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CardDrop } from './CardDrop';
-import { SongClearCard } from './SongClearCard';
-import { SuperstarGame } from './SuperstarGame';
-import { NumberLike } from '../types';
-import { DateParts } from './DateParts.embed';
+import { CardDrop, SongClearCard, SuperstarGame } from './internal';
 
-@Index(['guid'], { unique: true })
-@Index(['gameId'], {})
 @Entity('themes', { schema: 'superstar_log' })
 export class Theme {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -29,11 +23,20 @@ export class Theme {
   @Column('simple-array', { comment: 'contains theme tags like "Limited", "Event", "Original"' })
   tags: string[];
 
-  @Column('simple-json', { comment: 'maps card IDs to prism and prism background and frame' })
-  prismMap: { [cardId: string]: { prismBg: NumberLike, frame: NumberLike } };
+  @Column('int', { unsigned: true, default: 0, comment: 'ID of the frame cards, for LE/Event cards' })
+  frameId: number;
+
+  @Column('int', { unsigned: true, default: 1, comment: 'ID of the prism bg, GFriend prism cards' })
+  prismId: number;
+
+  @Column('int', { unsigned: true, nullable: true })
+  cardIdStart: number;
+
+  @Column('int', { unsigned: true, nullable: true })
+  cardCount: number;
 
   @Index('byDateReleased')
-  @Column('datetime')
+  @Column('datetime', { nullable: true })
   dateReleased: Date;
 
   @Column('int', { name: 'game_id', unsigned: true, default: 1 })
