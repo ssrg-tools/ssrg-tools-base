@@ -340,6 +340,7 @@ createConnection().then(async connection => {
         album,
         game,
         internalSongId: dalcomSongId,
+        imageId: dalcomSongId,
         ingame: 1,
         dateReleasedGame: dateReleased,
         dateReleasedWorld: dateReleased,
