@@ -50,6 +50,8 @@ export const DropSources = StringUnion(
   'Star Pass - Premium',
   'Challenge',
   'Clear',
+  'Compensation - Maintainance',
+  'Compensation - Emergency',
 );
 export type DropSources = typeof DropSources.type;
 
