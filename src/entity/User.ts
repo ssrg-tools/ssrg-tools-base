@@ -38,6 +38,9 @@ export class User {
   @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   playsPublic: SqlBool;
 
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
+  forceDarkMode: SqlBool;
+
   @Column('datetime', { name: 'created', default: () => 'CURRENT_TIMESTAMP' })
   created: Date;
 
@@ -53,9 +56,9 @@ export class User {
   @Column('varchar', {
     name: 'timezone',
     length: 255,
-    default: () => '\'Europe/Berlin\'',
+    nullable: true,
   })
-  timezone: string;
+  timezone?: string;
 
   @Column('tinyint', { name: 'active', default: () => 1, width: 1 })
   active: SqlBool;
@@ -100,3 +103,6 @@ export class User {
   @JoinTable()
   activeGames: SuperstarGame[];
 }
+
+/** allow alphanumeric, underscore and Hangul, at least 3 digits */
+export const regexpUsername = /^[\w_\u3131-\uD79D]{3,50}$/u;
