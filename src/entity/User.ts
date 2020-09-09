@@ -15,6 +15,8 @@ import { SongClear } from './SongClear';
 import { UserCredential } from './UserCredential';
 import { SqlBool } from '../types';
 import { SuperstarGame } from './SuperstarGame';
+import { UserLogin } from './UserLogin';
+import { UserVerification } from './UserVerification';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {
@@ -24,16 +26,16 @@ export class User {
   @Column('varchar', { name: 'username', unique: true, length: 100 })
   username: string;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   profilePublic: SqlBool;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   balancePublic: SqlBool;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   dropsPublic: SqlBool;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   playsPublic: SqlBool;
 
   @Column('datetime', { name: 'created', default: () => 'CURRENT_TIMESTAMP' })
@@ -55,13 +57,13 @@ export class User {
   })
   timezone: string;
 
-  @Column('tinyint', { name: 'active', default: () => 1 })
+  @Column('tinyint', { name: 'active', default: () => 1, width: 1 })
   active: SqlBool;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   isAdmin: SqlBool;
 
-  @Column('tinyint', { unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   isMod: SqlBool;
 
   @Column('varchar', { name: 'guid', unique: true, length: 255 })
@@ -87,6 +89,12 @@ export class User {
 
   @OneToMany(() => UserCredential, (userCredentials) => userCredentials.user)
   userCredentials: UserCredential[];
+
+  @OneToMany(() => UserLogin, (userLogin) => userLogin.user)
+  logins: UserLogin[];
+
+  @OneToMany(() => UserVerification, (verification) => verification.user)
+  verifications: UserVerification[];
 
   @ManyToMany(() => SuperstarGame)
   @JoinTable()
