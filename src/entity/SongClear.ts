@@ -56,13 +56,12 @@ export class SongClear {
   @Column('int', { name: 'score_bonus', nullable: true, unsigned: true })
   scoreBonus: number | null;
 
-  @Column('int', { name: 'stars', unsigned: true, default: 3 })
+  @Column('int', { name: 'stars', unsigned: true })
   stars: number;
 
   @Column('enum', {
     name: 'difficulty',
     enum: ['Easy', 'Normal', 'Hard'],
-    default: '\'Normal\'',
   })
   difficulty: 'Easy' | 'Normal' | 'Hard';
 
@@ -76,7 +75,6 @@ export class SongClear {
     name: 'hit_good',
     nullable: true,
     unsigned: true,
-    default: 0,
   })
   hitGood: number | null;
 
@@ -85,7 +83,6 @@ export class SongClear {
     name: 'hit_miss',
     nullable: true,
     unsigned: true,
-    default: 0,
   })
   hitMiss: number | null;
 
@@ -125,7 +122,6 @@ export class SongClear {
   @Column('int', {
     name: 'theme_buff_bonus',
     unsigned: true,
-    default: 6000,
     nullable: true,
   })
   themeBuffBonus: number;
@@ -133,13 +129,12 @@ export class SongClear {
   @Column('int', {
     name: 'score_theme_grade_bonus',
     unsigned: true,
-    default: 545000,
     nullable: true,
   })
   scoreThemeGradeBonus: number;
 
-  @Column('int', { name: 'division_id', unsigned: true, default: 5 })
-  divisionId: number;
+  @Column('int', { name: 'division_id', unsigned: true, nullable: true })
+  divisionId?: number;
 
   @Column('int', {
     name: 'user_id',
@@ -166,14 +161,14 @@ export class SongClear {
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
   song: Song;
 
-  @ManyToOne(() => Division, (divisions) => divisions.songClearsVs, {
+  @ManyToOne(() => Division, (divisions) => divisions.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'division_id', referencedColumnName: 'id' }])
-  division: Division;
+  division?: Division;
 
-  @ManyToOne(() => User, (users) => users.songClearsVs, {
+  @ManyToOne(() => User, (users) => users.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

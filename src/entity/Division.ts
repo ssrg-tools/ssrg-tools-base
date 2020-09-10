@@ -50,7 +50,7 @@ export class Division {
   leagueRankings: LeagueRanking[];
 
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.division)
-  songClearsVs: SongClear[];
+  songClears: SongClear[];
 
   @ManyToMany(type => SuperstarGame)
   games: SuperstarGame[];

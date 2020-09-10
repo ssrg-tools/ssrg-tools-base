@@ -88,7 +88,7 @@ export class User {
   logDrops: CardDrop[];
 
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.user)
-  songClearsVs: SongClear[];
+  songClears: SongClear[];
 
   @OneToMany(() => UserCredential, (userCredentials) => userCredentials.user)
   userCredentials: UserCredential[];
