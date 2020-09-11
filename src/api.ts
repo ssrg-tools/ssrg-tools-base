@@ -53,7 +53,6 @@ export interface PostSongClear {
 }
 
 export interface CardExtra {
-  memberIndex: number;
   themeGuid?: string;
 }
 
