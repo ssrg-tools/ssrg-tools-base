@@ -95,7 +95,7 @@ export class SongClear {
   })
   hitScore: number | null;
 
-  @Column('int', { name: 'theme_level', unsigned: true, default: 3 })
+  @Column('int', { name: 'theme_level', unsigned: true, nullable: true })
   themeLevel: number;
 
   @Column('tinyint', {
