@@ -32,7 +32,10 @@ export class CardDrop {
     enum: [...MembersGFriend.values, 'Power Up'],
     nullable: true,
   })
-  member: typeof MembersGFriend.type | 'Power Up';
+  member?: typeof MembersGFriend.type | 'Power Up';
+
+  @Column('tinyint', { nullable: true, unsigned: true })
+  memberOffset?: number | null;
 
   @Column('int', { name: 'theme_id', nullable: true, unsigned: true })
   themeId: number | null;

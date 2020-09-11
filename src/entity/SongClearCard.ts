@@ -34,7 +34,10 @@ export class SongClearCard {
     enum: MembersGFriend.values,
     nullable: true,
   })
-  member: typeof MembersGFriend.type;
+  member?: typeof MembersGFriend.type;
+
+  @Column('tinyint', { nullable: true, unsigned: true })
+  memberOffset?: number | null;
 
   @Column('int', { name: 'score', unsigned: true })
   score: number;
