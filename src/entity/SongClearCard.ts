@@ -95,7 +95,7 @@ export class SongClearCard {
       case 'A':
       case 'B':
       case 'C':
-      default:
+      case 'None':
         return true;
     }
   }
@@ -103,19 +103,20 @@ export class SongClearCard {
   get canDecreaseGrade()
   {
     switch (this.grade) {
-      default:
-      case 'C':
+      case 'None':
         return false;
       case 'R':
       case 'S':
       case 'A':
       case 'B':
+      case 'C':
         return true;
     }
   }
 
   decreaseGrade()
   {
+    this.level = 1;
     switch (this.grade) {
       case 'R':
         this.grade = 'S';
@@ -130,13 +131,17 @@ export class SongClearCard {
         this.grade = 'C';
         break;
       case 'C':
-      default:
+        this.grade = 'None';
+        this.isPrism = 0;
+        break;
+      case 'None':
         break;
     }
   }
 
   increaseGrade()
   {
+    this.level = 1;
     switch (this.grade) {
       case 'R':
         break;
@@ -152,9 +157,31 @@ export class SongClearCard {
       case 'C':
         this.grade = 'B';
         break;
-      default:
+      case 'None':
         this.grade = 'C';
         break;
+    }
+  }
+
+  increaseLevel()
+  {
+    this.level++;
+    if (this.grade === 'None') {
+      this.increaseGrade();
+    }
+    if (['C', 'B', 'A', 'S'].includes(this.grade) && this.level > 5) {
+      this.increaseGrade();
+    }
+  }
+
+  decreaseLevel()
+  {
+    this.level--;
+    if (this.level < 1) {
+      this.decreaseGrade();
+      if (this.grade !== 'None') {
+        this.level = 5;
+      }
     }
   }
 }
