@@ -26,6 +26,11 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
   }
 }
 
+export interface ErrorResponse {
+  type: 'error';
+  reason: string;
+}
+
 export interface GameSummary {
   name: string;
   key: string;
@@ -59,7 +64,8 @@ export interface PostCardDropData {
   date: string | Date;
   cards: {
     grade: GradeNonEmpty | '30%' | '100%',
-    member: string | null,
+    member?: string,
+    memberOffset?: number,
     themeGuid: string,
     isPrism: SqlBool,
   }[];
