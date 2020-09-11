@@ -1,5 +1,7 @@
 import { NumberLike, DropSources, GradeNonEmpty, SqlBool } from './types';
 import { SongWorldRecord } from './entity/SongWorldRecord';
+import { SongClear } from './entity/SongClear';
+import { SongClearCard } from './entity/SongClearCard';
 
 export interface BaseApiResponse<T> {
   data: T;
@@ -34,6 +36,20 @@ export interface GameSummary {
   clearCount: number;
   beatmapsCount: number;
   worldRecords?: SongWorldRecord[];
+}
+
+export interface PostSongClear {
+  songClear: {
+    songGuid: string;
+    divisionGuid: string;
+  } & SongClear;
+  songClearCards: (SongClearCard & CardExtra)[];
+  totalAfter?: number;
+}
+
+export interface CardExtra {
+  memberIndex: number;
+  themeGuid?: string;
 }
 
 export interface PostCardDropData {
