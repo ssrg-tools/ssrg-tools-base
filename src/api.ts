@@ -2,6 +2,7 @@ import { NumberLike, DropSources, GradeNonEmpty, SqlBool } from './types';
 import { SongWorldRecord } from './entity/SongWorldRecord';
 import { SongClear } from './entity/SongClear';
 import { SongClearCard } from './entity/SongClearCard';
+import { Moment } from 'moment';
 
 export interface BaseApiResponse<T> {
   data: T;
@@ -54,6 +55,10 @@ export interface PostSongClear {
 
 export interface CardExtra {
   themeGuid?: string;
+}
+
+export interface MomentDate {
+  dateMoment: Moment;
 }
 
 export interface PostCardDropData {
