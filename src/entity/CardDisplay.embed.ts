@@ -1,4 +1,4 @@
-import { GradeNonEmpty } from '../types';
+import { Grade } from '../types';
 import { Column } from 'typeorm';
 
 /**
@@ -10,7 +10,7 @@ export class CardDisplay {
   cardImage?: number;
 
   @Column('varchar', { length: 5, nullable: true })
-  grade?: GradeNonEmpty;
+  grade?: Grade;
 
   @Column('smallint', { unsigned: true, nullable: true })
   level?: number;
