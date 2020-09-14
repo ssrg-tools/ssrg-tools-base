@@ -117,7 +117,6 @@ export class Song {
   @Column('varchar', {
     name: 'beatmap_fingerprint',
     comment: 'game internal song filename',
-    unique: true,
     length: 255,
     nullable: true,
     default: null,
