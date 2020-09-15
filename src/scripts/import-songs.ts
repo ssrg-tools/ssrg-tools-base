@@ -12,7 +12,6 @@ import { generate_guid } from '../guid';
 
 const verbose = false;
 const dryRun = true;
-const dateReleased = new Date('2020-01-01T09:00:00');
 
 // tslint:disable: object-literal-key-quotes
 const artistMap: Dictionary<string> = {
@@ -294,6 +293,12 @@ function processSongName(input: string) {
 
   processed[0] = (artistMap[processed[0]] || processed[0]).trim();
 
+  if (!processed[1]) {
+    processed[1] = processed[0];
+    processed[0] = 'Unknown';
+  }
+  processed[1] = (processed[1]).trim();
+
   return processed;
 }
 
@@ -366,8 +371,6 @@ createConnection().then(async connection => {
         internalSongId: dalcomSongId,
         imageId: dalcomSongId,
         ingame: 1,
-        dateReleasedGame: dateReleased,
-        dateReleasedWorld: dateReleased,
         guid: generate_guid(),
       });
 
@@ -376,7 +379,8 @@ createConnection().then(async connection => {
           `Would insert ${game.name}/${dalcomSongId} [${newSong.album}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`);
       }
       if (!dryRun) {
-        console.log(await songs.save(newSong));
+        const saved = await songs.save(newSong);
+        console.log(`Inserted ${gameKey}/${dalcomSongId} [${newSong.album}] ${newSong.name} - from '${songInfo.dalcom_song_filename}' - ${saved.id}-${saved.guid}`);
       }
       inserted++;
     }
