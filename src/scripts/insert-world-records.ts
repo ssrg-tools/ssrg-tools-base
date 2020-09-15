@@ -82,71 +82,77 @@ createConnection().then(async connection => {
 
       // console.log(`Processing '${filepath}'`);
       const dalcomWR: WRRecord = require(filepath);
-      const mentionedSong = songsByGames[game.id][dalcomWR.code];
+      const mentionedSong = songsForGame[dalcomWR.code];
 
       if (!mentionedSong) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`);
         return;
       }
 
-      const wr = SongWorldRecords.create(dalcomWR.rankDataRaw.ranking[0] as {});
-      wr.songId = mentionedSong.id;
-      wr.meta = JSON.stringify({ path: relpath });
-      wr.specialUserCode = wr.specialUserCode || 0;
-      wr.guid = generate_guid();
-
+      const wrRankingLength = dalcomWR.rankDataRaw.ranking.length;
       if (!dalcomWR.rankDataRaw.ranking || !dalcomWR.rankDataRaw.ranking[0]) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no ranking data?. ${filepath}`);
         return;
       }
 
-      wr.dateRecorded = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
+      for (let index = 0; index < wrRankingLength; index++) {
+        const ranking = dalcomWR.rankDataRaw.ranking[index];
 
-      // Find out if it's already been inserted
-      const exists = (await SongWorldRecords.createQueryBuilder('wr')
-        .cache(false)
-        .innerJoin('wr.song', 'song')
-        .innerJoin('song.game', 'game')
-        .where('song_id = :songId', { songId: mentionedSong.id })
-        .andWhere('object_id = :objectId', { objectId: wr.objectID })
-        .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
-        .andWhere('game.key = :gameKey', { gameKey: game.key })
-        .getCount()) > 0;
-      if (exists) {
-        if (verbose) {
-          console.warn(`Record '${relpath}' already inserted.`);
+        const wr = SongWorldRecords.create(ranking as {});
+        wr.songId = mentionedSong.id;
+        wr.meta = JSON.stringify({ path: relpath });
+        wr.specialUserCode = wr.specialUserCode || 0;
+        wr.guid = generate_guid();
+        wr.rank = index + 1;
+
+        wr.dateRecorded = new Date(ranking.updatedAt);
+
+        // Find out if it's already been inserted
+        const exists = (await SongWorldRecords.createQueryBuilder('wr')
+          .cache(false)
+          .innerJoin('wr.song', 'song')
+          .innerJoin('song.game', 'game')
+          .where('song_id = :songId', { songId: mentionedSong.id })
+          .andWhere('object_id = :objectId', { objectId: wr.objectID })
+          .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
+          .andWhere('rank = :rank', { rank: wr.rank })
+          .andWhere('game.key = :gameKey', { gameKey: game.key })
+          .getCount()) > 0;
+        if (exists) {
+          if (verbose) {
+            console.warn(`Record '${relpath}' already inserted.`);
+          }
+          skipped++;
+          return;
         }
-        skipped++;
-        return;
+
+        const leaderCard = ranking.leaderCard;
+        if (leaderCard) {
+          wr.leaderCard = {
+            cardImage: leaderCard.c,
+            grade: dalcomGradeMap[leaderCard.g],
+            level: leaderCard.l,
+          };
+        }
+
+        const season = await getRepository(WorldRecordSeason)
+          .createQueryBuilder('season')
+          .cache(true)
+          .where('dateStart < NOW()')
+          .andWhere('dateEnd > NOW()')
+          .innerJoin('season.game', 'game')
+          .andWhere('game.key = :gameKey', { gameKey: game.key })
+          .getOne()
+          ;
+        wr.season = season;
+        if (!season) {
+          console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no WR season found. ${filepath}`);
+          return;
+        }
+        worldRecords.push(wr);
+        console.log(`[INFO] inserting ${game.key}/${mentionedSong.album}/${mentionedSong.name}[${wr.rank.toLocaleString('en', {minimumIntegerDigits: 3, useGrouping: false})}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`);
       }
 
-      const leaderCard = dalcomWR.rankDataRaw.ranking[0].leaderCard;
-      if (leaderCard) {
-        wr.leaderCard = {
-          cardImage: leaderCard.c,
-          grade: dalcomGradeMap[leaderCard.g],
-          level: leaderCard.l,
-        };
-      }
-
-      const season = await getRepository(WorldRecordSeason)
-        .createQueryBuilder('season')
-        .cache(true)
-        .where('dateStart < NOW()')
-        .andWhere('dateEnd > NOW()')
-        .innerJoin('season.game', 'game')
-        .andWhere('game.key = :gameKey', { gameKey: game.key })
-        .getOne()
-        ;
-      wr.season = season;
-      if (!season) {
-        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no WR season found. ${filepath}`);
-        return;
-      }
-      // console.log(dalcomWR, wr);
-      worldRecords.push(wr);
-      // await SongWorldRecords.save(wr);
-      console.log(`[INFO] inserting ${game.key}/${mentionedSong.album}/${mentionedSong.name} - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`);
     }));
   }));
 
@@ -157,6 +163,7 @@ createConnection().then(async connection => {
       objectID: wr.objectID,
       highscore: wr.highscore,
       dateRecorded: wr.dateRecorded,
+      rank: wr.rank,
     });
   });
 

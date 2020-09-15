@@ -34,6 +34,9 @@ export class SongWorldRecord {
   @Column('datetime', { name: 'date_recorded' })
   dateRecorded: Date;
 
+  @Column('int', { unsigned: true })
+  rank: number;
+
   @ManyToOne(() => WorldRecordSeason, (season) => season.entries, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
