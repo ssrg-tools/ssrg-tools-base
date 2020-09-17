@@ -11,6 +11,7 @@ import { Theme } from './Theme';
 import { Grade, MembersGFriend, SqlBool } from './../types';
 
 @Index(['songClearId', 'member'], { unique: true })
+@Index(['songClearId', 'memberOffset'], { unique: true })
 @Index(['songClearId', 'rotationOrder'], {
   unique: true,
 })
