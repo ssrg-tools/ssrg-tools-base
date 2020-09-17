@@ -25,7 +25,7 @@ export class LeagueTrackerEntry {
   divisionGroup: number;
 
   @Index('bySSRGDiscord')
-  @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
+  @Column('tinyint', { unsigned: true, width: 1, default: 0 })
   isSSRGDiscord: SqlBool;
 
   @Column('varchar', { nullable: true, length: 255 })
