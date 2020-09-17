@@ -6,6 +6,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
+import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 import { SongClear } from './SongClear';
 import { SuperstarGame } from './SuperstarGame';
 
@@ -49,9 +50,12 @@ export class Division {
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.division)
   leagueRankings: LeagueRanking[];
 
+  @OneToMany(() => LeagueTrackerEntry, (leagueTrackerEntry) => leagueTrackerEntry.division)
+  leagueTrackerEntries: LeagueTrackerEntry[];
+
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.division)
   songClears: SongClear[];
 
-  @ManyToMany(type => SuperstarGame)
+  @ManyToMany(() => SuperstarGame)
   games: SuperstarGame[];
 }

@@ -10,6 +10,7 @@ import { Division } from './Division';
 import { User } from './User';
 import { SuperstarGame } from './SuperstarGame';
 
+/** possibly deprecated */
 @Entity('league_ranking', { schema: 'superstar_log' })
 export class LeagueRanking {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
@@ -51,7 +52,7 @@ export class LeagueRanking {
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
 
-  @Column('int', { name: 'division_id', unsigned: true, default: 5 })
+  @Column('int', { name: 'division_id', unsigned: true })
   divisionId: number;
 
   @Column('varchar', { name: 'comment', nullable: true, length: 255 })
@@ -68,7 +69,7 @@ export class LeagueRanking {
   })
   userId?: number;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
+  @Column('int', { name: 'game_id', unsigned: true })
   gameId: number;
 
   @Column('varchar', {

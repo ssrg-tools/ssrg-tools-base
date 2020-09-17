@@ -16,6 +16,7 @@ import { Song } from './Song';
 import { Theme } from './Theme';
 import { Division } from './Division';
 import { SqlBool } from '../types';
+import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
@@ -79,6 +80,9 @@ export class SuperstarGame {
 
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.game)
   leagueRankings: LeagueRanking[];
+
+  @OneToMany(() => LeagueTrackerEntry, (leagueTrackerEntry) => leagueTrackerEntry.game)
+  leagueTrackerEntries: LeagueTrackerEntry[];
 
   @OneToMany(() => LogCredit, (logCredits) => logCredits.game)
   logCredits: LogCredit[];
