@@ -11,6 +11,7 @@ export class AddLeagueTracker1600327341595 implements MigrationInterface {
       \`date\` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
       \`divisionId\` int UNSIGNED NULL,
       \`divisionGroup\` tinyint UNSIGNED NOT NULL COMMENT \'in SSRGs the divisions are divided into two groups\',
+      \`isSSRGDiscord\` tinyint(1) NOT NULL DEFAULT 0,
       \`comment\` varchar(255) NULL,
       \`divisionKey\` varchar(255) NULL COMMENT \'if available, connects people that have been in the same division, e.g. Week 43 Gold III-3\', \`meta\` longtext NULL,
       \`objectID\` int UNSIGNED NULL,
@@ -18,6 +19,7 @@ export class AddLeagueTracker1600327341595 implements MigrationInterface {
       \`gameId\` int UNSIGNED NOT NULL,
       \`guid\` varchar(255) NOT NULL,
       INDEX \`byDate\` (\`date\`),
+      INDEX \`bySSRGDiscord\` (\`isSSRGDiscord\`),
       UNIQUE INDEX \`IDX_a5b797770833ca08ffadcb9967\` (\`guid\`),
       PRIMARY KEY (\`id\`)
       ) ENGINE=InnoDB`);

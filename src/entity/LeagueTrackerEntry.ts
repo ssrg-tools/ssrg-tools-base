@@ -1,3 +1,4 @@
+import { SqlBool } from '../types';
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { Division } from './Division';
 import { SuperstarGame } from './SuperstarGame';
@@ -22,6 +23,10 @@ export class LeagueTrackerEntry {
 
   @Column('tinyint', { unsigned: true, comment: 'in SSRGs the divisions are divided into two groups' })
   divisionGroup: number;
+
+  @Index('bySSRGDiscord')
+  @Column('tinyint', { name: 'is_prism', unsigned: true, default: 0 })
+  isSSRGDiscord: SqlBool;
 
   @Column('varchar', { nullable: true, length: 255 })
   comment: string | null;
