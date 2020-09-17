@@ -6,10 +6,12 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  OneToOne,
 } from 'typeorm';
 import { CardDrop } from './CardDrop';
 import { SongClearCard } from './SongClearCard';
 import { SuperstarGame } from './SuperstarGame';
+import { Artist } from './Artist';
 
 @Entity('themes', { schema: 'superstar_log' })
 export class Theme {
@@ -47,6 +49,9 @@ export class Theme {
   @Column('int', { name: 'game_id', unsigned: true, default: 1 })
   gameId: number;
 
+  @Column('int', { name: 'artist_id', unsigned: true })
+  artistId: number;
+
   @Column('varchar', {
     name: 'guid',
     nullable: true,
@@ -54,6 +59,10 @@ export class Theme {
     length: 255,
   })
   guid: string | null;
+
+  @ManyToOne(() => Artist, { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
+  @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
+  artist: Artist;
 
   @OneToMany(() => CardDrop, (logDrops) => logDrops.theme)
   logDrops: CardDrop[];

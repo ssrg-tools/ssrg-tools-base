@@ -12,6 +12,7 @@ import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
 import { SongWorldRecord } from './SongWorldRecord';
 import { SqlBool } from '../types';
+import { Artist } from './Artist';
 
 @Index(['internalSongId', 'gameId'], { unique: true })
 @Entity('songs', { schema: 'superstar_log' })
@@ -103,8 +104,11 @@ export class Song {
   })
   beatmapDateProcessed: Date;
 
-  @Column('int', { name: 'game_id', unsigned: true, default: 1 })
+  @Column('int', { name: 'game_id', unsigned: true })
   gameId: number;
+
+  @Column('int', { name: 'artist_id', unsigned: true })
+  artistId: number;
 
   @Column('varchar', {
     name: 'guid',
@@ -123,6 +127,10 @@ export class Song {
     select: false,
   })
   beatmapFingerprint: string;
+
+  @ManyToOne(() => Artist,  { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
+  @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
+  artist: Artist;
 
   @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.songs, {
     onDelete: 'RESTRICT',

@@ -17,6 +17,7 @@ import { Theme } from './Theme';
 import { Division } from './Division';
 import { SqlBool } from '../types';
 import { LeagueTrackerEntry } from './LeagueTrackerEntry';
+import { Artist } from './Artist';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
@@ -101,6 +102,9 @@ export class SuperstarGame {
 
   @OneToMany(() => Theme, (themes) => themes.game)
   themes: Theme[];
+
+  @OneToMany(() => Artist, (artist) => artist.game)
+  artists: Artist[];
 
   @ManyToMany(type => Division)
   @JoinTable()
