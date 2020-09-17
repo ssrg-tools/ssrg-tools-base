@@ -113,6 +113,7 @@ const artistMap: Dictionary<string> = {
   'Jjp': 'JJ Project',
   'JUNK': 'Jun.K',
   'SUZY': 'Suzy',
+  'Nakjoon': 'NakJoon',
 };
 
 const prepareMap: Dictionary<string> = {
