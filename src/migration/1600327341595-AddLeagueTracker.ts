@@ -20,6 +20,8 @@ export class AddLeagueTracker1600327341595 implements MigrationInterface {
       \`guid\` varchar(255) NOT NULL,
       INDEX \`byDate\` (\`date\`),
       INDEX \`bySSRGDiscord\` (\`isSSRGDiscord\`),
+      INDEX \`byNickname\` (\`nickname\`),
+      INDEX \`byObjectID\` (\`objectID\`),
       UNIQUE INDEX \`IDX_a5b797770833ca08ffadcb9967\` (\`guid\`),
       PRIMARY KEY (\`id\`)
       ) ENGINE=InnoDB`);

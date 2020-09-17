@@ -8,6 +8,7 @@ export class LeagueTrackerEntry {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
+  @Index('byNickname')
   @Column('varchar', { length: 255 })
   nickname: string;
 
@@ -37,6 +38,7 @@ export class LeagueTrackerEntry {
   @Column('longtext', { nullable: true })
   meta: string | null;
 
+  @Index('byObjectID')
   @Column('int', { unsigned: true, nullable: true })
   objectID: number;
 
