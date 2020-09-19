@@ -41,6 +41,9 @@ export interface GameSummary {
   dropsCount: number;
   clearCount: number;
   beatmapsCount: number;
+  artistsCount: number;
+  artistsMembersCount: number;
+  topPlayerCount: number;
   worldRecords?: SongWorldRecord[];
 }
 
