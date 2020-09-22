@@ -21,7 +21,7 @@ export class SongWorldRecord {
   @Column('varchar', { length: 255 })
   nickname: string;
 
-  @Column('int', { name: 'profile_image', unsigned: true })
+  @Column('int', { name: 'profile_image', unsigned: true, nullable: true })
   profileImage: number;
 
   @Column(type => CardDisplay)
