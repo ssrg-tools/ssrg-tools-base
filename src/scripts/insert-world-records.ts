@@ -20,10 +20,12 @@ createConnection().then(async connection => {
   const games = _.keyBy(await getRepository(SuperstarGame).find(), 'id');
   const apkMap = _.keyBy(games, 'apkName');
 
-  const songsByGames = _.mapValues(_.groupBy(await Songs.find({
+  const songs = await Songs.find({
     select: ['id', 'internalSongId', 'gameId', 'name', 'album'],
     where: 'dalcom_song_id IS NOT NULL'
-  }), 'gameId'), songs => _.keyBy(songs, 'internalSongId'));
+  });
+  const songsByGames = _.mapValues(_.groupBy(songs, 'gameId'), songs => _.keyBy(songs, 'internalSongId'));
+  const songsByID = _.keyBy(songs, 'id');
 
   const inputPaths = process.argv.slice(2);
   if (inputPaths.length === 0) {
@@ -123,7 +125,7 @@ createConnection().then(async connection => {
             console.warn(`Record '${relpath}' already inserted.`);
           }
           skipped++;
-          return;
+          continue;
         }
 
         const leaderCard = ranking.leaderCard;
@@ -147,7 +149,7 @@ createConnection().then(async connection => {
         wr.season = season;
         if (!season) {
           console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no WR season found. ${filepath}`);
-          return;
+          continue;
         }
         worldRecords.push(wr);
         console.log(`[INFO] inserting ${game.key}/${mentionedSong.album}/${mentionedSong.name}[${wr.rank.toLocaleString('en', {minimumIntegerDigits: 3, useGrouping: false})}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`);
@@ -170,6 +172,10 @@ createConnection().then(async connection => {
   // console.log(wrFolders, worldRecords.length);
   const saved = await SongWorldRecords.save(deduplicated);
   console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);
+  console.log(_.mapKeys(
+    _.mapValues(_.groupBy(saved, swr => songsByID[swr.songId]?.gameId), group => group.length),
+    (group, key) => games[key]?.name || `Unknown Game #${key} (${group} values)`)
+  );
 }).then(() => process.exit(0)).catch((reason) => {
   console.error(reason);
   process.abort();
