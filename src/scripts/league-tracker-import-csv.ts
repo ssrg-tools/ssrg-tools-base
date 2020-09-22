@@ -9,9 +9,17 @@ import { SuperstarGame } from '../entity/SuperstarGame';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 
 createConnection().then(async connection => {
+  if (!process.argv[2] && !process.argv[3]) {
+    console.error(`No args provided. Need gameKey and source file.`);
+    process.exit(1);
+  }
   const gameKey = process.argv[2];
   if (!gameKey) {
     console.error(`No gameKey provided.`);
+    process.exit(1);
+  }
+  if (/[/\/]/.test(gameKey)) {
+    console.error(`gameKey had slashes. Was it intended as the source file parameter?`);
     process.exit(1);
   }
   const leagueDataFilePath = path.resolve(process.argv[3]);
