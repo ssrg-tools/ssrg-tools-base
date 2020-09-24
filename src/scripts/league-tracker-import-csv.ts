@@ -7,6 +7,7 @@ import { LeagueTrackerEntry } from '../entity/LeagueTrackerEntry';
 import { generate_guid } from '../guid';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
+import { Dictionary } from 'lodash';
 
 createConnection().then(async connection => {
   if (!process.argv[2] && !process.argv[3]) {
@@ -34,36 +35,84 @@ createConnection().then(async connection => {
     process.exit(1);
   }
 
+  const LeagueTrackerEntries = getRepository(LeagueTrackerEntry);
+  const SongWorldRecords = getRepository(SongWorldRecord);
+  const settings: Dictionary<{
+    skipLines: number,
+    readEntry: (record: string[]) => LeagueTrackerEntry,
+  }> = {
+    gfriend: {
+      skipLines: 1,
+      readEntry(record) {
+        const nickname = record[2];
+        const date = moment(record[4] + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ').toDate();
+        const leagueTrackerEntry = LeagueTrackerEntries.create({
+          nickname,
+          score: parseInt((record[3] || '').replace(/[,.]/g, ''), 10),
+          divisionGroup: parseInt(record[1], 10),
+          isSSRGDiscord: record[5] ? 1 : 0,
+          date,
+          game,
+          guid: generate_guid(),
+        });
+        return leagueTrackerEntry;
+      },
+    },
+    jyp: {
+      skipLines: 1,
+      readEntry(record) {
+        const date = moment(record[2] + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ').toDate();
+        const leagueTrackerEntry = LeagueTrackerEntries.create({
+          nickname: record[0],
+          score: parseInt((record[1] || '').replace(/[,.]/g, ''), 10),
+          divisionGroup: 3, // SCD's sheets don't have value for group
+          isSSRGDiscord: record[4] ? 1 : 0,
+          date,
+          game,
+          guid: generate_guid(),
+        });
+        return leagueTrackerEntry;
+      },
+    },
+  };
+
+  if (!settings[gameKey]) {
+    console.error(`Game '${gameKey}' not supported!`);
+    process.exit(1);
+  }
+
   const contents = fs.readFileSync(leagueDataFilePath, 'utf8');
   const records: any[] = csvParser(contents, {
     // columns: true,
     skip_empty_lines: true
-  }).slice(1);
+  }).slice(settings[gameKey].skipLines);
 
   if (!records.length) {
     console.error(`File '${leagueDataFilePath}' has no records.`);
     process.exit(1);
   }
 
+
   console.log(`Processing '${records.length}' records!`);
 
   let inserted = 0;
   let skipped = 0;
 
-  const LeagueTrackerEntries = getRepository(LeagueTrackerEntry);
-  const SongWorldRecords = getRepository(SongWorldRecord);
   for (const record of records) {
-    const nickname = record[2];
     if (!record[1] || !record[2]) {
       continue;
     }
 
-    const date = moment(record[4] + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ').toDate();
+    const leagueTrackerEntry = settings[gameKey].readEntry(record);
+    if (!leagueTrackerEntry) {
+      console.error(`Error for record`, record);
+      process.exit(1);
+    }
 
     const existing = await LeagueTrackerEntries.findOne(undefined, {
       where: {
-        date,
-        nickname,
+        date: leagueTrackerEntry.date,
+        nickname: leagueTrackerEntry.nickname,
         gameId: game.id,
       },
     });
@@ -73,20 +122,11 @@ createConnection().then(async connection => {
       continue;
     }
 
-    const leagueTrackerEntry = LeagueTrackerEntries.create({
-      nickname,
-      score: parseInt((record[3] || '').replace(/[,.]/g, ''), 10),
-      divisionGroup: parseInt(record[1], 10),
-      isSSRGDiscord: record[5] ? 1 : 0,
-      date,
-      game,
-      guid: generate_guid(),
-    });
 
     const matchingWrEntry = await SongWorldRecords.createQueryBuilder('swr')
       .cache(true)
       .innerJoin('swr.song', 'song')
-      .where('song.gameId = :gameId AND nickname = :nickname', { gameId: game.id, nickname, })
+      .where('song.gameId = :gameId AND nickname = :nickname', { gameId: game.id, nickname: leagueTrackerEntry.nickname, })
       .getOne();
     if (matchingWrEntry) {
       leagueTrackerEntry.objectID = matchingWrEntry.objectID;
@@ -94,6 +134,11 @@ createConnection().then(async connection => {
     }
 
     await LeagueTrackerEntries.save(leagueTrackerEntry);
+    // console.log(leagueTrackerEntry);
+    // if (inserted > 3) {
+
+    //   process.exit();
+    // }
     inserted++;
     process.stdout.write('.');
   }
