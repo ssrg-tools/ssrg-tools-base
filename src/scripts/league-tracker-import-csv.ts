@@ -39,7 +39,7 @@ createConnection().then(async connection => {
   const SongWorldRecords = getRepository(SongWorldRecord);
   const settings: Dictionary<{
     skipLines: number,
-    readEntry: (record: string[]) => LeagueTrackerEntry,
+    readEntry: (record: string[]) => LeagueTrackerEntry | 'skip',
   }> = {
     gfriend: {
       skipLines: 1,
@@ -74,6 +74,27 @@ createConnection().then(async connection => {
         return leagueTrackerEntry;
       },
     },
+    starship: {
+      skipLines: 5,
+      readEntry(record) {
+        const date = moment(record[5] + ' 17:00:00+00:00', 'DD/MM/YYYY HH:mm:ssZ').toDate();
+        const divisionGroup = /\bComet\b/.test(leagueDataFilePath) ? 1 : 2;
+        const score = parseInt((record[4] || '').replace(/[,.]/g, ''), 10);
+        if (score === 0) {
+          return 'skip';
+        }
+        const leagueTrackerEntry = LeagueTrackerEntries.create({
+          nickname: record[1],
+          score,
+          divisionGroup,
+          isSSRGDiscord: record[6] ? 1 : 0,
+          date,
+          game,
+          guid: generate_guid(),
+        });
+        return leagueTrackerEntry;
+      },
+    },
   };
 
   if (!settings[gameKey]) {
@@ -99,7 +120,8 @@ createConnection().then(async connection => {
   let skipped = 0;
 
   for (const record of records) {
-    if (!record[1] || !record[2]) {
+    if (!record[1] || (gameKey === 'starship' ? !record[4] : !record[2])) {
+      process.stdout.write('X');
       continue;
     }
 
@@ -107,6 +129,10 @@ createConnection().then(async connection => {
     if (!leagueTrackerEntry) {
       console.error(`Error for record`, record);
       process.exit(1);
+    }
+    if (leagueTrackerEntry === 'skip') {
+      process.stdout.write('Z');
+      continue;
     }
 
     const existing = await LeagueTrackerEntries.findOne(undefined, {
@@ -144,7 +170,7 @@ createConnection().then(async connection => {
   }
   console.log('   Done!');
 
-  console.log(`Finished, inserting ${inserted} records and skipping ${skipped}`);
+  console.log(`Finished, inserted ${inserted} records and skipped ${skipped}`);
 }).then(() => process.exit(0)).catch((reason) => {
   console.error(reason);
   process.abort();
