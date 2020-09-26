@@ -107,7 +107,7 @@ function calcTrueNoteScoreBasic(songClear: SongClear, beatmaps: Dictionary<SongB
     };
   }
 
-  const rangeP = _.range(1, songClear.hitPerfect + 1);
+  const rangeP = songClear.hitPerfect ? _.range(1, songClear.hitPerfect + 1) : [ 0 ];
   const rangeG = _.range(1, songClear.hitGood + 1);
   const rangeX = _.flatMap(rangeP, pCount =>
     rangeG.map(gCount => {
