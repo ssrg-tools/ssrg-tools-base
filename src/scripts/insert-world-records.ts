@@ -102,7 +102,7 @@ createConnection().then(async connection => {
 
         const wr = SongWorldRecords.create(ranking as {});
         wr.songId = mentionedSong.id;
-        wr.meta = JSON.stringify({ path: relpath });
+        wr.meta = JSON.stringify({});
         wr.specialUserCode = wr.specialUserCode || 0;
         wr.guid = generate_guid();
         wr.rank = index + 1;
