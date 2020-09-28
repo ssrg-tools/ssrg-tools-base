@@ -12,6 +12,7 @@ import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { generate_guid } from '../guid';
 
 const verbose = false;
+const stubSongs = false;
 
 createConnection().then(async connection => {
   const Songs = getRepository(Song);
@@ -84,11 +85,22 @@ createConnection().then(async connection => {
 
       // console.log(`Processing '${filepath}'`);
       const dalcomWR: WRRecord = require(filepath);
-      const mentionedSong = songsForGame[dalcomWR.code];
+      let mentionedSong = songsForGame[dalcomWR.code];
 
-      if (!mentionedSong) {
+      if (!stubSongs && !mentionedSong) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`);
         return;
+      } else if (stubSongs && !mentionedSong) {
+        mentionedSong = await Songs.save(Songs.create({
+          name: `${game.key.toLocaleUpperCase()} song #${dalcomWR.code}`,
+          album: `${game.key.toLocaleUpperCase()} song #${dalcomWR.code}`,
+          ingame: 0,
+          imageId: dalcomWR.code.toString(),
+          internalSongId: dalcomWR.code.toString(),
+          guid: generate_guid(),
+          game,
+        }));
+        console.warn(`[WARN] Created stub song for dalcom ID '${dalcomWR.code} - ${game.key}'`);
       }
 
       const wrRankingLength = dalcomWR.rankDataRaw.ranking.length;
