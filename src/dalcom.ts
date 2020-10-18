@@ -15,32 +15,34 @@ export interface WRRecord {
     /** dalcom internal song id */
     code: number;
     rankDataRaw: {
-      type: number,
+      type: number;
       /** unix timestamp with milli time */
-      nextUpdate: number,
-      ranking: [
-        {
-          /** no idea what this is supposed to be */
-          objectID: number,
-          specialUserCode: 0,
-          nickname: string,
-          /** profile image name, e.g. 13006 */
-          profileImage: number,
-          leaderCard?: {
-            /** card image name, e.g. 1033 */
-            c: number,
-            /**
-             * dalcom grade
-             * @see dalcomGradeMap
-             */
-            g: number,
-            /** card level */
-            l: number,
-          },
-          highscore: number,
-          /** unix timestamp with milli time */
-          updatedAt: number
-        }
-      ]
+      nextUpdate: number;
+      ranking: WRRecordEntry[];
     };
+}
+
+export interface WRRecordEntry {
+  /** no idea what this is supposed to be */
+  objectID: number;
+  specialUserCode: 0;
+  nickname: string;
+  /** profile image name, e.g. 13006 */
+  profileImage: number;
+  leaderCard?: LeaderCardShort;
+  highscore: number;
+  /** unix timestamp with milli time */
+  updatedAt: number;
+}
+
+export interface LeaderCardShort {
+  /** card image name, e.g. 1033 */
+  c: number;
+  /**
+   * dalcom grade
+   * @see dalcomGradeMap
+   */
+  g: number;
+  /** card level */
+  l: number;
 }
