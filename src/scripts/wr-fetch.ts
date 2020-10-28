@@ -8,6 +8,8 @@ import { dalcomGradeMap, WRRecordEntry } from '../dalcom';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import { generate_guid } from '../guid';
 import moment from 'moment';
+import fs from 'fs';
+import path from 'path';
 
 const verbose = false;
 
@@ -33,16 +35,16 @@ const currentSeason = {
   sm: 6,
 };
 
-const gameKey = process.argv[2];
-if (!gameKey) {
+const inputGameKey = process.argv[2];
+if (!inputGameKey) {
   console.error('No gameKey provided.');
   process.exit(1);
 }
-if (!supportsWR.includes(gameKey)) {
-  console.error(`gameKey '${gameKey}' not supported. Only ${supportsWR}.`);
+if (!supportsWR.includes(inputGameKey)) {
+  console.error(`gameKey '${inputGameKey}' not supported. Only ${supportsWR}.`);
   process.exit(1);
 }
-const dcSeasonId = process.argv[3] || currentSeason[gameKey];
+const inputDalcomSeasonId = process.argv[3] || currentSeason[inputGameKey];
 
 const timeStart = new Date();
 
@@ -57,6 +59,7 @@ createConnection().then(async conn => {
   const fetchWRsForGame = async (gameKey: string, seasonId: number) => {
     const game = await Games.findOneOrFail(null, { where: { key: gameKey } });
     const songs = await Songs.find({ where: { gameId: game.id } });
+    const timestamp = moment().format('YYYY-MM-DD_HH-mm');
     for (const song of songs) {
       console.log(`Fetching ${gameKey}/${seasonId}/${song.internalSongId}/${song.album}/${song.name}`);
       const endpoint = map[gameKey](seasonId, song.internalSongId);
@@ -72,6 +75,24 @@ createConnection().then(async conn => {
         console.error(`Song ${song.internalSongId} Empty body?`);
         continue;
       }
+
+      const dir = path.join(
+        __dirname,
+        '..', '..', '..',
+        'assets',
+        'wr-cache',
+        gameKey,
+        `${seasonId}_${timestamp}`
+      );
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFile(path.join(dir, song.internalSongId + '.json'), resp.body, 'utf8', (err) => {
+        if (err) {
+            console.log('An error occured while writing JSON Object to File.');
+            return console.log(err);
+        }
+
+        console.log('JSON file has been saved.');
+      });
       const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
 
       if (!rankingData?.length || !rankingData[0]) {
@@ -82,7 +103,7 @@ createConnection().then(async conn => {
       const seasonDate = new Date(rankingData[0].updatedAt);
       const season = await getRepository(WorldRecordSeason)
         .createQueryBuilder('season')
-        .cache(true)
+        // .cache(true)
         .where('dateStart < :date', { date: seasonDate })
         .andWhere('dateEnd > :date', { date: seasonDate })
         .innerJoin('season.game', 'game')
@@ -119,17 +140,19 @@ createConnection().then(async conn => {
         wr.season = season;
 
         // Find out if it's already been inserted
-        const exists = (await SongWorldRecords.createQueryBuilder('wr')
+        const existsQuery = SongWorldRecords.createQueryBuilder('wr')
           .cache(false)
           .innerJoin('wr.song', 'song')
           .innerJoin('song.game', 'game')
           .where('song_id = :songId', { songId: song.id })
           .andWhere('object_id = :objectId', { objectId: wr.objectID })
           .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
-          .andWhere('rank = :rank', { rank: wr.rank })
           .andWhere('game.key = :gameKey', { gameKey: game.key })
-          .andWhere('season_id = :seasonId', { seasonId: season.id })
-          .getCount()) > 0;
+          .andWhere('season_id = :seasonId', { seasonId: season.id });
+        if (wr.rank === 1) {
+          existsQuery.andWhere('rank = :rank', { rank: wr.rank });
+        }
+        const exists = (await existsQuery.getCount()) > 0;
         if (exists) {
           totalSkipped++;
           process.stdout.write('S');
@@ -150,12 +173,13 @@ createConnection().then(async conn => {
     }
   };
 
-  await fetchWRsForGame(gameKey, dcSeasonId);
+  await fetchWRsForGame(inputGameKey, inputDalcomSeasonId);
 
   const timeEnd = new Date();
   const timeTaken = Math.round(moment(timeEnd).diff(moment(timeStart)) / 1000);
+  const timeTakenH = timeTaken / 60 / 60;
 
-  console.log(`Processed in ${timeTaken}s (${((timeTaken / 60 / 60) || 0).toLocaleString(null, { maximumFractionDigits: 1 })}h)`);
+  console.log(`Processed in ${timeTaken}s (${timeTakenH}h)`);
   console.log(`Inserted ${totalInserted} and skipped ${totalSkipped}.`);
 }).then(() => process.exit(0)).catch((reason) => {
   console.error(reason);

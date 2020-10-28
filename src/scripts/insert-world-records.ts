@@ -109,6 +109,17 @@ createConnection().then(async connection => {
         return;
       }
 
+      const seasonDate = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
+      const season = await getRepository(WorldRecordSeason)
+        .createQueryBuilder('season')
+        .cache(true)
+        .where('dateStart < :date', { date: seasonDate })
+        .andWhere('dateEnd > :date', { date: seasonDate })
+        .innerJoin('season.game', 'game')
+        .andWhere('game.key = :gameKey', { gameKey: game.key })
+        .getOne()
+      ;
+
       for (let index = 0; index < wrRankingLength; index++) {
         const ranking = dalcomWR.rankDataRaw.ranking[index];
 
@@ -122,16 +133,19 @@ createConnection().then(async connection => {
         wr.dateRecorded = new Date(ranking.updatedAt);
 
         // Find out if it's already been inserted
-        const exists = (await SongWorldRecords.createQueryBuilder('wr')
+        const existsQuery = SongWorldRecords.createQueryBuilder('wr')
           .cache(false)
           .innerJoin('wr.song', 'song')
           .innerJoin('song.game', 'game')
           .where('song_id = :songId', { songId: mentionedSong.id })
           .andWhere('object_id = :objectId', { objectId: wr.objectID })
           .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
-          .andWhere('rank = :rank', { rank: wr.rank })
           .andWhere('game.key = :gameKey', { gameKey: game.key })
-          .getCount()) > 0;
+          .andWhere('season_id = :seasonId', { seasonId: season.id });
+        if (wr.rank === 1) {
+          existsQuery.andWhere('rank = :rank', { rank: wr.rank });
+        }
+        const exists = (await existsQuery.getCount()) > 0;
         if (exists) {
           if (verbose) {
             console.warn(`Record '${relpath}' already inserted.`);
@@ -149,15 +163,6 @@ createConnection().then(async connection => {
           };
         }
 
-        const season = await getRepository(WorldRecordSeason)
-          .createQueryBuilder('season')
-          .cache(true)
-          .where('dateStart < :date', { date: wr.dateRecorded })
-          .andWhere('dateEnd > :date', { date: wr.dateRecorded })
-          .innerJoin('season.game', 'game')
-          .andWhere('game.key = :gameKey', { gameKey: game.key })
-          .getOne()
-          ;
         wr.season = season;
         if (!season) {
           console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no WR season found. ${filepath}`);
@@ -180,7 +185,8 @@ createConnection().then(async connection => {
       rank: wr.rank,
     });
   });
-
+  console.log(`Done ${deduplicated.length}`);
+  process.exit();
   // console.log(wrFolders, worldRecords.length);
   const saved = await SongWorldRecords.save(deduplicated);
   console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);
