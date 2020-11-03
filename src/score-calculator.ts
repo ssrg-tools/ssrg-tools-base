@@ -37,7 +37,6 @@ export function calcTrueNotScore(songClear: SongClear, beatmaps: Dictionary<Song
   if (songClear.scoreBase > 60000
     || songClear.scoreTotal > 85000
     || songClear.themeLevel // unequipped should be 0/null
-    || songClear.difficulty === 'Easy'
     || songClear.hitMiss
     || typeof songClear.hitGood !== 'number'
     || typeof songClear.hitPerfect !== 'number'
@@ -73,7 +72,7 @@ export function calcTrueNotScore(songClear: SongClear, beatmaps: Dictionary<Song
     });
     return;
   }
-  const baseScoreUnequipped = songClear.difficulty === 'Hard' ? 60000 : 54000;
+  const baseScoreUnequipped = songClear.difficulty === 'Hard' ? 60000 : (songClear.difficulty === 'Normal' ? 54000 : 48000);
   return calcTrueNoteScoreBasic(songClear, beatmaps, baseScoreUnequipped);
 }
 
@@ -89,7 +88,15 @@ function calcTrueNoteScoreBasic(songClear: SongClear, beatmaps: Dictionary<SongB
     (songClear.scoreThemeGradeBonus || calculateThemeBonus(songClearCardsToCards(songClear.cards)));
   const gap = baseScore - rawScoreBase;
 
-  if (rawScoreBase === baseScore) {
+  if (
+    rawScoreBase === baseScore ||
+    (
+      songClear.hitSuperPerfect &&
+      songClear.hitPerfect === 0 &&
+      songClear.hitGood === 0 &&
+      songClear.hitMiss === 0
+    )
+  ) {
     // straight FSP
     return {
       hitSuperPerfect: countNotesTotal,
