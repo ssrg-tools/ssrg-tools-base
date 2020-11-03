@@ -138,3 +138,27 @@ function calcTrueNoteScoreBasic(songClear: SongClear, beatmaps: Dictionary<SongB
     hitMiss: 0,
   };
 }
+
+export function calcThemeLevel(cards: SongClearCard[]) {
+  const groups = _.groupBy(cards, card => card.theme?.guid || 'no-theme');
+  const entries = Object.entries(groups);
+  const totalCount = cards.length;
+  const lvl1 = Math.ceil(totalCount * 0.33);
+  const lvl2 = Math.ceil(totalCount * 0.66);
+
+  const entriesWithTheme = entries.filter(([key]) => key !== 'no-theme');
+  if (entriesWithTheme.length === 0) {
+    return 0;
+  }
+  const biggestGroup = _.maxBy(entriesWithTheme, ([key, group]) => group.length);
+  const biggestGroupCount = biggestGroup[1]?.length;
+  if (biggestGroupCount === totalCount) {
+    return 3;
+  } else if (biggestGroupCount >= lvl2) {
+    return 2;
+  } else if (biggestGroupCount >= lvl1) {
+    return 1;
+  }
+
+  return 0;
+}
