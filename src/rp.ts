@@ -1,4 +1,4 @@
-import { Difficulty } from './types';
+import { Difficulty, GradeNonEmpty } from './types';
 
 export function calcBaseRP(scoreTotal: number, difficulty: Difficulty) {
   let base: number;
@@ -19,3 +19,10 @@ export function calcBaseRP(scoreTotal: number, difficulty: Difficulty) {
 
   return Math.ceil(base + rp);
 }
+
+export const upgradeCost: { [gradeStart: string]: number } = {
+  C: 2500,
+  B: 5000,
+  A: 10000,
+  S: 20000,
+};
