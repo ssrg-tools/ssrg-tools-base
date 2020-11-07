@@ -50,6 +50,7 @@ export const DropSources = StringUnion(
   'Star Pass - Premium',
   'Challenge',
   'Clear',
+  'Coupon',
   'Compensation - Maintainance',
   'Compensation - Emergency',
 );
