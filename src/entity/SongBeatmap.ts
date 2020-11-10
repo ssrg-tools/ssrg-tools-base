@@ -24,6 +24,9 @@ export class SongBeatmap {
   @Column('int', { name: 'count_notes_total', unsigned: true, })
   countNotesTotal: number;
 
+  @Column('int', { name: 'count_notes_total_raw', unsigned: true, comment: 'including all bullshit from the beatmaps' })
+  countNotesTotalRaw: number;
+
   @Column('int', { name: 'count_notes_nocombo', unsigned: true, })
   countNotesNocombo: number;
 

@@ -17,6 +17,7 @@ export interface SongInfo
       index_beat_min: number,
       index_beat_max: number,
       count_notes_total: number,
+      count_notes_total_raw?: number,
       count_notes_nocombo: number,
       count_taps: number,
       count_sliders_nocombo: number,
