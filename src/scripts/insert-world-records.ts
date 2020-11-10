@@ -7,9 +7,11 @@ import { Song } from '../entity/Song';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import { WRRecord, dalcomGradeMap } from '../dalcom';
 import _ from 'lodash';
+import moment from 'moment';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { generate_guid } from '../guid';
+import { writeRankingDataToCache } from './wr-common';
 
 const verbose = false;
 const stubSongs = false;
@@ -25,7 +27,7 @@ createConnection().then(async connection => {
     select: ['id', 'internalSongId', 'gameId', 'name', 'album'],
     where: 'dalcom_song_id IS NOT NULL'
   });
-  const songsByGames = _.mapValues(_.groupBy(songs, 'gameId'), songs => _.keyBy(songs, 'internalSongId'));
+  const songsByGames = _.mapValues(_.groupBy(songs, 'gameId'), songsToSort => _.keyBy(songsToSort, 'internalSongId'));
   const songsByID = _.keyBy(songs, 'id');
 
   const inputPaths = process.argv.slice(2);
@@ -37,6 +39,7 @@ createConnection().then(async connection => {
   const wrFolders: string[] = [];
   const worldRecords: SongWorldRecord[] = [];
   let skipped = 0;
+  const timestamp = moment().format('YYYY-MM-DD_HH-mm-ss');
 
   await Promise.all(inputPaths.map(async inputPath => {
     if (!fs.existsSync(inputPath) || !(await fs.promises.lstat(inputPath)).isDirectory()) {
@@ -50,7 +53,7 @@ createConnection().then(async connection => {
     await Promise.all(files.map(async file => {
       const filepath = path.join(inputPath, file);
       const isDir = (await fs.promises.lstat(filepath)).isDirectory();
-      const isWr = /^wr-|^(133928|9865992|674379|245395|16680625)$/.test(file);
+      const isWr = /^wr-|^(133928|9865992|674379|245395|16680625|120908)$/.test(file);
 
       if (isDir && isWr) {
         wrFolders.push(filepath);
@@ -108,6 +111,8 @@ createConnection().then(async connection => {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no ranking data?. ${filepath}`);
         return;
       }
+
+      writeRankingDataToCache(game.key, 'manual', timestamp, mentionedSong, JSON.stringify(dalcomWR.rankDataRaw.ranking));
 
       const seasonDate = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
       const season = await getRepository(WorldRecordSeason)
@@ -185,8 +190,8 @@ createConnection().then(async connection => {
       rank: wr.rank,
     });
   });
-  console.log(`Done ${deduplicated.length}`);
-  process.exit();
+  // console.log(`Done ${deduplicated.length}`);
+  // process.exit();
   // console.log(wrFolders, worldRecords.length);
   const saved = await SongWorldRecords.save(deduplicated);
   console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);

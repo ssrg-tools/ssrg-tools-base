@@ -4,12 +4,11 @@ import { NumberLike } from '../types';
 import { createConnection, getRepository } from 'typeorm';
 import got from 'got';
 import { WorldRecordSeason } from '../entity/WorldRecordSeason';
-import { dalcomGradeMap, WRRecordEntry } from '../dalcom';
+import { WRRecordEntry } from '../dalcom';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
-import { generate_guid } from '../guid';
 import moment from 'moment';
-import fs from 'fs';
-import path from 'path';
+import { parseRankingData } from '../wr';
+import { writeRankingDataToCache } from './wr-common';
 
 const verbose = false;
 
@@ -76,96 +75,31 @@ createConnection().then(async conn => {
         continue;
       }
 
-      const dir = path.join(
-        __dirname,
-        '..', '..', '..',
-        'assets',
-        'wr-cache',
-        gameKey,
-        `${seasonId}_${timestamp}`
-      );
-      fs.mkdirSync(dir, { recursive: true });
-      fs.writeFile(path.join(dir, song.internalSongId + '.json'), resp.body, 'utf8', (err) => {
-        if (err) {
-            console.log('An error occured while writing JSON Object to File.');
-            return console.log(err);
-        }
+      writeRankingDataToCache(gameKey, seasonId, timestamp, song, resp.body);
 
-        console.log('JSON file has been saved.');
-      });
       const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
-
-      if (!rankingData?.length || !rankingData[0]) {
-        console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no ranking data?.`);
+      const result = await parseRankingData(
+        rankingData,
+        game,
+        song,
+        getRepository(WorldRecordSeason),
+        SongWorldRecords,
+      );
+      let entries: SongWorldRecord[] = [];
+      const output = result?.dots?.join('') || '';
+      if (result.result === 'ok' && result.entries?.length) {
+        entries = result.entries;
+      } else if (result.result === 'ok') {
+        console.log('  No changes - Done!');
+        continue;
+      } else {
         continue;
       }
 
-      const seasonDate = new Date(rankingData[0].updatedAt);
-      const season = await getRepository(WorldRecordSeason)
-        .createQueryBuilder('season')
-        // .cache(true)
-        .where('dateStart < :date', { date: seasonDate })
-        .andWhere('dateEnd > :date', { date: seasonDate })
-        .innerJoin('season.game', 'game')
-        .andWhere('game.key = :gameKey', { gameKey: game.key })
-        .getOne()
-        ;
-      if (!season) {
-        console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no WR season found.`);
-        continue;
-      }
-
-      const wrRankingLength = rankingData.length;
-      const entries: SongWorldRecord[] = [];
-      for (let index = 0; index < wrRankingLength; index++) {
-        const ranking = rankingData[index];
-
-        const wr = SongWorldRecords.create(ranking as {});
-        wr.songId = song.id;
-        wr.meta = JSON.stringify({});
-        wr.specialUserCode = wr.specialUserCode || 0;
-        wr.guid = generate_guid();
-        wr.rank = index + 1;
-
-        wr.dateRecorded = new Date(ranking.updatedAt);
-
-        const leaderCard = ranking.leaderCard;
-        if (leaderCard) {
-          wr.leaderCard = {
-            cardImage: leaderCard.c,
-            grade: dalcomGradeMap[leaderCard.g],
-            level: leaderCard.l,
-          };
-        }
-        wr.season = season;
-
-        // Find out if it's already been inserted
-        const existsQuery = SongWorldRecords.createQueryBuilder('wr')
-          .cache(false)
-          .innerJoin('wr.song', 'song')
-          .innerJoin('song.game', 'game')
-          .where('song_id = :songId', { songId: song.id })
-          .andWhere('object_id = :objectId', { objectId: wr.objectID })
-          .andWhere('date_recorded = :dateRecorded', { dateRecorded: wr.dateRecorded })
-          .andWhere('game.key = :gameKey', { gameKey: game.key })
-          .andWhere('season_id = :seasonId', { seasonId: season.id });
-        if (wr.rank === 1) {
-          existsQuery.andWhere('rank = :rank', { rank: wr.rank });
-        }
-        const exists = (await existsQuery.getCount()) > 0;
-        if (exists) {
-          totalSkipped++;
-          process.stdout.write('S');
-          continue;
-        }
-        totalInserted++;
-
-        if (verbose) {
-          console.log(`[INFO] inserting ${game.key}/${song.album}/${song.name}[${wr.rank.toLocaleString('en', { minimumIntegerDigits: 3, useGrouping: false })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`);
-        } else {
-          process.stdout.write('.');
-        }
-        entries.push(wr);
+      if (verbose) {
+        entries.forEach(wr => console.log(`  [INFO] inserting ${game.key}/${song.album}/${song.name}[${wr.rank.toLocaleString('en', { minimumIntegerDigits: 3, useGrouping: false })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`));
+      } else {
+        process.stdout.write('  ' + output);
       }
       const saved = await SongWorldRecords.save(entries);
 
