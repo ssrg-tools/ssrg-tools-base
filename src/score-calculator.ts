@@ -79,7 +79,7 @@ export function calcTrueNotScore(songClear: SongClear, beatmaps: Dictionary<Song
 function calcTrueNoteScoreBasic(songClear: SongClear, beatmaps: Dictionary<SongBeatmap>, baseScore: number)
 {
   const beatmap = beatmaps[songClear.difficulty];
-  const countNotesTotal = beatmap.countNotesTotal - 1;
+  const countNotesTotal = beatmap.countNotesTotal;
   const spPerNote = baseScore / countNotesTotal;
   const pPerNote = Math.round(baseScore / countNotesTotal / 2);
   const gPerNote = Math.round(baseScore / countNotesTotal / 8);
