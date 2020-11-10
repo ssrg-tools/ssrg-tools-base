@@ -51,6 +51,8 @@ export const DropSources = StringUnion(
   'Challenge',
   'Clear',
   'Coupon',
+  'Store - Point Reward / Random',
+  'Store - Point Reward / Selector',
   'Compensation - Maintainance',
   'Compensation - Emergency',
 );
