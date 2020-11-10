@@ -98,8 +98,10 @@ const artistMap: Dictionary<string> = {
   'Yoona': 'YoonA',
   'ZHOUIMI': 'ZHOUMI',
   'TAEMIN': 'Taemin',
-  'TAEYEON': 'Taeyeon',
-  'TaeYeon': 'Taeyeon',
+  'TY': 'TAEYEON',
+  'Taeyeon': 'TAEYEON',
+  'TaeYeon': 'TAEYEON',
+  'TEAYEON' : 'TAEYEON',
   'BEAKHYUN': 'BAEKHYUN',
   'BH': 'BAEKHYUN',
   'Superm': 'SuperM',
@@ -117,6 +119,23 @@ const artistMap: Dictionary<string> = {
   'J*Hope': 'J-Hope',
   'bts': 'BTS',
   'Bts': 'BTS',
+
+  // SSYG
+  'Leesuhyun': 'LEE SUHYUN',
+  'SECHSKEIS': 'SECHSKIES',
+  'GT': 'GD X TAEYANG',
+  'G1': 'EUN JIWON', // ???
+  'IKON': 'iKON',
+  'Winner': 'WINNER',
+  'BigBang': 'BIGBANG',
+  'BP': 'BLACKPINK',
+  'Taeyang': 'TAEYANG',
+  'Daesung': 'DAESUNG',
+  'Bobby': 'BOBBY',
+  'KSY': 'YOON',
+  'TOP': 'T.O.P',
+  'GD': 'G-DRAGON',
+  'JENNY': 'JENNIE',
 };
 
 const prepareMap: Dictionary<string> = {
