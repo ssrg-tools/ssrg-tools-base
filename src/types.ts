@@ -41,6 +41,7 @@ export const DropSources = StringUnion(
   'Reward - Event',
   'Reward - Gift', // appeared in your inbox suddenly
   'Reward - Attendance',
+  'Reward - World Record',
   'Mission - Daily',
   'Mission - Weekly',
   'Monthly Challenges',
