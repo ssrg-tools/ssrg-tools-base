@@ -1,6 +1,6 @@
 
 import 'jasmine';
-import { scoreBonusCountdown, scoreBonusInDateRange } from './utils';
+import { scoreBonusCalculate, scoreBonusCountdown, scoreBonusInDateRange } from './utils';
 
 const scoreBonusDateData: [Date, Date, boolean][] = [
   [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-06T00:00:00Z'), false ],
@@ -32,6 +32,7 @@ describe('Score bonus date test', () => {
 
 const scoreBonusCountdownData: [Date, Date, number][] = [
   [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-06T00:00:00Z'), 1 ],
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-01T00:00:00Z'), 6 ],
   [ new Date('2020-11-31T11:00:00Z'), new Date('2021-01-01T11:00:00Z'), 331 ],
 ];
 
@@ -39,6 +40,25 @@ describe('Score bonus countdown test', () => {
   scoreBonusCountdownData.forEach(([ datePoint, dateNow, expected ]) => {
     it(`Score bonus date for ${dateNow} within ${datePoint} should be ${expected}`, () => {
       expect(scoreBonusCountdown(datePoint, dateNow)).toBe(expected);
+    });
+  });
+});
+
+const scoreBonusFullData: [Date, Date, Date[], number][] = [
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-06T00:00:00Z'), [], 0 ],
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-01T00:00:00Z'), [], 0 ],
+  [ new Date('2020-11-31T11:00:00Z'), new Date('2021-01-01T11:00:00Z'), [], 0 ],
+
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-10T00:00:00Z'), [], 3 ],
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-30T00:00:00Z'), [ new Date('2020-06-30T11:00:00Z') ], 2 ],
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-10T11:00:00Z'), [ new Date('2020-06-10T11:00:00Z') ], 5 ],
+  [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-30T00:00:00Z'), [ new Date('2020-06-30T11:00:00Z'), new Date('2020-06-30T11:00:00Z'), new Date('2020-06-30T11:00:00Z') ], 6 ],
+];
+
+describe('Score bonus full calc test', () => {
+  scoreBonusFullData.forEach(([ datePoint, dateNow, dateArtists, expected ]) => {
+    it(`Score bonus date for ${dateNow} within ${datePoint} should be ${expected}`, () => {
+      expect(scoreBonusCalculate(datePoint, dateArtists, dateNow)).toBe(expected);
     });
   });
 });
