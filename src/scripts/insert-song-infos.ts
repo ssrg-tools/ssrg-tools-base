@@ -98,6 +98,7 @@ createConnection().then(async connection => {
           beatmap.indexBeatMin = songBeatmap.index_beat_min;
           beatmap.indexBeatMax = songBeatmap.index_beat_max;
           beatmap.countNotesTotal = songBeatmap.count_notes_total;
+          beatmap.countNotesTotalRaw = songBeatmap.count_notes_total_raw || songBeatmap.count_notes_total;
           beatmap.countNotesNocombo = songBeatmap.count_notes_nocombo;
           beatmap.countTaps = songBeatmap.count_taps;
           beatmap.countSlidersNocombo = songBeatmap.count_sliders_nocombo;
@@ -117,7 +118,7 @@ createConnection().then(async connection => {
 
   for (const song of savedSongs) {
     console.log(`[${song.game.key}] ${song.internalSongId} ${song.album} - ${song.name}: ` +
-      ((savedBeatmapsBySong[song.id] || []).map(beatmap => beatmap.difficulty).sort().join(', ') || 'No beatmaps?'));
+      ((savedBeatmapsBySong[song.id] || []).map(beatmap => `${beatmap.difficulty} (${beatmap.countNotesTotal})`).sort().join(', ') || 'No beatmaps?'));
   }
 
   console.log(`Done. ${savedBeatmaps.length} beatmaps for ${savedSongs.length} songs.`);
