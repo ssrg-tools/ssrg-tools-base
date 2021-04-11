@@ -142,16 +142,16 @@ const testData: {
     divisionId: 4,
     divisionBonus: 0.3
   },
-  { //  this is with penalty
-    rpBase: 176,
-    rpBonus: 123,
-    rpTotal: 475,
-    scoreTotal: 21749,
-    difficulty: 'Easy',
-    isChallenge: false,
-    divisionId: 123,
-    divisionBonus: 0.7,
-  },
+  // { //  this is with penalty
+  //   rpBase: 176,
+  //   rpBonus: 123,
+  //   rpTotal: 475,
+  //   scoreTotal: 21749,
+  //   difficulty: 'Easy',
+  //   isChallenge: false,
+  //   divisionId: 123,
+  //   divisionBonus: 0.7,
+  // },
   {
     rpBase: 333,
     rpBonus: 99,

@@ -32,7 +32,7 @@ describe('Score bonus date test', () => {
 
 const scoreBonusCountdownData: [Date, Date, number][] = [
   [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-06T00:00:00Z'), 1 ],
-  [ new Date('2020-11-31T11:00:00Z'), new Date('2021-01-01T11:00:00Z'), 334 ],
+  [ new Date('2020-11-31T11:00:00Z'), new Date('2021-01-01T11:00:00Z'), 331 ],
 ];
 
 describe('Score bonus countdown test', () => {
