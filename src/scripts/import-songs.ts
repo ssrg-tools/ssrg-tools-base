@@ -9,6 +9,7 @@ import { Song } from '../entity/Song';
 import { SongInfo } from '../SongInfo';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { generate_guid } from '../guid';
+import { Artist } from '../entity/Artist';
 
 const verbose = false;
 const dryRun = true;
@@ -256,6 +257,8 @@ createConnection().then(async connection => {
     console.log('Dry run enabled!');
   }
   const songs = getRepository(Song);
+  const artistsRaw = await getRepository(Artist).find();
+  const artistsByGame = _.mapValues(_.groupBy(artistsRaw, 'gameId'), group => _.keyBy(group, 'name'));
 
   const songInfoFile = path.resolve(process.argv[2]);
   if (!fs.existsSync(songInfoFile)) {
@@ -315,16 +318,18 @@ createConnection().then(async connection => {
         internalSongId: dalcomSongId,
         imageId: dalcomSongId,
         ingame: 1,
+        artist: (artistsByGame[game.id] || {})[album],
         guid: generate_guid(),
       });
 
+      const printArtist = newSong.artist ? ` / ${newSong.artist.name} (${newSong.artist.cardCount}ca)` : '';
       if (verbose || dryRun) {
         console.log(
-          `Would insert ${game.name}/${dalcomSongId} [${newSong.album}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`);
+          `Would insert ${game.name}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`);
       }
       if (!dryRun) {
         const saved = await songs.save(newSong);
-        console.log(`Inserted ${gameKey}/${dalcomSongId} [${newSong.album}] ${newSong.name} - from '${songInfo.dalcom_song_filename}' - ${saved.id}-${saved.guid}`);
+        console.log(`Inserted ${gameKey}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}' - ${saved.id}-${saved.guid}`);
       }
       inserted++;
     }
