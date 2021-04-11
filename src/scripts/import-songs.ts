@@ -15,6 +15,7 @@ const dryRun = true;
 
 // tslint:disable: object-literal-key-quotes
 const artistMap: Dictionary<string> = {
+  // SM
   'EXO*SC': 'EXO-SC',
   'EXO*K': 'EXO-K',
   'EXO*M': 'EXO-M',
@@ -25,7 +26,6 @@ const artistMap: Dictionary<string> = {
   'Redvelvet': 'Red Velvet',
   'Boa': 'BoA',
   'BOA': 'BoA',
-  'TY': 'Taeyeon',
   'GG': 'Girls\' Generation',
   'TTS': 'Girls\' Generation-TTS',
   'CBX': 'EXO-CBX',
@@ -51,6 +51,22 @@ const artistMap: Dictionary<string> = {
   'fx': 'f(x)',
   'Fx': 'f(x)',
   'FX': 'f(x)',
+  'IS': 'Irene & Seulgi',
+  'Shinee': 'SHINee',
+  'UKNOW': 'U-Know',
+  'Yoona': 'YoonA',
+  'ZHOUIMI': 'ZHOUMI',
+  'Taemin': 'TAEMIN',
+  'TY': 'TAEYEON',
+  'Taeyeon': 'TAEYEON',
+  'TaeYeon': 'TAEYEON',
+  'TEAYEON' : 'TAEYEON',
+  'BEAKHYUN': 'BAEKHYUN',
+  'BH': 'BAEKHYUN',
+  'Superm': 'SuperM',
+  'Aespa': 'æspa',
+
+  // Starship
   'Sistar': 'SISTAR',
   'Cravity': 'CRAVITY',
   'MONSTAX': 'MONSTA X',
@@ -58,6 +74,23 @@ const artistMap: Dictionary<string> = {
   'MonstaX': 'MONSTA X',
   'Monstax': 'MONSTA X',
   'MonsterX': 'MONSTA X',
+  'JSW': 'JEONG SEWOON',
+  'JEONGSEWOON': 'JEONG SEWOON',
+  'BrotherSu': 'BrotherSu',
+  'Madclown': 'MAD CLOWN',
+  'MINDU': 'MIND U',
+  'MindU': 'MIND U',
+  'Mindu': 'MIND U',
+  'YSW': 'YU SEUNGWOO',
+  'YuseungWoo': 'YU SEUNGWOO',
+  'Yuseungwoo': 'YU SEUNGWOO',
+  'Wjsn': 'WJSN',
+  'CCM': 'WJSN CHOCOME',
+  'SoYou': 'SOYOU',
+  'Kwill': 'K.WILL',
+  'SOYOU&MC': 'SOYOU & MAD CLOWN',
+
+  // Woollim
   'GC': 'Golden Child',
   'GOLDENCHILD': 'Golden Child',
   'GoldenChild': 'Golden Child',
@@ -68,43 +101,18 @@ const artistMap: Dictionary<string> = {
   'RyuSuJeong': 'Ryu Su Jeong',
   'Ryusujeong': 'Ryu Su Jeong',
   'RSJ': 'Ryu Su Jeong',
-  'JSW': 'Jeong Se Woon',
-  'JEONGSEWOON': 'Jeong Se Woon',
-  'Itzy': 'ITZY',
-  'Twice': 'TWICE',
-  'Jyp': 'JYP',
-  'IS': 'Irene & Seulgi',
   'NWH': 'Nam Woo Hyun',
   'JDW': 'Jang Dong Woo',
   'KSK': 'Kim Sung Kyu',
   'KimSungKyu': 'Kim Sung Kyu',
-  'BrotherSu': 'BrotherSu',
-  'Madclown': 'MAD CLOWN',
-  'MINDU': 'MIND U',
-  'MindU': 'MIND U',
-  'YSW': 'YU SEUNG WOO',
-  'YuseungWoo': 'YU SEUNG WOO',
-  'Wjsn': 'WJSN',
-  'SoYou': 'SOYOU',
-  'Kwill': 'K.WILL',
-  'SOYOU&MC': 'SOYOU & MAD CLOWN',
-  'GF': 'GFRIEND',
-  'GFriend': 'GFRIEND',
-  'Gfriend': 'GFRIEND',
+  'WOOYOUNG': 'Jang Wooyoung',
+
+  // JYP
+  'Itzy': 'ITZY',
+  'Twice': 'TWICE',
+  'Jyp': 'JYP',
   'MissA': 'miss A',
   'Miss A': 'miss A',
-  'Shinee': 'SHINee',
-  'UKNOW': 'U-Know',
-  'Yoona': 'YoonA',
-  'ZHOUIMI': 'ZHOUMI',
-  'TAEMIN': 'Taemin',
-  'TY': 'TAEYEON',
-  'Taeyeon': 'TAEYEON',
-  'TaeYeon': 'TAEYEON',
-  'TEAYEON' : 'TAEYEON',
-  'BEAKHYUN': 'BAEKHYUN',
-  'BH': 'BAEKHYUN',
-  'Superm': 'SuperM',
   'Day6': 'DAY6',
   '2pm': '2PM',
   'Got7': 'GOT7',
@@ -116,6 +124,14 @@ const artistMap: Dictionary<string> = {
   'JUNK': 'Jun.K',
   'Suzy': 'SUZY',
   'Nakjoon': 'NakJoon',
+
+  // GFRIEND
+  'GF': 'GFRIEND',
+  'Gf': 'GFRIEND',
+  'GFriend': 'GFRIEND',
+  'Gfriend': 'GFRIEND',
+
+  // BTS
   'J*Hope': 'J-Hope',
   'bts': 'BTS',
   'Bts': 'BTS',
@@ -127,6 +143,7 @@ const artistMap: Dictionary<string> = {
   'G1': 'EUN JIWON', // ???
   'IKON': 'iKON',
   'Winner': 'WINNER',
+  'BB': 'BIGBANG',
   'BigBang': 'BIGBANG',
   'BP': 'BLACKPINK',
   'Taeyang': 'TAEYANG',
@@ -136,18 +153,16 @@ const artistMap: Dictionary<string> = {
   'TOP': 'T.O.P',
   'GD': 'G-DRAGON',
   'JENNY': 'JENNIE',
+  'Mino': 'MINO',
 };
 
 const prepareMap: Dictionary<string> = {
+  // SM
   'EXO-SC': 'EXO*SC', // protect the dash
   'EXO_SC': 'EXO*SC',
   'Sehun_Chanyeol': 'EXO*SC',
   'EXO_K_': 'EXO*K_',
   'EXO_M': 'EXO*M',
-  'j-hope': 'J*Hope',
-  'J-Hope': 'J*Hope',
-  'J_Hope': 'J*Hope',
-  'JHope': 'J*Hope',
   'NCT_U': 'NCT U',
   'NCT_127': 'NCT 127',
   'NCT_Dream': 'NCT Dream',
@@ -157,8 +172,21 @@ const prepareMap: Dictionary<string> = {
   'Red_velvet': 'Red Velvet',
   'Red_Velvet': 'Red Velvet',
   'U_know': 'UKNOW',
+  'Super_Junior': 'Super Junior',
+  'Girls_Generation': 'Girls\' Generation',
+
+  // BTS
+  'j-hope': 'J*Hope',
+  'J-Hope': 'J*Hope',
+  'J_Hope': 'J*Hope',
+  'JHope': 'J*Hope',
+
+  // WOOLLIM
+  'Kim_Sung_Kyu': 'Kim Sung Kyu',
   'JANG_WOOYOUNG': 'Jang Wooyoung',
-  'WOOYOUNG': 'Jang Wooyoung',
+  'Rocket_Punch': 'Rocket Punch',
+
+  // JYP
   'Baek_Ye_Rin': 'Yerin Baek',
   'BaekYeRin': 'Yerin Baek',
   'Wonder_Girls': 'Wonder Girls',
@@ -168,22 +196,22 @@ const prepareMap: Dictionary<string> = {
   'Stray_Kids': 'Stray Kids',
   'Straykids': 'Stray Kids',
   'StrayKids': 'Stray Kids',
+  'Stary_Kids': 'Stray Kids',
   'sk_': 'Stray Kids_',
   'Day_6': 'DAY6',
   'JUN_K_': 'Jun.K_',
   'Baek_A_Yeon': 'Baek A Yeon',
   'Beak_A_Yeon': 'Baek A Yeon',
   'Back_A_Yeon': 'Baek A Yeon',
-  'Monsta_X': 'MONSTA X',
-  'MONSTA_X': 'MONSTA X',
-  'Super_Junior': 'Super Junior',
-  'Girls_Generation': 'Girls\' Generation',
-  'Rocket_Punch': 'Rocket Punch',
+
+  // Starship
   'DJ_SODA': 'DJ SODA',
   'Mad_Clown': 'MAD CLOWN',
   'Mind_U': 'MIND U',
   'Mind_u': 'MIND U',
-  'Yu_Seung_Woo': 'YU SEUNG WOO',
+  'Yu_Seung_Woo': 'YU SEUNGWOO',
+  'Monsta_X': 'MONSTA X',
+  'MONSTA_X': 'MONSTA X',
 };
 
 function prepOriginalFilename(originalFilename: string) {
