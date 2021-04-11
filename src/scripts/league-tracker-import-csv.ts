@@ -14,7 +14,8 @@ createConnection().then(async connection => {
     console.error(`No args provided. Need gameKey and source file.`);
     process.exit(1);
   }
-  const gameKey = process.argv[2];
+  const format = process.argv[2].split('-');
+  const [gameKey, variant] = format; // variant is unused rn
   if (!gameKey) {
     console.error(`No gameKey provided.`);
     process.exit(1);
@@ -44,14 +45,20 @@ createConnection().then(async connection => {
     gfriend: {
       skipLines: 1,
       readEntry(record) {
+        const gfScoreOffset = 1;
         const nickname = record[2];
-        const date = moment(record[4] + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ').toDate();
+        const dateRaw = record[4 + gfScoreOffset];
+        const date = moment(dateRaw + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ');
+        const score = parseInt((record[3 + gfScoreOffset] || '').replace(/[,.]/g, ''), 10);
+        if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
+          console.error('entry was invalid', record);
+        }
         const leagueTrackerEntry = LeagueTrackerEntries.create({
           nickname,
-          score: parseInt((record[3] || '').replace(/[,.]/g, ''), 10),
+          score,
           divisionGroup: parseInt(record[1], 10),
-          isSSRGDiscord: record[5] ? 1 : 0,
-          date,
+          isSSRGDiscord: record[5 + gfScoreOffset] ? 1 : 0,
+          date: date.toDate(),
           game,
           guid: generate_guid(),
         });
@@ -61,13 +68,20 @@ createConnection().then(async connection => {
     jyp: {
       skipLines: 1,
       readEntry(record) {
-        const date = moment(record[2] + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ').toDate();
+        const nickname = record[0];
+        const dateRaw = record[2];
+        const date = moment(dateRaw + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ');
+        const score = parseInt((record[1] || '').replace(/[,.]/g, ''), 10);
+        if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
+          console.error('entry was invalid', record);
+          return;
+        }
         const leagueTrackerEntry = LeagueTrackerEntries.create({
-          nickname: record[0],
-          score: parseInt((record[1] || '').replace(/[,.]/g, ''), 10),
+          nickname,
+          score,
           divisionGroup: 3, // SCD's sheets don't have value for group
           isSSRGDiscord: record[4] ? 1 : 0,
-          date,
+          date: date.toDate(),
           game,
           guid: generate_guid(),
         });
@@ -77,18 +91,24 @@ createConnection().then(async connection => {
     starship: {
       skipLines: 5,
       readEntry(record) {
-        const date = moment(record[5] + ' 17:00:00+00:00', 'DD/MM/YYYY HH:mm:ssZ').toDate();
+        const dateRaw = record[5];
+        const date = moment(dateRaw + ' 17:00:00+00:00', 'DD/MM/YYYY HH:mm:ssZ');
         const divisionGroup = /\bComet\b/.test(leagueDataFilePath) ? 1 : 2;
         const score = parseInt((record[4] || '').replace(/[,.]/g, ''), 10);
         if (score === 0) {
           return 'skip';
         }
+        const nickname = record[1];
+        if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
+          console.error('entry was invalid', record);
+          return;
+        }
         const leagueTrackerEntry = LeagueTrackerEntries.create({
-          nickname: record[1],
+          nickname,
           score,
           divisionGroup,
           isSSRGDiscord: record[6] ? 1 : 0,
-          date,
+          date: date.toDate(),
           game,
           guid: generate_guid(),
         });
@@ -150,7 +170,6 @@ createConnection().then(async connection => {
 
 
     const matchingWrEntry = await SongWorldRecords.createQueryBuilder('swr')
-      .cache(true)
       .innerJoin('swr.song', 'song')
       .where('song.gameId = :gameId AND nickname = :nickname', { gameId: game.id, nickname: leagueTrackerEntry.nickname, })
       .getOne();
