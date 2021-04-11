@@ -90,6 +90,11 @@ createConnection().then(async connection => {
       const dalcomWR: WRRecord = require(filepath);
       let mentionedSong = songsForGame[dalcomWR.code];
 
+      const fsHandle = fs.openSync(filepath, 'r');
+      const wrFileInfo = fs.fstatSync(fsHandle);
+      const dateObserved = new Date(wrFileInfo.mtimeMs);
+      fs.closeSync(fsHandle);
+
       if (!stubSongs && !mentionedSong) {
         console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`);
         return;
@@ -136,6 +141,8 @@ createConnection().then(async connection => {
         wr.rank = index + 1;
 
         wr.dateRecorded = new Date(ranking.updatedAt);
+        wr.dateObserved = dateObserved;
+        wr.dateEntry = new Date();
 
         // Find out if it's already been inserted
         const existsQuery = SongWorldRecords.createQueryBuilder('wr')

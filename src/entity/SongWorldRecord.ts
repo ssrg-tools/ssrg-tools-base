@@ -2,6 +2,7 @@ import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } 
 import { Song } from './Song';
 import { CardDisplay } from './CardDisplay.embed';
 import { WorldRecordSeason } from './WorldRecordSeason';
+import { User } from './User';
 
 @Entity('song_world_records', { schema: 'superstar_log' })
 export class SongWorldRecord {
@@ -34,6 +35,14 @@ export class SongWorldRecord {
   @Column('datetime', { name: 'date_recorded' })
   dateRecorded: Date;
 
+  @Index('byDateObserved')
+  @Column('datetime')
+  dateObserved: Date;
+
+  @Index('byDateEntry')
+  @Column('datetime')
+  dateEntry: Date;
+
   @Column('int', { unsigned: true })
   rank: number;
 
@@ -46,6 +55,13 @@ export class SongWorldRecord {
   })
   @JoinColumn([{ name: 'season_id', referencedColumnName: 'id' }])
   season: WorldRecordSeason;
+
+  @ManyToOne(() => User, (users) => users.observedSongWorldRecords, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'observerUserId', referencedColumnName: 'id' }])
+  observer: User;
 
   @Column('longtext', { name: 'meta', default: '{}' })
   meta: string;

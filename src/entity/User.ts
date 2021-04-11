@@ -17,6 +17,7 @@ import { SqlBool } from '../types';
 import { SuperstarGame } from './SuperstarGame';
 import { UserLogin } from './UserLogin';
 import { UserVerification } from './UserVerification';
+import { SongWorldRecord } from './SongWorldRecord';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {
@@ -89,6 +90,9 @@ export class User {
 
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.user)
   songClears: SongClear[];
+
+  @OneToMany(() => SongWorldRecord, (songWorldRecord) => songWorldRecord.observer)
+  observedSongWorldRecords: SongWorldRecord[];
 
   @OneToMany(() => UserCredential, (userCredentials) => userCredentials.user)
   userCredentials: UserCredential[];

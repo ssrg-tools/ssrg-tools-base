@@ -12,6 +12,7 @@ export async function parseRankingData(
   song: Song,
   WorldRecordSeasons: Repository<WorldRecordSeason>,
   SongWorldRecords: Repository<SongWorldRecord>,
+  dateObserved = new Date(),
 ) {
   if (!rankingData?.length || !rankingData[0]) {
     console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no ranking data?.`);
@@ -47,6 +48,8 @@ export async function parseRankingData(
     wr.rank = index + 1;
 
     wr.dateRecorded = new Date(ranking.updatedAt);
+    wr.dateObserved = dateObserved;
+    wr.dateEntry = new Date();
 
     const leaderCard = ranking.leaderCard;
     if (leaderCard) {
