@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { ArtistMember } from './ArtistMember';
@@ -21,6 +22,28 @@ export class Artist {
 
   @Column('tinyint', { unsigned: true, nullable: true })
   cardCount: number;
+
+  /** arbitrary sort, possibly unused */
+  @Column('int', { nullable: true })
+  sort: number;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  imageId: string;
+
+  @Index('byDateDebut')
+  @Column('datetime', { nullable: true })
+  dateDebut: Date;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    comment: 'to group e.g. the NCT units under NCT',
+  })
+  group: string;
 
   @Column('varchar', {
     name: 'guid',

@@ -14,6 +14,11 @@ export class UserLogin {
   @Column('tinyint', { width: 1 })
   successful: SqlBool;
 
+  @Column('json', {
+    nullable: true,
+  })
+  meta: any;
+
   @ManyToOne(() => User, (users) => users.logins, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',

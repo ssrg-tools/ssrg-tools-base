@@ -18,6 +18,8 @@ import { Division } from './Division';
 import { SqlBool } from '../types';
 import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 import { Artist } from './Artist';
+import { GamePopulation } from './GamePopulation';
+import { PlayerProfile } from './PlayerProfile';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
@@ -60,10 +62,41 @@ export class SuperstarGame {
   })
   active: SqlBool;
 
-  @Column('varchar', { name: 'comment', nullable: true, length: 255 })
+  @Column('date', {
+    nullable: true,
+  })
+  dateReleased: Date;
+
+  @Column('tinyint', {
+    unsigned: true,
+    default: 0,
+  })
+  hasPrism: SqlBool;
+
+  @Column('tinyint', {
+    unsigned: true,
+    default: 0,
+  })
+  isSingleArtistGame: SqlBool;
+
+  @Column('varchar', {
+    length: 255,
+    default: 'common',
+    select: false,
+  })
+  xpSystem: 'common' | 'bts';
+
+  @Column('varchar', {
+    nullable: true,
+    length: 255,
+    select: false,
+  })
   comment: string | null;
 
-  @Column('longtext', { name: 'meta', nullable: true })
+  @Column('longtext', {
+    nullable: true,
+    select: false,
+  })
   meta: string | null;
 
   @Column('varchar', {
@@ -72,7 +105,6 @@ export class SuperstarGame {
   apkName: string;
 
   @Column('varchar', {
-    name: 'guid',
     nullable: true,
     unique: true,
     length: 255,
@@ -105,6 +137,12 @@ export class SuperstarGame {
 
   @OneToMany(() => Artist, (artist) => artist.game)
   artists: Artist[];
+
+  @OneToMany(() => GamePopulation, (pop) => pop.game)
+  populationHistory: GamePopulation[];
+
+  @OneToMany(() => PlayerProfile, (pop) => pop.game)
+  playerProfiles: PlayerProfile[];
 
   @ManyToMany(type => Division)
   @JoinTable()

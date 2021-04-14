@@ -28,6 +28,9 @@ export class WorldRecordSeason {
   @Column('longtext', { name: 'meta', nullable: true })
   meta: string | null;
 
+  @Column('int', { nullable: true, unsigned: true })
+  dalcomSeasonId: number | null;
+
   @Column('varchar', {
     name: 'guid',
     nullable: true,

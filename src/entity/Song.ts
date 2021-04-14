@@ -128,6 +128,18 @@ export class Song {
   })
   beatmapFingerprint: string;
 
+  @Column('int', { unsigned: true, nullable: true })
+  swrStatHighscore: number;
+
+  @Column('int', { unsigned: true, nullable: true })
+  swrStatMin: number;
+
+  @Column('int', { unsigned: true, nullable: true })
+  swrStatMean: number;
+
+  @Column('int', { unsigned: true, nullable: true })
+  swrStatMedian: number;
+
   @ManyToOne(() => Artist,  { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
   @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
   artist: Artist;

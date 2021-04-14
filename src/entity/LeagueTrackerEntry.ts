@@ -2,6 +2,7 @@ import { SqlBool } from '../types';
 import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { Division } from './Division';
 import { SuperstarGame } from './SuperstarGame';
+import { PlayerProfile } from './PlayerProfile';
 
 @Entity('league_tracker', { schema: 'superstar_log' })
 export class LeagueTrackerEntry {
@@ -45,6 +46,9 @@ export class LeagueTrackerEntry {
   @Column('int', { unsigned: true, nullable: true })
   specialUserCode: number;
 
+  @Column('int', { unsigned: true, nullable: true })
+  profileId: number;
+
   @Column('int', { unsigned: true })
   gameId: number;
 
@@ -54,6 +58,14 @@ export class LeagueTrackerEntry {
     length: 255,
   })
   guid: string | null;
+
+  @ManyToOne(
+    () => PlayerProfile,
+    player => player.nicknameHistory,
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+  )
+  @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
+  profile: PlayerProfile;
 
   @ManyToOne(() => Division, (divisions) => divisions.leagueTrackerEntries, {
     onDelete: 'RESTRICT',

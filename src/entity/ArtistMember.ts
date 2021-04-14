@@ -24,6 +24,10 @@ export class ArtistMember {
   @Column('tinyint', { unsigned: true })
   memberOffset: number;
 
+  @Index('byDateBirthday')
+  @Column('datetime', { nullable: true })
+  dateBirthday: Date;
+
   @Column('varchar', {
     name: 'guid',
     unique: true,

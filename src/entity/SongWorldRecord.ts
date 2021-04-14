@@ -3,6 +3,7 @@ import { Song } from './Song';
 import { CardDisplay } from './CardDisplay.embed';
 import { WorldRecordSeason } from './WorldRecordSeason';
 import { User } from './User';
+import { PlayerProfile } from './PlayerProfile';
 
 @Entity('song_world_records', { schema: 'superstar_log' })
 export class SongWorldRecord {
@@ -21,6 +22,9 @@ export class SongWorldRecord {
 
   @Column('varchar', { length: 255 })
   nickname: string;
+
+  @Column('int', { unsigned: true, nullable: true })
+  profileId: number;
 
   @Column('int', { name: 'profile_image', unsigned: true, nullable: true })
   profileImage: number;
@@ -43,6 +47,7 @@ export class SongWorldRecord {
   @Column('datetime')
   dateEntry: Date;
 
+  @Index('byRank')
   @Column('int', { unsigned: true })
   rank: number;
 
@@ -73,6 +78,14 @@ export class SongWorldRecord {
     length: 255,
   })
   guid?: string;
+
+  @ManyToOne(
+    () => PlayerProfile,
+    player => player.nicknameHistory,
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+  )
+  @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
+  profile: PlayerProfile;
 
   @ManyToOne(() => Song, (songs) => songs.worldRecords, {
     onDelete: 'RESTRICT',

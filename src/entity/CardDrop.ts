@@ -17,9 +17,8 @@ export class CardDrop {
   id: number;
 
   @Index('bySource')
-  @Column('enum', {
+  @Column('varchar', {
     name: 'source',
-    enum: DropSources.values,
   })
   source: typeof DropSources.type;
 
@@ -27,9 +26,8 @@ export class CardDrop {
   @Column('varchar', { name: 'type', nullable: true, length: 255 })
   type: string | null;
 
-  @Column('enum', {
+  @Column('varchar', {
     name: 'member',
-    enum: [...MembersGFriend.values, 'Power Up'],
     nullable: true,
   })
   member?: typeof MembersGFriend.type | 'Power Up';
