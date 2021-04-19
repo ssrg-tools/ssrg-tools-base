@@ -2,6 +2,8 @@
 
 import { GradeNonEmpty } from './types';
 
+export type DateNumber = number;
+
 // where is the None grade?
 export const dalcomGradeMap: { [dalcomId: number]: GradeNonEmpty } = {
   0: 'C',
@@ -17,7 +19,7 @@ export interface WRRecord {
     rankDataRaw: {
       type: number;
       /** unix timestamp with milli time */
-      nextUpdate: number;
+      nextUpdate: DateNumber;
       ranking: WRRecordEntry[];
     };
 }
@@ -32,7 +34,7 @@ export interface WRRecordEntry {
   leaderCard?: LeaderCardShort;
   highscore: number;
   /** unix timestamp with milli time */
-  updatedAt: number;
+  updatedAt: DateNumber;
 }
 
 export interface LeaderCardShort {
