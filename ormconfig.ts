@@ -2,7 +2,7 @@ module.exports = (() => {
   const _ = require('lodash');
 
   return _.extend({
-    type: 'mysql',
+    type: 'mariadb',
     synchronize: false,
     logging: false,
     entities: [
