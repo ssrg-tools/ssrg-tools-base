@@ -260,7 +260,12 @@ createConnection().then(async connection => {
   const artistsRaw = await getRepository(Artist).find();
   const artistsByGame = _.mapValues(_.groupBy(artistsRaw, 'gameId'), group => _.keyBy(group, 'name'));
 
-  const songInfoFile = path.resolve(process.argv[2]);
+  const songInfoPath = process.argv[2];
+  if (!songInfoPath) {
+    console.error(`No path provided.`);
+    process.exit(1);
+  }
+  const songInfoFile = path.resolve(songInfoPath);
   if (!fs.existsSync(songInfoFile)) {
     console.error(`File ${songInfoFile} does not exist.`);
     process.exit(1);
