@@ -105,6 +105,14 @@ export class SuperstarGame {
   apkName: string;
 
   @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'game encryption key in clear text',
+  })
+  encryptionKey: string;
+
+  @Column('varchar', {
     nullable: true,
     unique: true,
     length: 255,
