@@ -115,6 +115,68 @@ export class SuperstarGame {
   encryptionKey: string;
 
   @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  appVersionAndroid: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+  })
+  appVersionIOS: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'folder to manifest',
+  })
+  baseUrlManifest: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'base url to world record info',
+  })
+  baseUrlRanking: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'link to game assets',
+  })
+  baseUrlAssets: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'main assets base url',
+  })
+  baseUrlBucketAssets: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'main CDN base url',
+  })
+  baseUrlBucketCdn: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    select: false,
+    comment: 'game api endpoint',
+  })
+  baseUrlApi: string;
+
+  @Column('varchar', {
     nullable: true,
     unique: true,
     length: 255,
