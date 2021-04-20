@@ -22,6 +22,9 @@ export class WorldRecordSeason {
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
+  @Column('varchar', { length: 255, default: 'top100-no-tie' })
+  bonusSystem: 'top1-tie' | 'top100-no-tie' | 'top100-tie';
+
   @Column('varchar', { name: 'comment', nullable: true, length: 255 })
   comment: string | null;
 
