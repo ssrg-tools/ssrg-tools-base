@@ -20,6 +20,8 @@ import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 import { Artist } from './Artist';
 import { GamePopulation } from './GamePopulation';
 import { PlayerProfile } from './PlayerProfile';
+import { GameManifest } from './GameManifest';
+import { GameDataFile } from './GameDataFile';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
@@ -151,6 +153,12 @@ export class SuperstarGame {
 
   @OneToMany(() => PlayerProfile, (pop) => pop.game)
   playerProfiles: PlayerProfile[];
+
+  @OneToMany(() => GameManifest, (manifest) => manifest.game)
+  gameManifests: GameManifest[];
+
+  @OneToMany(() => GameDataFile, (dataFile) => dataFile.game)
+  gameDataFiles: GameDataFile[];
 
   @ManyToMany(type => Division)
   @JoinTable()

@@ -7,6 +7,8 @@ export type Grade = typeof Grade.type;
 
 export type CardSystem = 50 | 99;
 
+export type StringCBool = '0' | '1';
+
 export const DifficultyName = StringUnion('Easy', 'Normal', 'Hard');
 export type DifficultyName = typeof DifficultyName.type;
 export enum Difficulty {
