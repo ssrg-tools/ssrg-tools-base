@@ -1,5 +1,4 @@
 import { existsSync, mkdirSync } from 'fs';
-import _ from 'lodash';
 import { resolve } from 'path';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { createConnection, getRepository } from 'typeorm';
@@ -31,7 +30,7 @@ createConnection().then(async connection => {
 
   const infoAggregate: InfoAggregate = require(infoPath);
 
-  const basedir = resolve(__dirname, '..', '..', '..', 'assets', 'gameInfo', 'gfriend');
+  const basedir = resolve(__dirname, '..', '..', '..', 'assets', 'gameInfo', gameKey);
   mkdirSync(basedir, { recursive: true });
 
   return processAggregate(game.encryptionKey, infoAggregate, basedir);
