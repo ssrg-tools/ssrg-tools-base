@@ -7,7 +7,7 @@ import { Moment } from 'moment';
 export interface BaseApiResponse<T> {
   data: T;
 
-  timeTakenMs: string;
+  timeTakenMs: number;
 }
 
 export class PaginationResult<T> implements BaseApiResponse<T[]> {
@@ -16,7 +16,7 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
   page: number | string;
   pageSize: number;
 
-  timeTakenMs: string;
+  timeTakenMs: number;
 
   constructor([data, total]: [T[], number], pageSize: NumberLike, page: number | string = 0)
   {
