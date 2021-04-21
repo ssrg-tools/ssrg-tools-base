@@ -1,6 +1,8 @@
 import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 
+export const fingerprintAlgo = 'sha256';
+
 @Unique('perGameAndVersionAndKey', [ 'gameId', 'version', 'key' ])
 @Entity('zz_gamedata_files', { schema: 'superstar_log' })
 export class GameDataFile<T = any> {
