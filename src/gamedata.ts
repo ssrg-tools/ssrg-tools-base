@@ -23,7 +23,7 @@ export async function downloadInfoFile(clearkey: string, url: string) {
 export async function processAggregate(clearkey: string, infoAggregate: InfoAggregate, basedir: string) {
   const aggregateVersion = infoAggregate.version;
   const dir = join(basedir, 'v' + aggregateVersion);
-  mkdirSync(dir, { recursive: true });
+  mkdirSync(dir);
   writeFileSync(join(dir, 'Info.json'), JSON.stringify(infoAggregate, null, jsonPrettyIndent));
   for (const key in infoAggregate.context) {
     if (Object.prototype.hasOwnProperty.call(infoAggregate.context, key)) {
