@@ -89,6 +89,9 @@ export function selectDataByQuery<T>(data: T[], query: object, selectPrefix = 's
 
 /** ?selectCode=123 => .filter(x => x.code === 123) */
 export function extractDataByQuery<T>(data: T | T[], extractBy: string | string[]) {
+  if (typeof data !== 'object') {
+    return data;
+  }
   if (extractBy instanceof Array && extractBy.length === 1) {
     extractBy = extractBy[0];
   }
