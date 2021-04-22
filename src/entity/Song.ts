@@ -69,6 +69,7 @@ export class Song {
   })
   ingame: SqlBool;
 
+  @Index('bySongCode')
   @Column('varchar', {
     name: 'dalcom_song_id',
     comment: 'game internal song id',
