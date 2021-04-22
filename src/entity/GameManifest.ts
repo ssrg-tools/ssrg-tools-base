@@ -1,4 +1,4 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique, BeforeInsert } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { GameManifest as GameManifestType } from '../definitions/data/gamemanifest';
 
@@ -45,6 +45,11 @@ export class GameManifest {
 
   versionParts() {
     return this.versionString.split('.').map(x => parseInt(x, 10));
+  }
+
+  @BeforeInsert()
+  updateVersunNumber() {
+    this.versionNumber = this.versionKeyAsNumber();
   }
 }
 

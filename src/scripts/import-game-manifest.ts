@@ -65,8 +65,6 @@ createConnection().then(async connection => {
       gameId: game.id,
     });
 
-    newManifestEntity.versionNumber = newManifestEntity.versionKeyAsNumber();
-
     await GameManifests.save(newManifestEntity);
     console.log(`${game.key}: Added Manifest for ${game.key}@${version}.`);
   }
