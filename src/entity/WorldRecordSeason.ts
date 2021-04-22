@@ -34,6 +34,9 @@ export class WorldRecordSeason {
   @Column('int', { nullable: true, unsigned: true })
   dalcomSeasonId: number | null;
 
+  @Column('int', { unsigned: true })
+  gameId: number;
+
   @Column('varchar', {
     name: 'guid',
     nullable: true,
