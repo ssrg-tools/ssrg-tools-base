@@ -11,7 +11,7 @@ import moment from 'moment';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { generate_guid } from '../guid';
-import { writeRankingDataToCache } from './wr-common';
+import { writeRankingDataToCache } from '../wr';
 
 const verbose = false;
 const stubSongs = false;
@@ -117,8 +117,6 @@ createConnection().then(async connection => {
         return;
       }
 
-      writeRankingDataToCache(game.key, 'manual', timestamp, mentionedSong, JSON.stringify(dalcomWR.rankDataRaw.ranking));
-
       const seasonDate = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
       const season = await getRepository(WorldRecordSeason)
         .createQueryBuilder('season')
@@ -129,6 +127,13 @@ createConnection().then(async connection => {
         .andWhere('game.key = :gameKey', { gameKey: game.key })
         .getOne()
       ;
+
+      if (!season.dalcomSeasonId) {
+        console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - season does not have dalcom code. ${filepath}`);
+        return;
+      }
+
+      writeRankingDataToCache(game, mentionedSong, season.dalcomSeasonId, dalcomWR.rankDataRaw.ranking, dateObserved, 'manual');
 
       for (let index = 0; index < wrRankingLength; index++) {
         const ranking = dalcomWR.rankDataRaw.ranking[index];

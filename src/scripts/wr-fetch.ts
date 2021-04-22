@@ -7,27 +7,9 @@ import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { WRRecordEntry } from '../dalcom';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import moment from 'moment';
-import { parseRankingData } from '../wr';
-import { writeRankingDataToCache } from './wr-common';
+import { buildUrlTop100, parseRankingData, writeRankingDataToCache } from '../wr';
 
 const verbose = false;
-
-const map = {
-  jyp(dcSeasonId: number, dcSongId: NumberLike) {
-    return `https://superstar-jyp.s3.ap-northeast-2.amazonaws.com/world_record_ranking/production/${dcSeasonId}/${dcSongId}/latest.json?t=${Math.floor(new Date().getTime() / 100)}`;
-  },
-  sm(dcSeasonId: number, dcSongId: NumberLike) {
-    return `https://superstar-smtown-live.s3.ap-northeast-2.amazonaws.com/world_record_ranking/production/${dcSeasonId}/${dcSongId}/latest.json?t=${Math.floor(new Date().getTime() / 100)}`;
-  },
-};
-
-const supportsWR = [
-  'jyp',
-  'sm',
-  // 'starhip',
-  // 'woollim',
-  // 'gfriend',
-];
 
 const currentSeason = {
   jyp: 7,
@@ -37,10 +19,6 @@ const currentSeason = {
 const inputGameKey = process.argv[2];
 if (!inputGameKey) {
   console.error('No gameKey provided.');
-  process.exit(1);
-}
-if (!supportsWR.includes(inputGameKey)) {
-  console.error(`gameKey '${inputGameKey}' not supported. Only ${supportsWR}.`);
   process.exit(1);
 }
 const inputDalcomSeasonId = process.argv[3] || currentSeason[inputGameKey];
@@ -57,11 +35,19 @@ createConnection().then(async conn => {
 
   const fetchWRsForGame = async (gameKey: string, seasonId: number) => {
     const game = await Games.findOneOrFail(null, { where: { key: gameKey } });
+
+    if (!game.baseUrlRanking) {
+      console.error(`gameKey '${gameKey}' not supported.`);
+      process.exit(1);
+    }
+
+    const buildUrl = buildUrlTop100(game.baseUrlRanking);
+
     const songs = await Songs.find({ where: { gameId: game.id } });
     const timestamp = moment().format('YYYY-MM-DD_HH-mm');
     for (const song of songs) {
       console.log(`Fetching ${gameKey}/${seasonId}/${song.internalSongId}/${song.album}/${song.name}`);
-      const endpoint = map[gameKey](seasonId, song.internalSongId);
+      const endpoint = buildUrl(seasonId, song.internalSongId);
       const resp = await got(endpoint)
         .catch((e) => {
           console.error(endpoint, e);
@@ -75,9 +61,9 @@ createConnection().then(async conn => {
         continue;
       }
 
-      writeRankingDataToCache(gameKey, seasonId, timestamp, song, resp.body);
-
       const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
+      writeRankingDataToCache(game, song, seasonId, rankingData, new Date(), 'script/wr-fetch');
+
       const result = await parseRankingData(
         rankingData,
         game,

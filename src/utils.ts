@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import moment, { Moment } from 'moment-timezone';
+import crypto from 'crypto';
 
 export const KST = 'Asia/Seoul';
 
@@ -54,6 +55,10 @@ export function scoreBonusCountdown(datePoint: Date | Moment, dateNow: Date | Mo
   mDatePointStart.add(-scoreBonusDayDiff, 'day').startOf('day');
 
   return mDatePointStart.diff(mDateNow, 'days');
+}
+
+export function createFingerprint(algo: string, input: string) {
+  return crypto.createHash(algo).update(input).digest('hex');
 }
 
 function buildPrefixKeysFromQuery(query: object, prefix) {
