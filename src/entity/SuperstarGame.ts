@@ -22,6 +22,7 @@ import { GamePopulation } from './GamePopulation';
 import { PlayerProfile } from './PlayerProfile';
 import { GameManifest } from './GameManifest';
 import { GameDataFile } from './GameDataFile';
+import { SongWorldRecordArchive } from './Archive/SongWorldRecordArchive';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
 export class SuperstarGame {
@@ -221,6 +222,9 @@ export class SuperstarGame {
 
   @OneToMany(() => GameDataFile, (dataFile) => dataFile.game)
   gameDataFiles: GameDataFile[];
+
+  @OneToMany(() => SongWorldRecordArchive, (archiveSongWorldRecord) => archiveSongWorldRecord.game)
+  archiveSongWorldRecords: SongWorldRecordArchive[];
 
   @ManyToMany(type => Division)
   @JoinTable()
