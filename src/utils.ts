@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 
 export const KST = 'Asia/Seoul';
@@ -53,4 +54,50 @@ export function scoreBonusCountdown(datePoint: Date | Moment, dateNow: Date | Mo
   mDatePointStart.add(-scoreBonusDayDiff, 'day').startOf('day');
 
   return mDatePointStart.diff(mDateNow, 'days');
+}
+
+function buildPrefixKeysFromQuery(query: object, prefix) {
+  const map: [string, (string | number)][] = [];
+  for (const extractKey in query) {
+    if (Object.prototype.hasOwnProperty.call(query, extractKey) && extractKey.length > prefix.length && extractKey.startsWith(prefix)) {
+      const value = JSON.parse(query[extractKey] as string);
+      const fieldNameRaw = extractKey.slice(prefix.length);
+      const fieldName = fieldNameRaw.slice(0, 1).toLowerCase() + fieldNameRaw.slice(1);
+      map.push([fieldName, value]);
+    }
+  }
+  return map;
+}
+
+/** ?selectCode=123 => .filter(x => x.code === 123) */
+export function selectDataByQuery<T>(data: T[], query: object, selectPrefix = 'select') {
+  const selectMap = buildPrefixKeysFromQuery(query, selectPrefix);
+
+  if (selectMap.length) {
+    const select: (e: any) => boolean = (e) => selectMap.some(param => e[param[0]] === param[1]);
+
+    data = data.filter(select);
+  }
+
+  return data;
+}
+
+/** ?selectCode=123 => .filter(x => x.code === 123) */
+export function extractDataByQuery<T>(data: T | T[], extractBy: string | string[]) {
+  if (extractBy instanceof Array && extractBy.length === 1) {
+    extractBy = extractBy[0];
+  }
+  const finalExtractBy = extractBy;
+  let extract: (e: T) => any;
+
+  if (typeof finalExtractBy === 'string') {
+    extract = e => e[finalExtractBy];
+  } else {
+    extract = e => _.pick(e, finalExtractBy);
+  }
+
+  if (data instanceof Array) {
+    return data.map(extract);
+  }
+  return extract(data);
 }

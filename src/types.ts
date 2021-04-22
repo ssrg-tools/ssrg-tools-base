@@ -9,6 +9,10 @@ export type CardSystem = 50 | 99;
 
 export type StringCBool = '0' | '1';
 
+export interface HasLength {
+  length: number;
+}
+
 export const DifficultyName = StringUnion('Easy', 'Normal', 'Hard');
 export type DifficultyName = typeof DifficultyName.type;
 export enum Difficulty {
