@@ -1,5 +1,6 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -48,6 +49,7 @@ export class UserCredential {
   })
   updated: Date | null;
 
+  @DeleteDateColumn()
   @Column('datetime', { nullable: true })
   expired: Date;
 
