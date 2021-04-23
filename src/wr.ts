@@ -54,18 +54,30 @@ export async function fetchAndInsertSWRForGameAndSeason(
   });
 
   for (const song of songs) {
-    responseText.push(`Fetching ${game.key}/${season.dalcomSeasonId}/${song.internalSongId}/${song.album}/${song.name}`);
+    const label = `${game.key}/${season.dalcomSeasonId}/${song.internalSongId}/${song.album}/${song.name}`;
+    responseText.push(`Fetching ${label}`);
     const endpoint = buildUrl(song.internalSongId);
     const resp = await got(endpoint)
       .catch((e) => {
         console.error(endpoint, e);
+        responseText.push(`[ERROR] Song had error ${label}`);
+        if (e instanceof Error) {
+          responseText.push(`  [${e.name}] ${e.message}`);
+          responseText.push(e.stack);
+        } else {
+          responseText.push(e);
+        }
       });
     if (!resp) {
-      console.error(`Song ${song.internalSongId} had no response. Error?`);
+      const errStr = `Song ${song.internalSongId} had no response. Error?`;
+      console.error(errStr);
+      responseText.push(errStr);
       continue;
     }
     if (!resp.body) {
-      console.error(`Song ${song.internalSongId} Empty body?`);
+      const errStr = `Song ${song.internalSongId} Empty body?`;
+      console.error(errStr);
+      responseText.push(errStr);
       continue;
     }
 
