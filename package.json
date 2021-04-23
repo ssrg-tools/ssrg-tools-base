@@ -34,5 +34,8 @@
     "ts-node": "^8.10.2",
     "typeorm-model-generator": "^0.4.2-no-engines",
     "typescript": "^3.9.7"
+  },
+  "browser": {
+      "crypto": false
   }
 }
