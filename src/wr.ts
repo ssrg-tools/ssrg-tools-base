@@ -1,4 +1,6 @@
-import { getRepository } from 'typeorm';
+import got from 'got';
+import _ from 'lodash';
+import { getRepository, IsNull, Not, Repository } from 'typeorm';
 import { dalcomGradeMap, WRRecordEntry } from './dalcom';
 import { SongWorldRecordArchive } from './entity/Archive/SongWorldRecordArchive';
 import { Song } from './entity/Song';
@@ -9,7 +11,100 @@ import { generate_guid } from './guid';
 import { NumberLike } from './types';
 import { createFingerprint } from './utils';
 
-export type WRSeasonType = 'top1-tie' | 'top100-no-tie' | 'top100-tie';
+/**
+ * 'top100-2021-tie': SSM starting client 3.1.4, July 2021 season
+ */
+export type WRSeasonType = 'top1-tie' | 'top100-no-tie' | 'top100-tie' | 'top100-2021-tie';
+
+export async function fetchAndInsertSWRForGameAndSeason(
+  source: string,
+  game: SuperstarGame,
+  season: WorldRecordSeason,
+  songList: Song[] = undefined,
+  Songs = getRepository(Song),
+  SongWorldRecords = getRepository(SongWorldRecord),
+  SongWorldRecordArchives = getRepository(SongWorldRecordArchive),
+  verbose = false,
+) {
+  if (!game.baseUrlRanking) {
+    return new Error(`gameKey '${game.key}' not supported, no ranking url.`);
+  }
+
+  if (!season.dalcomSeasonId) {
+    return new Error(`gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`);
+  }
+
+  if (!season.bonusSystem.startsWith('top100')) {
+    return new Error(`gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`);
+  }
+
+  const buildUrl = _.curry(buildUrlTop100(game.baseUrlRanking))(season.dalcomSeasonId);
+  const responseText: string[] = [];
+
+  const songs = songList?.length ? songList : await Songs.find({
+    select: [
+      'id',
+      'name',
+      'internalSongId',
+    ],
+    where: {
+      gameId: game.id,
+      internalSongId: Not(IsNull()),
+    },
+  });
+
+  for (const song of songs) {
+    responseText.push(`Fetching ${game.key}/${season.dalcomSeasonId}/${song.internalSongId}/${song.album}/${song.name}`);
+    const endpoint = buildUrl(song.internalSongId);
+    const resp = await got(endpoint)
+      .catch((e) => {
+        console.error(endpoint, e);
+      });
+    if (!resp) {
+      console.error(`Song ${song.internalSongId} had no response. Error?`);
+      continue;
+    }
+    if (!resp.body) {
+      console.error(`Song ${song.internalSongId} Empty body?`);
+      continue;
+    }
+
+    const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
+    writeRankingDataToCache(game, song, season.dalcomSeasonId, rankingData, new Date(), source, SongWorldRecordArchives);
+
+    const result = await parseRankingData(
+      rankingData,
+      game,
+      song,
+      season,
+      SongWorldRecords,
+      new Date(),
+    );
+    let entries: SongWorldRecord[] = [];
+    const output = result?.dots?.join('') || '';
+    if (result.result === 'ok' && result.entries?.length) {
+      entries = result.entries;
+    } else if (result.result === 'ok') {
+      responseText.push('  No changes - Done!');
+      continue;
+    } else {
+      continue;
+    }
+
+    if (verbose) {
+      entries.forEach(wr => responseText.push(`  [INFO] inserting ${game.key}/${song.album}/${song.name}[${wr.rank.toLocaleString('en', { minimumIntegerDigits: 3, useGrouping: false })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`));
+    } else {
+      responseText.push('  ' + output);
+    }
+    const saved = await SongWorldRecords.save(entries);
+
+    responseText.push(`Done! +${saved.length}`);
+  }
+
+  return {
+    responseText,
+  };
+}
 
 export function buildUrlTop100(endpoint: string) {
   return (dcSeasonId: number, dcSongId: NumberLike) => `${endpoint}${dcSeasonId}/${dcSongId}/latest.json?t=${Date.now()}`;
@@ -49,28 +144,32 @@ export async function parseRankingData(
   rankingData: WRRecordEntry[],
   game: SuperstarGame,
   song: Song,
-  WorldRecordSeasons = getRepository(WorldRecordSeason),
+  season?: WorldRecordSeason,
   SongWorldRecords = getRepository(SongWorldRecord),
   dateObserved = new Date(),
+  WorldRecordSeasons?: Repository<WorldRecordSeason>,
 ) {
   if (!rankingData?.length || !rankingData[0]) {
     console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no ranking data?.`);
     return { result: 'no data' };
   }
 
-  const seasonDate = new Date(rankingData[0].updatedAt);
-  const season = await WorldRecordSeasons
-    .createQueryBuilder('season')
-    // .cache(true)
-    .where('dateStart < :date', { date: seasonDate })
-    .andWhere('dateEnd > :date', { date: seasonDate })
-    .innerJoin('season.game', 'game')
-    .andWhere('game.key = :gameKey', { gameKey: game.key })
-    .getOne()
-    ;
   if (!season) {
-    console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no WR season found.`);
-    return { result: 'error' };
+    const WorldRecordSeasons = getRepository(WorldRecordSeason);
+    const seasonDate = new Date(rankingData[0].updatedAt);
+    season = await WorldRecordSeasons
+      .createQueryBuilder('season')
+      // .cache(true)
+      .where('dateStart < :date', { date: seasonDate })
+      .andWhere('dateEnd > :date', { date: seasonDate })
+      .innerJoin('season.game', 'game')
+      .andWhere('game.key = :gameKey', { gameKey: game.key })
+      .getOne()
+      ;
+    if (!season) {
+      console.error(`[ERROR] Song with dalcom ID '${song.internalSongId} - ${game.key}' had an error - no WR season found.`);
+      return { result: 'error' };
+    }
   }
 
   const wrRankingLength = rankingData.length;

@@ -33,8 +33,10 @@ createConnection().then(async conn => {
   let totalInserted = 0;
   let totalSkipped = 0;
 
+  const promises$: Promise<any>[] = [];
+
   const fetchWRsForGame = async (gameKey: string, seasonId: number) => {
-    const game = await Games.findOneOrFail(null, { where: { key: gameKey } });
+    const game = await Games.findOneOrFail(null, { where: { key: gameKey }, select: [ 'id', 'key', 'baseUrlRanking' ] });
 
     if (!game.baseUrlRanking) {
       console.error(`gameKey '${gameKey}' not supported.`);
@@ -62,14 +64,16 @@ createConnection().then(async conn => {
       }
 
       const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
-      writeRankingDataToCache(game, song, seasonId, rankingData, new Date(), 'script/wr-fetch');
+      promises$.push(writeRankingDataToCache(game, song, seasonId, rankingData, new Date(), 'script/wr-fetch'));
 
       const result = await parseRankingData(
         rankingData,
         game,
         song,
-        getRepository(WorldRecordSeason),
+        null,
         SongWorldRecords,
+        new Date(),
+        getRepository(WorldRecordSeason),
       );
       let entries: SongWorldRecord[] = [];
       const output = result?.dots?.join('') || '';
@@ -94,6 +98,8 @@ createConnection().then(async conn => {
   };
 
   await fetchWRsForGame(inputGameKey, inputDalcomSeasonId);
+  console.log(`Nearly done, waiting for cache to finish writing.`);
+  await Promise.all(promises$);
 
   const timeEnd = new Date();
   const timeTaken = Math.round(moment(timeEnd).diff(moment(timeStart)) / 1000);
