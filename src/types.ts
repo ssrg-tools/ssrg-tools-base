@@ -20,6 +20,7 @@ export enum Difficulty {
   Normal = 7,
   Hard = 13,
 }
+export const difficultyIds = [4, 7, 13];
 
 export function difficultyToEnum(difficulty: DifficultyName): Difficulty
 {
