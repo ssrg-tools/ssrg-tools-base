@@ -15,6 +15,7 @@
     "@sindresorhus/fnv1a": "^2.0.1",
     "codelyzer": "^6.0.0",
     "csv-parse": "^4.12.0",
+    "get-audio-duration": "^2.0.3",
     "got": "^11.7.0",
     "kuuid": "^0.5.1",
     "lodash": "^4.17.19",
@@ -36,6 +37,7 @@
     "typescript": "^3.9.7"
   },
   "browser": {
-      "crypto": false
+    "crypto": false,
+    "get-audio-duration": false
   }
 }
