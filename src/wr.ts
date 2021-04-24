@@ -1,4 +1,4 @@
-import got from 'got';
+import got, { HTTPError } from 'got';
 import _ from 'lodash';
 import { getRepository, IsNull, Not, Repository } from 'typeorm';
 import { dalcomGradeMap, WRRecordEntry } from './dalcom';
@@ -55,8 +55,13 @@ export async function fetchAndInsertSWRForGameAndSeason(
     const endpoint = buildUrl(song.internalSongId);
     const resp = await got(endpoint)
       .catch((e) => {
+        if (e instanceof HTTPError && e.response.statusCode === 403) {
+          responseText.push(`[SKIP] Song has no WR`);
+          return 'skip';
+        }
         console.error(endpoint, e);
         responseText.push(`[ERROR] Song had error ${label}`);
+        responseText.push(`URL: ${endpoint}`);
         if (e instanceof Error) {
           responseText.push(`  [${e.name}] ${e.message}`);
           responseText.push(e.stack);
@@ -64,6 +69,9 @@ export async function fetchAndInsertSWRForGameAndSeason(
           responseText.push(e);
         }
       });
+    if (typeof resp === 'string') {
+      continue;
+    }
     if (!resp) {
       const errStr = `Song ${song.internalSongId} had no response. Error?`;
       console.error(errStr);
