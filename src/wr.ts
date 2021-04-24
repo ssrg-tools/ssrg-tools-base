@@ -14,7 +14,7 @@ import { createFingerprint } from './utils';
 /**
  * 'top100-2021-tie': SSM starting client 3.1.4, July 2021 season
  */
-export type WRSeasonType = 'top1-tie' | 'top100-no-tie' | 'top100-tie' | 'top100-2021-tie';
+export type WRSeasonType = 'top1-tie' | 'top100-no-tie' | 'top100-tie' | 'top100-2021-3day-tie';
 
 export async function fetchAndInsertSWRForGameAndSeason(
   source: string,
@@ -34,11 +34,7 @@ export async function fetchAndInsertSWRForGameAndSeason(
     return new Error(`gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`);
   }
 
-  if (!season.bonusSystem.startsWith('top100')) {
-    return new Error(`gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`);
-  }
-
-  const buildUrl = _.curry(buildUrlTop100(game.baseUrlRanking))(season.dalcomSeasonId);
+  const buildUrl = _.curry(buildUrlRanking(game.baseUrlRanking, season.bonusSystem))(season.dalcomSeasonId);
   const responseText: string[] = [];
 
   const songs = songList?.length ? songList : await Songs.find({
@@ -118,11 +114,12 @@ export async function fetchAndInsertSWRForGameAndSeason(
   };
 }
 
-export function buildUrlTop100(endpoint: string) {
-  return (dcSeasonId: number, dcSongId: NumberLike) => `${endpoint}${dcSeasonId}/${dcSongId}/latest.json?t=${Date.now()}`;
+export function buildUrlRanking(endpoint: string, bonusSystem: WRSeasonType) {
+  const filename = bonusSystem.startsWith('top100') ? 'latest' : 'latest_first';
+  return (dcSeasonId: number, dcSongId: NumberLike) => `${endpoint}${dcSeasonId}/${dcSongId}/${filename}.json?t=${Date.now()}`;
 }
 
-export function writeRankingDataToCache(
+export async function writeRankingDataToCache(
   game: SuperstarGame,
   song: Song,
   seasonCode: number,
@@ -137,6 +134,18 @@ export function writeRankingDataToCache(
   if (isNaN(songCode)) {
     throw new Error(`Song ${song.name} (${game.key}) has an invalid song code.`);
   }
+
+  const existingArchiveItem = await SongWorldRecordArchives.count({
+    where: {
+      gameId: game.id,
+      fingerprint,
+    },
+  });
+
+  if (existingArchiveItem) {
+    return;
+  }
+
   const archiveItem = SongWorldRecordArchives.create({
     gameId: game.id,
     data: contents,

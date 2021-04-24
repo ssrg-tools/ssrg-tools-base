@@ -7,7 +7,7 @@ import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { WRRecordEntry } from '../dalcom';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import moment from 'moment';
-import { buildUrlTop100, parseRankingData, writeRankingDataToCache } from '../wr';
+import { buildUrlRanking, parseRankingData, writeRankingDataToCache } from '../wr';
 
 const verbose = false;
 
@@ -43,7 +43,7 @@ createConnection().then(async conn => {
       process.exit(1);
     }
 
-    const buildUrl = buildUrlTop100(game.baseUrlRanking);
+    const buildUrl = buildUrlRanking(game.baseUrlRanking);
 
     const songs = await Songs.find({ where: { gameId: game.id } });
     const timestamp = moment().format('YYYY-MM-DD_HH-mm');
