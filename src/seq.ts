@@ -305,7 +305,7 @@ function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[]
     const typeID = readInt8(16);
 
     noteCountRaw++;
-    if (lane > 13) {
+    if (lane >= 13) {
       // Skip bullshit notes
       continue;
     }
