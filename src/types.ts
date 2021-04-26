@@ -1,3 +1,4 @@
+import { Dictionary } from 'lodash';
 import { StringUnion } from './string-union';
 
 export const GradeNonEmpty = StringUnion('C', 'B', 'A', 'S', 'R');
@@ -21,6 +22,12 @@ export enum Difficulty {
   Hard = 13,
 }
 export const difficultyIds = [4, 7, 13];
+
+export const difficultyNames: Dictionary<DifficultyName> = {
+  [Difficulty.Easy]: 'Easy',
+  [Difficulty.Normal]: 'Normal',
+  [Difficulty.Hard]: 'Hard',
+};
 
 export function difficultyToEnum(difficulty: DifficultyName): Difficulty
 {
