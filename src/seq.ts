@@ -1,5 +1,5 @@
 import _, { Dictionary } from 'lodash';
-import { difficultyIds } from './types';
+import { Difficulty, difficultyIds } from './types';
 
 type NoteTap = 'tap';
 type NoteSlider = 'slider';
@@ -16,7 +16,7 @@ const noteTypes: Dictionary<NoteType> = {
   0xE9: 'slider',
 };
 
-const noteTypeIDs = [
+const noteTypeIDs: NoteTypeID[] = [
   0x00,
   0x0B,
   0x0C,
@@ -64,7 +64,7 @@ interface BeatmapOffsets {
   noteDataStartOffset: number;
 }
 
-const beatmapTypes = [0x65, 0x66];
+const beatmapTypes: BeatmapTypes[] = [0x65, 0x66];
 
 enum BeatmapTypes {
   // older SM beatmaps
@@ -80,7 +80,7 @@ const beatmapOffsets: Dictionary<BeatmapOffsets> = {
         songName: [0xAC],
         songNameNullBytes: 1,
         noteDataLength: 20,
-        noteDataStartOffset: 2312,
+        noteDataStartOffset: 2312, // 2048 + 264 (0x108)
     },
     [BeatmapTypes.Normal]: {
         difficultyId: 0x38,
@@ -88,7 +88,7 @@ const beatmapOffsets: Dictionary<BeatmapOffsets> = {
         songName: [0xBC, 0x19C],
         songNameNullBytes: 2,
         noteDataLength: 24,
-        noteDataStartOffset: 2316,
+        noteDataStartOffset: 2316, // 2048 + 268 (0x10C)
     },
 };
 
@@ -117,7 +117,18 @@ function readFilenameFromBeatmap(
   return readFilenameFromBeatmap(input, songNames.slice(1), songNameNullBytes);
 }
 
-export function parseBeatmapFile(input: Buffer) {
+interface Beatmap {
+  beatmapType: BeatmapTypes;
+  difficultyId: Difficulty;
+  /** source file name (not related to game assets) */
+  filename: string;
+
+  noteCount: number;
+  noteCountRaw: number;
+  notes: Note[];
+}
+
+export function parseBeatmapFile(input: Buffer): Beatmap {
   if (!input || input.length < 4) {
     throw new Error('Input buffer too small.');
   }
@@ -153,8 +164,8 @@ export function parseBeatmapFile(input: Buffer) {
   const noteData = input.slice(songNameInfo.songNameOffset + songNameInfo.songNameLength + offsets.noteDataStartOffset);
 
   const notes = readNoteData(noteData, offsets.noteDataLength);
-  if (notes.length !== (noteCount - 1)) {
-    throw new Error(`Wrong note count, expected ${noteCount - 1} but got ${notes.length};`);
+  if (notes.notes.length !== (noteCount - 1)) {
+    throw new Error(`Wrong note count, expected ${noteCount - 1} but got ${notes.notes.length};`);
   }
 
   return {
@@ -162,7 +173,8 @@ export function parseBeatmapFile(input: Buffer) {
     difficultyId,
     noteCount,
     filename,
-    notes,
+    notes: notes.notes,
+    noteCountRaw: notes.noteCountRaw,
   };
 }
 
@@ -174,7 +186,7 @@ interface Note {
   lane: number;
 }
 
-function readNoteData(noteData: Buffer, noteDataLength: number): Note[] {
+function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[], noteCountRaw: number } {
   if ((noteData.length % noteDataLength) !== 0) {
     throw new Error(`Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`);
   }
@@ -182,6 +194,7 @@ function readNoteData(noteData: Buffer, noteDataLength: number): Note[] {
 
   let currentOffset = 0;
   let line: Buffer;
+  let noteCountRaw = 0;
   const maxOffset = noteData.length;
 
   const readInt32 = (offset: number) => line.readUInt32LE(offset);
@@ -196,6 +209,7 @@ function readNoteData(noteData: Buffer, noteDataLength: number): Note[] {
     const lane = readInt8(8);
     const typeID = readInt8(16);
 
+    noteCountRaw++;
     if (lane > 13) {
       // Skip bullshit notes
       continue;
@@ -213,5 +227,8 @@ function readNoteData(noteData: Buffer, noteDataLength: number): Note[] {
     });
   }
 
-  return notes;
+  return {
+    notes,
+    noteCountRaw,
+  };
 }
