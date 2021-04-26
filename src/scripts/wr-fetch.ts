@@ -43,10 +43,10 @@ createConnection().then(async conn => {
       process.exit(1);
     }
 
-    const buildUrl = buildUrlRanking(game.baseUrlRanking);
+    const season = await getRepository(WorldRecordSeason).findOneOrFail(null, { where: { dalcomSeasonId: seasonId } });
+    const buildUrl = buildUrlRanking(game.baseUrlRanking, season.bonusSystem);
 
     const songs = await Songs.find({ where: { gameId: game.id } });
-    const timestamp = moment().format('YYYY-MM-DD_HH-mm');
     for (const song of songs) {
       console.log(`Fetching ${gameKey}/${seasonId}/${song.internalSongId}/${song.album}/${song.name}`);
       const endpoint = buildUrl(seasonId, song.internalSongId);
@@ -70,10 +70,9 @@ createConnection().then(async conn => {
         rankingData,
         game,
         song,
-        null,
+        season,
         SongWorldRecords,
         new Date(),
-        getRepository(WorldRecordSeason),
       );
       let entries: SongWorldRecord[] = [];
       const output = result?.dots?.join('') || '';
