@@ -3,6 +3,7 @@ import { File } from './File';
 
 @ChildEntity()
 export class EncryptedBlob extends File {
-  @Column('varbinary')
-  header: Buffer;
+  /** store base64 encoded encryption header information */
+  @Column('varchar')
+  header: string;
 }

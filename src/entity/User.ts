@@ -18,6 +18,7 @@ import { SuperstarGame } from './SuperstarGame';
 import { UserLogin } from './UserLogin';
 import { UserVerification } from './UserVerification';
 import { SongWorldRecord } from './SongWorldRecord';
+import { File } from './Files/File';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {
@@ -102,6 +103,9 @@ export class User {
 
   @OneToMany(() => UserVerification, (verification) => verification.user)
   verifications: UserVerification[];
+
+  @OneToMany(() => File, (file) => file.user)
+  files: File[];
 
   @ManyToMany(() => SuperstarGame)
   @JoinTable()

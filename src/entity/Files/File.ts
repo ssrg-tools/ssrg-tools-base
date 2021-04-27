@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, TableInheritance, Index, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, TableInheritance, Index, Unique, JoinColumn, ManyToOne } from 'typeorm';
+import { User } from '../User';
 
 @Entity('files', { schema: 'superstar_log' })
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -24,7 +25,7 @@ export abstract class File {
   @Column('varchar', { length: 255, nullable: true })
   mime: string;
 
-  @Column('json')
+  @Column('json', { default: '{}' })
   meta: any;
 
   /** May control e.g. caching behaviour */
@@ -45,6 +46,19 @@ export abstract class File {
 
   @Column('varchar', { length: 255 })
   guid: string;
+
+  @Column('int', {
+    unsigned: true,
+    nullable: true, // null means system
+  })
+  userId: number;
+
+  @ManyToOne(() => User, (users) => users.files, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
+  user: User;
 }
 
 export type FileAccessRestriction = 'public';

@@ -57,7 +57,7 @@ export function scoreBonusCountdown(datePoint: Date | Moment, dateNow: Date | Mo
   return mDatePointStart.diff(mDateNow, 'days');
 }
 
-export function createFingerprint(algo: string, input: string) {
+export function createFingerprint(algo: string, input: string | Buffer) {
   return crypto.createHash(algo).update(input).digest('hex');
 }
 
