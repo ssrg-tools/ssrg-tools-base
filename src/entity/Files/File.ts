@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, TableInheritance, Index, Unique, JoinColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, TableInheritance, Index, Unique, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import { GameArchivedAsset } from '../Archive/GameArchivedAsset';
 import { User } from '../User';
 
 @Entity('files', { schema: 'superstar_log' })
@@ -59,6 +60,14 @@ export abstract class File {
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
+
+
+  @OneToOne(
+    () => GameArchivedAsset,
+    gameAsset => gameAsset.file,
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+  )
+  gameAsset: GameArchivedAsset;
 }
 
 export type FileAccessRestriction = 'public';
