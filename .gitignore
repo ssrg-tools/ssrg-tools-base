@@ -12,7 +12,7 @@
 Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
-/config.database.json
+/config.*.json
 
 *.log
 log.txt
