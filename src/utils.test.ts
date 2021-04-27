@@ -1,6 +1,6 @@
 
 import 'jasmine';
-import { scoreBonusCalculate, scoreBonusCountdown, scoreBonusInDateRange } from './utils';
+import { createKeyFromUrl, scoreBonusCalculate, scoreBonusCountdown, scoreBonusInDateRange } from './utils';
 
 const scoreBonusDateData: [Date, Date, boolean][] = [
   [ new Date('2020-06-10T11:00:00Z'), new Date('2020-06-06T00:00:00Z'), false ],
@@ -59,6 +59,29 @@ describe('Score bonus full calc test', () => {
   scoreBonusFullData.forEach(([ datePoint, dateNow, dateArtists, expected ]) => {
     it(`Score bonus date for ${dateNow} within ${datePoint} should be ${expected}`, () => {
       expect(scoreBonusCalculate(datePoint, dateArtists, dateNow)).toBe(expected);
+    });
+  });
+});
+
+const keyFromUrlData: [string, string][] = [
+  [
+    'http://scymdori.cloudfront.net/resources/images/store/recommend/1234/4321/somepic.png?v=01293847',
+    'cf-scymdori-images/store/recommend/1234/4321/somepic.png',
+  ],
+  [
+    'https://s3.ap-northeast-2.amazonaws.com/superstar-smtown-live/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
+    's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
+  ],
+  [
+    'https://superstar-smtown-live.s3-ap-northeast-2.amazonaws.com/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
+    's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
+  ],
+];
+
+describe('Create key from url test', () => {
+  keyFromUrlData.forEach(([input, expected]) => {
+    it(`should produce '${expected}' from '${input}'`, () => {
+      expect(createKeyFromUrl(input)).toBe(expected);
     });
   });
 });

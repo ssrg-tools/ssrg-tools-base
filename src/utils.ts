@@ -119,3 +119,30 @@ export function s3SafeFilename(name: string) {
     .replace(/\/+/g, '/')
   ;
 }
+
+export function createKeyFromUrl(url: string) {
+  const obj = new URL(url);
+
+  let { hostname, pathname } = obj;
+  let hostmatch: RegExpMatchArray;
+  // tslint:disable: no-conditional-assignment
+  if (hostmatch = hostname.match(/^([\w\-]+)\.cloudfront\.net$/)) {
+    hostname = 'cf-' + hostmatch[1];
+  } else if (hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/)) {
+    hostname = 's3-' + hostmatch[1];
+  } else if (/^s3.ap-[\w\-]+\.amazonaws\.com$/.test(hostname)) {
+    const bucketName = pathname.match(/^\/([\w\-]+)\//)[1];
+    hostname = 's3-' + bucketName;
+    pathname = pathname.slice(bucketName.length + 2);
+  }
+
+  pathname = pathname
+    .replace(/^\/resources?\//, '')
+    .replace(/^\/version\/(real\/|live\/|production\/)?/, '')
+    .replace(/^\/+/, '')
+    .replace(/\/+$/, '')
+  ;
+
+  const ret = hostname + '-' + pathname;
+  return ret;
+}
