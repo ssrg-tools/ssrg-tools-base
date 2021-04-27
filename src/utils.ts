@@ -109,3 +109,13 @@ export function extractDataByQuery<T>(data: T | T[], extractBy: string | string[
   }
   return extract(data);
 }
+
+export function s3SafeFilename(name: string) {
+  // allow forward slashes (but remove repetitions)
+  return name.trim()
+    .replace(/[|\\:<>?"^&~%\s]+/g, '-')
+    .replace(/[ .]+$/, '')
+    .replace(/^[ .]+/, '')
+    .replace(/\/+/g, '/')
+  ;
+}
