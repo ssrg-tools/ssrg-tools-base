@@ -137,8 +137,9 @@ export function createKeyFromUrl(url: string) {
   }
 
   pathname = pathname
+    .replace(/^\/version?\//, '')
+    .replace(/^\/(real\/|live\/|production\/)?/, '')
     .replace(/^\/resources?\//, '')
-    .replace(/^\/version\/(real\/|live\/|production\/)?/, '')
     .replace(/^\/+/, '')
     .replace(/\/+$/, '')
   ;
