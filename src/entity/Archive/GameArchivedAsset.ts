@@ -2,8 +2,10 @@ import { Index, Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, U
 import { File } from '../Files/File';
 import { SuperstarGame } from '../SuperstarGame';
 
+@Unique('byGuid', ['guid'])
+  @Unique('byVersionsAndCode', ['gameId', 'gameAssetVersion', 'gameSubAssetVersion', 'originalCode'])
+  @Unique('byFileId', ['fileId'])
 @Entity('files_gameasset_archive', { schema: 'superstar_log' })
-@Unique('byGuid', [ 'guid' ])
 export class GameArchivedAsset {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
@@ -42,7 +44,10 @@ export class GameArchivedAsset {
   sourceVersion: string;
 
   @Index('bySourceDateModified')
-  @Column('datetime', { comment: 'the date this file was last modified according to the original entry' })
+  @Column('datetime', {
+    comment: 'the date this file was last modified according to the original entry',
+    nullable: true,
+  })
   sourceDateModified: Date;
 
   @Column('varchar', {
@@ -63,5 +68,6 @@ export class GameArchivedAsset {
     file => file.gameAsset,
     { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
   )
+  @JoinColumn({ name: 'fileId' })
   file: File;
 }

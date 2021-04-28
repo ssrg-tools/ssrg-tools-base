@@ -64,8 +64,7 @@ export abstract class File {
 
   @OneToOne(
     () => GameArchivedAsset,
-    gameAsset => gameAsset.file,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    gameAsset => gameAsset.file
   )
   gameAsset: GameArchivedAsset;
 }
