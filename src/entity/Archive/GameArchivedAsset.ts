@@ -3,8 +3,7 @@ import { File } from '../Files/File';
 import { SuperstarGame } from '../SuperstarGame';
 
 @Unique('byGuid', ['guid'])
-  @Unique('byVersionsAndCode', ['gameId', 'gameAssetVersion', 'gameSubAssetVersion', 'originalCode'])
-  @Unique('byFileId', ['fileId'])
+@Unique('byVersionsAndCode', ['gameId', 'gameAssetVersion', 'gameSubAssetVersion', 'originalCode'])
 @Entity('files_gameasset_archive', { schema: 'superstar_log' })
 export class GameArchivedAsset {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
