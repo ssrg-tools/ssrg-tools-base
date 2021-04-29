@@ -283,6 +283,11 @@ interface Note {
   // Original beat (y) and sub-beat (yy/256) combined
   beat: number;
   lane: number;
+
+  raw: {
+    beat: number;
+    subBeat: number;
+  };
 }
 
 function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[], noteCountRaw: number, issues?: SeqIssue[] } {
@@ -324,6 +329,10 @@ function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[]
       lane,
       type: noteTypes[typeID],
       typeID,
+      raw: {
+        beat,
+        subBeat,
+      },
     });
   }
 
