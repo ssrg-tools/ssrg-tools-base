@@ -284,6 +284,9 @@ interface Note {
   beat: number;
   lane: number;
 
+  sliderGroup: number;
+  isSliderStart: boolean;
+
   raw: {
     beat: number;
     subBeat: number;
@@ -329,6 +332,8 @@ function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[]
       lane,
       type: noteTypes[typeID],
       typeID,
+      sliderGroup: sliderGroups[typeID],
+      isSliderStart: sliderStart.includes(typeID),
       raw: {
         beat,
         subBeat,
