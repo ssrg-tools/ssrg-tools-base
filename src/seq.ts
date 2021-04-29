@@ -2,6 +2,8 @@ import { readFile } from 'fs/promises';
 import _, { Dictionary } from 'lodash';
 import { Difficulty, difficultyIds } from './types';
 
+export const seqParserVersion = 3;
+
 type NoteTap = 'tap';
 type NoteSlider = 'slider';
 type NoteType = NoteTap | NoteSlider;
@@ -180,8 +182,8 @@ function readDataCore(input: Buffer): {
 
   const dataCore: SeqDataCore = {
     layoutVersion,
-    tickLength:   input.readInt32LE(  0x4),
-    secLength:    input.readDoubleLE( 0x8),
+    tickLength:   input.readInt32LE( 0x04),
+    secLength:    input.readDoubleLE(0x08),
     tickPerBeat:  input.readInt32LE( 0x10),
     beatPerTick:  input.readDoubleLE(0x14 + skipPadOffset),
     tempoCount:   input.readUInt32LE(0x1C + skipPadOffset),
@@ -218,6 +220,8 @@ export interface Beatmap {
   notes: Note[];
 
   issues?: SeqIssue[];
+
+  seqParserVersion: number;
 }
 
 export function parseBeatmap(input: Buffer): Beatmap {
@@ -269,6 +273,7 @@ export function parseBeatmap(input: Buffer): Beatmap {
     notes: notes.notes,
     noteCountRaw: notes.noteCountRaw,
     issues,
+    seqParserVersion,
   };
 }
 
