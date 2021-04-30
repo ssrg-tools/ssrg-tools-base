@@ -77,3 +77,28 @@ export interface PostCardDropData {
     isPrism: SqlBool,
   }[];
 }
+
+export interface GameAssetsListingResult {
+  gameAssetVersion: number;
+  gameSubAssetVersion: number;
+  originalCode: number;
+  /** date string */
+  dateArchival: Date;
+  sourceUrl: string;
+  /** date string */
+  sourceDateModified: Date;
+  guid: string;
+  file: {
+    fingerprint: string,
+    size: number,
+    mime: string,
+    meta: {
+      detectMagic: string,
+      detectMime: string,
+      detectMagicReverse: string,
+      detectBinwalk: string;
+    };
+    guid: string;
+  };
+  uri: string;
+}
