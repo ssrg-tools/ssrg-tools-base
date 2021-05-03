@@ -131,7 +131,11 @@ export function createKeyFromUrl(url: string) {
   } else if (hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/)) {
     hostname = 's3-' + hostmatch[1];
   } else if (/^s3.ap-[\w\-]+\.amazonaws\.com$/.test(hostname)) {
-    const bucketName = pathname.match(/^\/([\w\-]+)\//)[1];
+    if (!pathname.match(/^\/([\w.\-]+)\//)) {
+      console.log(url);
+      return null;
+    }
+    const bucketName = pathname.match(/^\/([\w.\-]+)\//)[1];
     hostname = 's3-' + bucketName;
     pathname = pathname.slice(bucketName.length + 2);
   }
