@@ -2,8 +2,8 @@ import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import _ from 'lodash';
 import { join } from 'path';
-import { BaseApiResponse } from 'src/api';
-import { URLs } from 'src/definitions/data/gameinfo';
+import { BaseApiResponse } from '../api';
+import { URLs } from '../definitions/data/gameinfo';
 import { api, apiConfig, fetchAllGameData } from '../backend-interface';
 
 const gameKey = process.argv[2];
