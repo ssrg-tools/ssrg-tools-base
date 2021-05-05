@@ -113,7 +113,6 @@ export class Song {
 
   @Column('varchar', {
     name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })

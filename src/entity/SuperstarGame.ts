@@ -177,7 +177,6 @@ export class SuperstarGame {
   baseUrlApi: string;
 
   @Column('varchar', {
-    nullable: true,
     unique: true,
     length: 255,
   })
