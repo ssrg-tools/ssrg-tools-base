@@ -48,7 +48,6 @@ export class SuperstarGame {
   @Column('varchar', {
     name: 'key',
     length: 50,
-    nullable: true,
     comment: 'used for urls and internal tools',
   })
   key: string;
