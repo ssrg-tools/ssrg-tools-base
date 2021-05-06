@@ -82,7 +82,7 @@ async function main() {
     }
   } finally {
     const timeEnd = new Date();
-    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}.json`;
+    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}.json`;
     await writeFile(join(__dirname, '..', '..', '..', logFilename), JSON.stringify({
       timeStart,
       timeEnd,
