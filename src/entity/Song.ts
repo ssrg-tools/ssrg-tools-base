@@ -128,6 +128,9 @@ export class Song {
   })
   beatmapFingerprint: string;
 
+  @Column('json', { default: '{}', select: false })
+  meta: any;
+
   @Column('int', { unsigned: true, nullable: true })
   swrStatHighscore: number;
 

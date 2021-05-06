@@ -52,6 +52,17 @@ export class Theme {
   @Column('int', { name: 'artist_id', unsigned: true })
   artistId: number;
 
+  @Column('json', { default: '{}', select: false })
+  meta: any;
+
+  @Index('byCode')
+  @Column('int', {
+    comment: 'game internal theme id',
+    nullable: true,
+    default: null,
+  })
+  internalId: number;
+
   @Column('varchar', {
     name: 'guid',
     nullable: true,

@@ -55,6 +55,9 @@ export class SongBeatmap {
   @Column('varchar', { name: 'dalcom_beatmap_fingerprint', length: 255 })
   beatmapFingerprint: string;
 
+  @Column('json', { default: '{}', select: false })
+  meta: any;
+
   @Column('varchar', {
     name: 'guid',
     nullable: true,

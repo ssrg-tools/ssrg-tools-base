@@ -45,6 +45,17 @@ export class Artist {
   })
   group: string;
 
+  @Column('json', { default: '{}', select: false })
+  meta: any;
+
+  @Index('byCode')
+  @Column('simple-json', {
+    comment: 'game internal artist ids',
+    nullable: true,
+    default: [],
+  })
+  internalIds: number[];
+
   @Column('varchar', {
     name: 'guid',
     unique: true,
