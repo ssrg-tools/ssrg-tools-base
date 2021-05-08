@@ -1,4 +1,5 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique, OneToMany } from 'typeorm';
+import { GameArchivedAssetLink } from './Archive/GameArchivedAssetLink';
 import { SuperstarGame } from './SuperstarGame';
 
 export const fingerprintAlgo = 'sha256';
@@ -41,6 +42,9 @@ export class GameDataFile<T = any> {
   )
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
+
+  @OneToMany(() => GameArchivedAssetLink, (assetLink) => assetLink.gamedataFile)
+  assetLinks: GameArchivedAssetLink[];
 
   getData(): T {
     return this.data;
