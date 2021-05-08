@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -5,11 +6,11 @@ import 'reflect-metadata';
 import { createConnection, getRepository } from 'typeorm';
 import _, { Dictionary } from 'lodash';
 
-import { Song } from '../entity/Song';
-import { SongInfo } from '../SongInfo';
-import { SuperstarGame } from '../entity/SuperstarGame';
-import { generate_guid } from '../guid';
-import { Artist } from '../entity/Artist';
+import { Song } from '@base/entity/Song';
+import { SongInfo } from '@base/SongInfo';
+import { SuperstarGame } from '@base/entity/SuperstarGame';
+import { generate_guid } from '@base/guid';
+import { Artist } from '@base/entity/Artist';
 
 const verbose = false;
 const dryRun = true;
@@ -227,14 +228,15 @@ function processSongName(input: string) {
   const processed = input
     .replace('.ogg', '')
     .split(/_(.+)/)
-    .map(part =>
-      part.replace(/_+/g, ' ')
+    .map((part) => {
+      return part
+        .replace(/_+/g, ' ')
         .split(' ')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .map(word => word.trim())
-        .filter(x => x)
-        .join(' ')
-    );
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => word.trim())
+        .filter((x) => x)
+        .join(' ');
+    });
 
   processed[0] = (artistMap[processed[0]] || processed[0]).trim();
 
@@ -242,7 +244,7 @@ function processSongName(input: string) {
     processed[1] = processed[0];
     processed[0] = 'Unknown';
   }
-  processed[1] = (processed[1]).trim();
+  processed[1] = processed[1].trim();
 
   return processed;
 }
@@ -252,96 +254,118 @@ function parseSongName(originalFilename: string) {
   return processSongName(originalFilename);
 }
 
-createConnection().then(async connection => {
-  if (dryRun) {
-    console.log('Dry run enabled!');
-  }
-  const songs = getRepository(Song);
-  const artistsRaw = await getRepository(Artist).find();
-  const artistsByGame = _.mapValues(_.groupBy(artistsRaw, 'gameId'), group => _.keyBy(group, 'name'));
-
-  const songInfoPath = process.argv[2];
-  if (!songInfoPath) {
-    console.error(`No path provided.`);
-    process.exit(1);
-  }
-  const songInfoFile = path.resolve(songInfoPath);
-  if (!fs.existsSync(songInfoFile)) {
-    console.error(`File ${songInfoFile} does not exist.`);
-    process.exit(1);
-  }
-  const songInfos: {
-    date: string,
-    guid: string,
-    songinfos: {
-      [baseId: string]: SongInfo,
-    },
-  } = require(songInfoFile);
-
-  const games = _.keyBy(await getRepository(SuperstarGame).find(), 'key');
-
-  let inserted = 0;
-  let skipped = 0;
-  const errors = [];
-
-  for (const baseId in songInfos.songinfos) {
-    if (songInfos.songinfos.hasOwnProperty(baseId)) {
-      const songInfo = songInfos.songinfos[baseId];
-
-      const [gameKey, dalcomSongId] = baseId.split('/');
-
-      const existingSong = await songs.createQueryBuilder('song')
-        .innerJoin('song.game', 'game')
-        .leftJoinAndSelect('song.beatmaps', 'beatmaps')
-        .addSelect(['song.lengthNominal', 'song.songFilename', 'song.beatmapFingerprint', 'song.beatmapDateProcessed'])
-        .where('song.dalcom_song_id = :dalcomSongId', { dalcomSongId })
-        .andWhere('game.key = :gameKey', { gameKey })
-        .getOne()
-        ;
-
-      if (existingSong) {
-        if (verbose) {
-          console.log(`Skipping ${gameKey}/${dalcomSongId} [${existingSong.album}] ${existingSong.name} - already inserted`);
-        }
-        skipped++;
-        continue;
-      }
-
-      const [album, name] = parseSongName(songInfo.dalcom_song_filename);
-      const game = games[gameKey];
-      if (!game || !name || !album) {
-        const errorText = `Could not insert song for ${gameKey}/${dalcomSongId} [${album}] ${name} - from '${songInfo.dalcom_song_filename}'`;
-        console.error(errorText);
-        errors.push(errorText);
-        continue;
-      }
-
-      const newSong = songs.create({
-        name,
-        album,
-        game,
-        internalSongId: dalcomSongId,
-        imageId: dalcomSongId,
-        ingame: 1,
-        artist: (artistsByGame[game.id] || {})[album],
-        guid: generate_guid(),
-      });
-
-      const printArtist = newSong.artist ? ` / ${newSong.artist.name} (${newSong.artist.cardCount}ca)` : '';
-      if (verbose || dryRun) {
-        console.log(
-          `Would insert ${game.name}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`);
-      }
-      if (!dryRun) {
-        const saved = await songs.save(newSong);
-        console.log(`Inserted ${gameKey}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}' - ${saved.id}-${saved.guid}`);
-      }
-      inserted++;
+createConnection()
+  .then(async () => {
+    if (dryRun) {
+      console.log('Dry run enabled!');
     }
-  }
+    const songs = getRepository(Song);
+    const artistsRaw = await getRepository(Artist).find();
+    const artistsByGame = _.mapValues(
+      _.groupBy(artistsRaw, 'gameId'),
+      (group) => _.keyBy(group, 'name'),
+    );
 
-  console.log(`Done, inserted ${inserted} songs and skipped ${skipped} with ${errors.length} errors`, errors);
-}).then(() => process.exit(0)).catch((reason) => {
-  console.error(reason);
-  process.abort();
-});
+    const songInfoPath = process.argv[2];
+    if (!songInfoPath) {
+      console.error(`No path provided.`);
+      process.exit(1);
+    }
+    const songInfoFile = path.resolve(songInfoPath);
+    if (!fs.existsSync(songInfoFile)) {
+      console.error(`File ${songInfoFile} does not exist.`);
+      process.exit(1);
+    }
+    const songInfos: {
+      date: string;
+      guid: string;
+      songinfos: {
+        [baseId: string]: SongInfo;
+      };
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+    } = require(songInfoFile);
+
+    const games = _.keyBy(await getRepository(SuperstarGame).find(), 'key');
+
+    let inserted = 0;
+    let skipped = 0;
+    const errors = [];
+
+    for (const baseId in songInfos.songinfos) {
+      if (songInfos.songinfos.hasOwnProperty(baseId)) {
+        const songInfo = songInfos.songinfos[baseId];
+
+        const [gameKey, dalcomSongId] = baseId.split('/');
+
+        const existingSong = await songs
+          .createQueryBuilder('song')
+          .innerJoin('song.game', 'game')
+          .leftJoinAndSelect('song.beatmaps', 'beatmaps')
+          .addSelect([
+            'song.lengthNominal',
+            'song.songFilename',
+            'song.beatmapFingerprint',
+            'song.beatmapDateProcessed',
+          ])
+          .where('song.dalcom_song_id = :dalcomSongId', { dalcomSongId })
+          .andWhere('game.key = :gameKey', { gameKey })
+          .getOne();
+
+        if (existingSong) {
+          if (verbose) {
+            console.log(
+              `Skipping ${gameKey}/${dalcomSongId} [${existingSong.album}] ${existingSong.name} - already inserted`,
+            );
+          }
+          skipped++;
+          continue;
+        }
+
+        const [album, name] = parseSongName(songInfo.dalcom_song_filename);
+        const game = games[gameKey];
+        if (!game || !name || !album) {
+          const errorText = `Could not insert song for ${gameKey}/${dalcomSongId} [${album}] ${name} - from '${songInfo.dalcom_song_filename}'`;
+          console.error(errorText);
+          errors.push(errorText);
+          continue;
+        }
+
+        const newSong = songs.create({
+          name,
+          album,
+          game,
+          internalSongId: dalcomSongId,
+          imageId: dalcomSongId,
+          ingame: 1,
+          artist: (artistsByGame[game.id] || {})[album],
+          guid: generate_guid(),
+        });
+
+        const printArtist = newSong.artist
+          ? ` / ${newSong.artist.name} (${newSong.artist.cardCount}ca)`
+          : '';
+        if (verbose || dryRun) {
+          console.log(
+            `Would insert ${game.name}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}'`,
+          );
+        }
+        if (!dryRun) {
+          const saved = await songs.save(newSong);
+          console.log(
+            `Inserted ${gameKey}/${dalcomSongId} [${newSong.album}${printArtist}] ${newSong.name} - from '${songInfo.dalcom_song_filename}' - ${saved.id}-${saved.guid}`,
+          );
+        }
+        inserted++;
+      }
+    }
+
+    console.log(
+      `Done, inserted ${inserted} songs and skipped ${skipped} with ${errors.length} errors`,
+      errors,
+    );
+  })
+  .then(() => process.exit(0))
+  .catch((reason) => {
+    console.error(reason);
+    process.abort();
+  });

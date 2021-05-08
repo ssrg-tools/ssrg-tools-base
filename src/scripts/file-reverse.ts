@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from "fs";
-import { basename, dirname, extname, join } from "path";
-import { isReversedFile, reverseBuffer } from "../dalcom-files";
+import { readFileSync, writeFileSync } from 'fs';
+import { basename, dirname, extname, join } from 'path';
+import { isReversedFile, reverseBuffer } from '@base/dalcom-files';
 
 const path = process.argv[2];
 if (!path) {

@@ -1,10 +1,9 @@
 import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
-import _ from 'lodash';
 import { join } from 'path';
-import { BaseApiResponse } from '../api';
-import { URLs } from '../definitions/data/gameinfo';
-import { api, apiConfig, fetchAllGameData } from '../backend-interface';
+import { BaseApiResponse } from '@base/api';
+import { URLs } from '@base/definitions/data/gameinfo';
+import { api, apiConfig, fetchAllGameData } from '@base/backend-interface';
 
 const gameKey = process.argv[2];
 if (!gameKey) {
@@ -34,7 +33,9 @@ async function main() {
   const results = [];
   const timeStart = new Date();
   try {
-    const { overview, contextMap, contextMapByCode } = await fetchAllGameData(gameKey, version, ['urls']);
+    const { overview, contextMap } = await fetchAllGameData(gameKey, version, [
+      'urls',
+    ]);
 
     const urls = contextMap.urls as URLs[];
     console.log(`All game data loaded.`);
@@ -42,12 +43,18 @@ async function main() {
     console.log();
 
     for (const url of urls) {
-      const assetsubversion = (overview.context.urls || overview.context.URLs).version;
+      const assetsubversion = (overview.context.urls || overview.context.URLs)
+        .version;
       const apiEndpoint = `/v1/${gameKey}/gamedata/urls/${overview.version}/${assetsubversion}/archiveAsset/${url.code}`;
 
-      const result = await api.post<BaseApiResponse<ArchiveAssetResult>>(apiEndpoint)
-        .then(response => ({timeTakenMs: response.timeTakenMs, assetsubversion, ... response.data}))
-        .catch(reason => {
+      const result = await api
+        .post<BaseApiResponse<ArchiveAssetResult>>(apiEndpoint)
+        .then((response) => ({
+          timeTakenMs: response.timeTakenMs,
+          assetsubversion,
+          ...response.data,
+        }))
+        .catch((reason) => {
           if (reason instanceof HTTPError) {
             return {
               result: 'http-error',
@@ -72,8 +79,14 @@ async function main() {
       // tslint:disable-next-line: no-string-literal
       const resultUrl = result['uri'] ? apiConfig.endpoint + result['uri'] : '';
       const displayLength = 40;
-      const displayCode = 'v' + result.assetsubversion + '@' + url.code.toString().padStart(5);
-      console.log(`${displayCode} ...${url.url.replace(/\?.+$/, '').slice(-displayLength).padStart(displayLength)}: ${result.result.padEnd(7)} ${resultUrl}`);
+      const displayCode =
+        'v' + result.assetsubversion + '@' + url.code.toString().padStart(5);
+      console.log(
+        `${displayCode} ...${url.url
+          .replace(/\?.+$/, '')
+          .slice(-displayLength)
+          .padStart(displayLength)}: ${result.result.padEnd(7)} ${resultUrl}`,
+      );
     }
   } catch (error) {
     console.error(error);
@@ -83,13 +96,20 @@ async function main() {
   } finally {
     const timeEnd = new Date();
     const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}.json`;
-    await writeFile(join(__dirname, '..', '..', '..', logFilename), JSON.stringify({
-      timeStart,
-      timeEnd,
-      timeTakenMs: timeEnd.getTime() - timeStart.getTime(),
-      gameKey,
-      results,
-    }, null, 2));
+    await writeFile(
+      join(__dirname, '..', '..', '..', logFilename),
+      JSON.stringify(
+        {
+          timeStart,
+          timeEnd,
+          timeTakenMs: timeEnd.getTime() - timeStart.getTime(),
+          gameKey,
+          results,
+        },
+        null,
+        2,
+      ),
+    );
   }
 }
 
