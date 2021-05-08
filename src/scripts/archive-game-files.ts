@@ -1,9 +1,9 @@
 import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import { join } from 'path';
-import { BaseApiResponse } from '@base/api';
-import { URLs } from '@base/definitions/data/gameinfo';
-import { api, apiConfig, fetchAllGameData } from '@base/backend-interface';
+import { BaseApiResponse } from '../api';
+import { URLs } from '../definitions/data/gameinfo';
+import { api, apiConfig, fetchAllGameData } from '../backend-interface';
 
 const gameKey = process.argv[2];
 if (!gameKey) {
@@ -32,11 +32,8 @@ interface ArchiveAssetResultError {
 async function main() {
   const results = [];
   const timeStart = new Date();
+  const { overview, contextMap } = await fetchAllGameData(gameKey, version, ['urls']);
   try {
-    const { overview, contextMap } = await fetchAllGameData(gameKey, version, [
-      'urls',
-    ]);
-
     const urls = contextMap.urls as URLs[];
     console.log(`All game data loaded.`);
     console.log(`Archiving ${urls.length}x entries`);
@@ -95,7 +92,7 @@ async function main() {
     }
   } finally {
     const timeEnd = new Date();
-    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}.json`;
+    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}-${overview.version}.json`;
     await writeFile(
       join(__dirname, '..', '..', '..', logFilename),
       JSON.stringify(
