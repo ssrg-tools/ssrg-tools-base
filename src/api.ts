@@ -18,12 +18,16 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
 
   timeTakenMs: number;
 
-  constructor([data, total]: [T[], number], pageSize: NumberLike, page: number | string = 0)
-  {
+  constructor(
+    [data, total]: [T[], number],
+    pageSize: NumberLike,
+    page: number | string = 0,
+  ) {
     this.data = data;
     this.total = total;
     this.page = page;
-    this.pageSize = typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
+    this.pageSize =
+      typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
   }
 }
 
@@ -70,35 +74,40 @@ export interface PostCardDropData {
   comment?: string;
   date: string | Date;
   cards: {
-    grade: GradeNonEmpty | '30%' | '100%',
-    member?: string,
-    memberOffset?: number,
-    themeGuid: string,
-    isPrism: SqlBool,
+    grade: GradeNonEmpty | '30%' | '100%';
+    member?: string;
+    memberOffset?: number;
+    themeGuid: string;
+    isPrism: SqlBool;
   }[];
 }
 
 export interface GameAssetsListingResult {
-  gameAssetVersion: number;
-  gameSubAssetVersion: number;
-  originalCode: number;
-  /** date string */
-  dateArchival: Date;
   sourceUrl: string;
-  /** date string */
-  sourceDateModified: Date;
   guid: string;
   file: {
-    fingerprint: string,
-    size: number,
-    mime: string,
+    fingerprint: string;
+    size: number;
+    mime: string;
     meta: {
-      detectMagic: string,
-      detectMime: string,
-      detectMagicReverse: string,
+      detectMagic: string;
+      detectMime: string;
+      detectMagicReverse: string;
       detectBinwalk: string;
     };
     guid: string;
   };
+  gamedataFileLinks: {
+    bundleVersion: number;
+    resourceVersion: number;
+    originalCode: number;
+    /** date string */
+    dateArchival: Date;
+    /** date string */
+    sourceDateModified: Date;
+    game: {
+      key: string;
+    };
+  }[];
   uri: string;
 }
