@@ -12,7 +12,7 @@ export class AddGameAssetLink1620438527493 implements MigrationInterface {
 
     // Create new asset archive
     await queryRunner.query(
-      'CREATE TABLE `files_gameasset_archive` (`id` int UNSIGNED NOT NULL AUTO_INCREMENT, `fileId` int UNSIGNED NOT NULL, `sourceUrl` varchar(255) NOT NULL, `guid` varchar(255) NOT NULL, UNIQUE INDEX `byGuid` (`guid`), UNIQUE INDEX `REL_fc124abf040f63fe0d61f12cd4` (`fileId`), PRIMARY KEY (`id`)) ENGINE=InnoDB',
+      'CREATE TABLE `files_gameasset_archive` (`id` int UNSIGNED NOT NULL AUTO_INCREMENT, `fileId` int UNSIGNED NOT NULL, `sourceUrl` varchar(255) NOT NULL, `guid` varchar(255) NOT NULL, UNIQUE INDEX `byGuid` (`guid`), INDEX `REL_fc124abf040f63fe0d61f12cd4` (`fileId`), PRIMARY KEY (`id`)) ENGINE=InnoDB',
     );
 
     await queryRunner.query(
