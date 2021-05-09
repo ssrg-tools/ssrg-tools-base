@@ -1,11 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column, TableInheritance, Index, Unique, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  TableInheritance,
+  Index,
+  Unique,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+} from 'typeorm';
 import { GameArchivedAsset } from '../Archive/GameArchivedAsset';
 import { User } from '../User';
 
 @Entity('files', { schema: 'superstar_log' })
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
-@Unique('byKey', [ 'key' ])
-@Unique('byGuid', [ 'guid' ])
+@Unique('byKey', ['key'])
+@Unique('byGuid', ['guid'])
 export abstract class File {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
@@ -61,13 +71,17 @@ export abstract class File {
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-
-  @OneToOne(
-    () => GameArchivedAsset,
-    gameAsset => gameAsset.file
-  )
+  @OneToOne(() => GameArchivedAsset, (gameAsset) => gameAsset.file)
   gameAsset: GameArchivedAsset;
+}
+
+export interface FileWithUri extends File {
+  uri: string;
 }
 
 export type FileAccessRestriction = 'public';
 export type FileEngine = 'aws-s3';
+
+export function userCanViewAllKeys(user: User) {
+  return user && (user.isMod || user.isAdmin);
+}
