@@ -58,6 +58,9 @@ export abstract class File {
   @Column('varchar', { length: 255 })
   guid: string;
 
+  @Column('varchar', { length: 255 })
+  type: string;
+
   @Column('int', {
     unsigned: true,
     nullable: true, // null means system
