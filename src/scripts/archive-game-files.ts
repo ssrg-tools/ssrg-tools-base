@@ -77,7 +77,7 @@ async function main() {
       const resultUrl = result['uri'] ? apiConfig.endpoint + result['uri'] : '';
       const displayLength = 40;
       const displayCode =
-        'v' + result.assetsubversion + '@' + url.code.toString().padStart(5);
+        'v' + result.assetsubversion + '@' + url.code.toString().padStart(5) + '/' + urls.length;
       console.log(
         `${displayCode} ...${url.url
           .replace(/\?.+$/, '')
