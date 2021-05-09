@@ -7,3 +7,7 @@ export class EncryptedBlob extends File {
   @Column('varchar')
   header: string;
 }
+
+export interface EncryptedBlobWithUri extends EncryptedBlob {
+  uri: string;
+}

@@ -85,3 +85,7 @@ export type FileEngine = 'aws-s3';
 export function userCanViewAllKeys(user: User) {
   return user && (user.isMod || user.isAdmin);
 }
+
+export function hasUri(file: File): file is FileWithUri {
+  return (file as any).uri;
+}

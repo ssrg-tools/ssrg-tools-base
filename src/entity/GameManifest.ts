@@ -52,4 +52,3 @@ export class GameManifest {
     this.versionNumber = this.versionKeyAsNumber();
   }
 }
-
