@@ -177,6 +177,9 @@ export class SuperstarGame {
   })
   baseUrlApi: string;
 
+  @Column('simple-array')
+  s3Buckets: string[];
+
   @Column('varchar', {
     unique: true,
     length: 255,
