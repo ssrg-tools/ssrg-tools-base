@@ -40,6 +40,9 @@ export const api = {
   get<T = any>(endpoint: string, options?: OptionsOfTextResponseBody): Promise<T> {
     return got(apiConfig.endpoint + endpoint, buildStandardHeaders(options)).json();
   },
+  getRaw(endpoint: string, options?: OptionsOfTextResponseBody): Promise<Buffer> {
+    return got(apiConfig.endpoint + endpoint, buildStandardHeaders(options)).buffer();
+  },
   post<T = any>(endpoint: string, options?: OptionsOfTextResponseBody): Promise<T> {
     return got.post(apiConfig.endpoint + endpoint, buildStandardHeaders(options)).json();
   },
