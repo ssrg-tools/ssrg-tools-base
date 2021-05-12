@@ -61,7 +61,8 @@ export class SuperstarGame {
   @Column('tinyint', {
     unsigned: true,
     default: 1,
-    comment: 'whether this entry is active in the application and should be displayed and interacted with',
+    comment:
+      'whether this entry is active in the application and should be displayed and interacted with',
   })
   active: SqlBool;
 
@@ -177,7 +178,7 @@ export class SuperstarGame {
   })
   baseUrlApi: string;
 
-  @Column('simple-array')
+  @Column('simple-array', { select: false, default: '' })
   s3Buckets: string[];
 
   @Column('varchar', {
@@ -189,7 +190,10 @@ export class SuperstarGame {
   @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.game)
   leagueRankings: LeagueRanking[];
 
-  @OneToMany(() => LeagueTrackerEntry, (leagueTrackerEntry) => leagueTrackerEntry.game)
+  @OneToMany(
+    () => LeagueTrackerEntry,
+    (leagueTrackerEntry) => leagueTrackerEntry.game,
+  )
   leagueTrackerEntries: LeagueTrackerEntry[];
 
   @OneToMany(() => LogCredit, (logCredits) => logCredits.game)
@@ -228,10 +232,13 @@ export class SuperstarGame {
   @OneToMany(() => GameArchivedAssetLink, (dataFileLink) => dataFileLink.game)
   gameArchivedAssetLinks: GameArchivedAssetLink[];
 
-  @OneToMany(() => SongWorldRecordArchive, (archiveSongWorldRecord) => archiveSongWorldRecord.game)
+  @OneToMany(
+    () => SongWorldRecordArchive,
+    (archiveSongWorldRecord) => archiveSongWorldRecord.game,
+  )
   archiveSongWorldRecords: SongWorldRecordArchive[];
 
-  @ManyToMany(type => Division)
+  @ManyToMany(() => Division)
   @JoinTable()
   divisions: Division[];
 }
