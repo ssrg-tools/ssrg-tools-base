@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import _ from 'lodash';
 import moment, { Moment } from 'moment-timezone';
 import crypto from 'crypto';
@@ -183,4 +184,27 @@ export function createKeyFromUrl(url: string) {
 
   const ret = hostname + '-' + pathname;
   return ret;
+}
+
+export function s3BucketName(url: string): string | null {
+  const { hostname, pathname } = new URL(url);
+  let hostmatch: RegExpMatchArray;
+
+  // tslint:disable: no-conditional-assignment
+  if ((hostmatch = hostname.match(/^([\w\-]+)\.cloudfront\.net$/))) {
+    return 'cf-' + hostmatch[1];
+  } else if (
+    (hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/))
+  ) {
+    return hostmatch[1];
+  } else if (/^s3.ap-[\w\-]+\.amazonaws\.com$/.test(hostname)) {
+    if (!pathname.match(/^\/([\w.\-]+)\//)) {
+      console.log(url);
+      return null;
+    }
+    const bucketName = pathname.match(/^\/([\w.\-]+)\//)[1];
+    return bucketName;
+  }
+
+  return null;
 }

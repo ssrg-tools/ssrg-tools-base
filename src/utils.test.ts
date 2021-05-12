@@ -1,6 +1,7 @@
 import 'jasmine';
 import {
   createKeyFromUrl,
+  s3BucketName,
   scoreBonusCalculate,
   scoreBonusCountdown,
   scoreBonusInDateRange,
@@ -104,25 +105,39 @@ describe('Score bonus full calc test', () => {
   });
 });
 
-const keyFromUrlData: [string, string][] = [
-  [
-    'http://scymdori.cloudfront.net/resources/images/store/recommend/1234/4321/somepic.png?v=01293847',
-    'cf-scymdori-images/store/recommend/1234/4321/somepic.png',
-  ],
-  [
-    'https://s3.ap-northeast-2.amazonaws.com/superstar-smtown-live/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
-    's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
-  ],
-  [
-    'https://superstar-smtown-live.s3-ap-northeast-2.amazonaws.com/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
-    's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
-  ],
+const keyFromUrlData = [
+  {
+    input:
+      'http://scymdori.cloudfront.net/resources/images/store/recommend/1234/4321/somepic.png?v=01293847',
+    key: 'cf-scymdori-images/store/recommend/1234/4321/somepic.png',
+    bucket: 'cf-scymdori',
+  },
+  {
+    input:
+      'https://s3.ap-northeast-2.amazonaws.com/superstar-smtown-live/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
+    key: 's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
+    bucket: 'superstar-smtown-live',
+  },
+  {
+    input:
+      'https://superstar-smtown-live.s3-ap-northeast-2.amazonaws.com/aslkdfjh/images/something/2345/asdf.asdf?v=90234857&',
+    key: 's3-superstar-smtown-live-aslkdfjh/images/something/2345/asdf.asdf',
+    bucket: 'superstar-smtown-live',
+  },
 ];
 
 describe('Create key from url test', () => {
-  keyFromUrlData.forEach(([input, expected]) => {
-    it(`should produce '${expected}' from '${input}'`, () => {
-      expect(createKeyFromUrl(input)).toBe(expected);
+  keyFromUrlData.forEach(({ input, key }) => {
+    it(`should produce '${key}' from '${input}'`, () => {
+      expect(createKeyFromUrl(input)).toBe(key);
+    });
+  });
+});
+
+describe('Find s3 bucket name from url', () => {
+  keyFromUrlData.forEach(({ input, bucket }) => {
+    it(`should produce '${bucket}' from '${input}'`, () => {
+      expect(s3BucketName(input)).toBe(bucket);
     });
   });
 });
