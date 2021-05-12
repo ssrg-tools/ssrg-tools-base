@@ -63,3 +63,8 @@ export async function processAggregate(
     }
   }
 }
+
+export function isCdnAddress(url: string): boolean {
+  const obj = new URL(url);
+  return obj.hostname === 'res.qmtt.punchbox.info';
+}
