@@ -1,8 +1,17 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Unique, BeforeInsert } from 'typeorm';
+import {
+  Index,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinColumn,
+  ManyToOne,
+  Unique,
+  BeforeInsert,
+} from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { GameManifest as GameManifestType } from '../definitions/data/gamemanifest';
 
-@Unique('perGameAndVersion', [ 'gameId', 'versionString' ])
+@Unique('perGameAndVersion', ['gameId', 'versionString'])
 @Entity('zz_gamedata_manifests', { schema: 'superstar_log' })
 export class GameManifest {
   @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
@@ -33,7 +42,7 @@ export class GameManifest {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.gameManifests,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
@@ -44,11 +53,11 @@ export class GameManifest {
   }
 
   versionParts() {
-    return this.versionString.split('.').map(x => parseInt(x, 10));
+    return this.versionString.split('.').map((x) => parseInt(x, 10));
   }
 
   @BeforeInsert()
-  updateVersunNumber() {
+  updateVersionNumber() {
     this.versionNumber = this.versionKeyAsNumber();
   }
 }
