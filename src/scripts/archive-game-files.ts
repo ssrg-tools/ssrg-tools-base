@@ -25,6 +25,7 @@ interface ArchiveAssetResultOk {
     game: { key: string };
   };
 }
+
 interface ArchiveAssetResultError {
   result: 'error';
 }
@@ -75,7 +76,7 @@ async function main() {
       });
       // tslint:disable-next-line: no-string-literal
       const resultUrl = result['uri'] ? apiConfig.endpoint + result['uri'] : '';
-      const displayLength = 40;
+      const displayLength = 50;
       const displayCode =
         'v' + result.assetsubversion + '@' + url.code.toString().padStart(5) + '/' + urls.length;
       console.log(
