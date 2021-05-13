@@ -148,7 +148,7 @@ export interface CardData {
   percentage: number;
   theme: number;
   sellEndAt: number;
-  prism: number;
+  prism?: number;
   cardImageSmall: number;
 }
 
@@ -406,19 +406,19 @@ export interface CardIntensifyData {
 }
 
 export interface CardInvenExpandStoreData {
-    analyticsData: string;
-    product: number;
-    code: number;
-    quantity: number;
-    paymentCategory: number;
-    productSmallImage: number[];
-    bonusQuantity: number;
-    eventCode: string;
-    currentExpandCount: number;
-    productImage: number[];
-    sellStartAt?: any;
-    price: number;
-    sellEndAt?: any;
+  analyticsData: string;
+  product: number;
+  code: number;
+  quantity: number;
+  paymentCategory: number;
+  productSmallImage: number[];
+  bonusQuantity: number;
+  eventCode: string;
+  currentExpandCount: number;
+  productImage: number[];
+  sellStartAt?: any;
+  price: number;
+  sellEndAt?: any;
 }
 
 export interface CardPackYearData {
@@ -436,8 +436,8 @@ export interface CardPackYearData {
 }
 
 export interface CardSellData {
-    code: number;
-    price: number;
+  code: number;
+  price: number;
 }
 
 export interface CardStoreData {
@@ -506,50 +506,50 @@ export interface CollectionPointData {
 }
 
 export interface ComebackAttendanceData {
-    localeName4: number;
-    localeName3: number;
-    localeName2: number;
-    code: number;
-    localeName1: number;
-    iconType7: number;
-    iconType6: number;
-    iconType5: number;
-    iconType4: number;
-    iconType3: number;
-    localeName7: number;
-    localeName6: number;
-    localeName5: number;
-    quantity1: number;
-    quantity2: number;
-    quantity7: number;
-    icon7: number;
-    icon5: number;
-    icon6: number;
-    quantity3: number;
-    icon3: number;
-    quantity4: number;
-    icon4: number;
-    icon1: number;
-    quantity5: number;
-    icon2: number;
-    quantity6: number;
-    iconType2: number;
-    iconType1: number;
+  localeName4: number;
+  localeName3: number;
+  localeName2: number;
+  code: number;
+  localeName1: number;
+  iconType7: number;
+  iconType6: number;
+  iconType5: number;
+  iconType4: number;
+  iconType3: number;
+  localeName7: number;
+  localeName6: number;
+  localeName5: number;
+  quantity1: number;
+  quantity2: number;
+  quantity7: number;
+  icon7: number;
+  icon5: number;
+  icon6: number;
+  quantity3: number;
+  icon3: number;
+  quantity4: number;
+  icon4: number;
+  icon1: number;
+  quantity5: number;
+  icon2: number;
+  quantity6: number;
+  iconType2: number;
+  iconType1: number;
 }
 
 export interface CommonData {
-    sV02?: any;
-    iV04?: number;
-    sV01?: any;
-    iV03?: number;
-    sV04?: any;
-    code: number;
-    sV03?: any;
-    iV05?: number;
-    sV05?: any;
-    iV02?: number;
-    isEnable: boolean;
-    iV01: number;
+  sV02?: any;
+  iV04?: number;
+  sV01?: any;
+  iV03?: number;
+  sV04?: any;
+  code: number;
+  sV03?: any;
+  iV05?: number;
+  sV05?: any;
+  iV02?: number;
+  isEnable: boolean;
+  iV01: number;
 }
 
 export interface DalcomStageMusicData {
@@ -557,39 +557,39 @@ export interface DalcomStageMusicData {
 }
 
 export interface DalcomStageRewardData {
-    rewardName1: number;
-    code: number;
-    rangeMin?: number;
-    icon5?: any;
-    rewardItem: string;
-    icon3?: any;
-    rewardName4?: any;
-    icon4?: any;
-    rewardName5?: any;
-    gradeMin?: number;
-    icon1: number;
-    rewardName2: number;
-    icon2: number;
-    rewardName3?: any;
-    rangeMax?: number;
-    gradeMax?: number;
-    localeName: number;
+  rewardName1: number;
+  code: number;
+  rangeMin?: number;
+  icon5?: any;
+  rewardItem: string;
+  icon3?: any;
+  rewardName4?: any;
+  icon4?: any;
+  rewardName5?: any;
+  gradeMin?: number;
+  icon1: number;
+  rewardName2: number;
+  icon2: number;
+  rewardName3?: any;
+  rangeMax?: number;
+  gradeMax?: number;
+  localeName: number;
 }
 
 export interface DiamondStoreData {
-    analyticsData: string;
-    code: number;
-    quantity: number;
-    bonusQuantity: number;
-    productImage: number[];
-    sellStartAt?: any;
-    price: number;
-    orderIndex: number;
-    targetDevice: number;
-    analyticsPrice: number;
-    sku: string;
-    sellEndAt?: any;
-    currencyCode: string;
+  analyticsData: string;
+  code: number;
+  quantity: number;
+  bonusQuantity: number;
+  productImage: number[];
+  sellStartAt?: any;
+  price: number;
+  orderIndex: number;
+  targetDevice: number;
+  analyticsPrice: number;
+  sku: string;
+  sellEndAt?: any;
+  currencyCode: string;
 }
 
 export interface EventManagementData {
@@ -610,656 +610,657 @@ export interface EventManagementData {
 }
 
 export interface EventMissionData {
-    item: number;
-    code: number;
-    titleLocale: number;
-    backgroundImage?: number;
-    itemIcon: number;
-    uri: string;
-    conditionCode: number;
-    eventCode: number;
-    descLocale: number;
-    itemName: number;
-    missionDescLocale?: number;
-    orderIndex: number;
-    rewardQuantity: number;
-    tabTitleLocale?: number;
-    value: number;
-    groupCode: number;
+  item: number;
+  code: number;
+  titleLocale: number;
+  backgroundImage?: number;
+  itemIcon: number;
+  uri: string;
+  conditionCode: number;
+  eventCode: number;
+  descLocale: number;
+  itemName: number;
+  missionDescLocale?: number;
+  orderIndex: number;
+  rewardQuantity: number;
+  tabTitleLocale?: number;
+  value: number;
+  groupCode: number;
 }
 
 export interface ExtraResourceData {
-    code: number;
-    url: number;
+  code: number;
+  url: number;
 }
 
 export interface FreePassRewardData {
-    code: number;
-    passExperience: number;
-    passCumulativeExperience: number;
-    starPassID: number;
-    freePassItemIcon?: number;
-    passTier: number;
-    freePassRewardQuantity?: number;
+  code: number;
+  passExperience: number;
+  passCumulativeExperience: number;
+  starPassID: number;
+  freePassItemIcon?: number;
+  passTier: number;
+  freePassRewardQuantity?: number;
 }
 
 export interface GameConfigData {
   /** Often a date string */
-    stringValue: any;
-    code: number;
-    floatValue?: number;
-    integerValue?: number;
-    booleanValue?: boolean;
+  stringValue: any;
+  code: number;
+  floatValue?: number;
+  integerValue?: number;
+  booleanValue?: boolean;
 }
 
 export interface GroupData {
-    profileGroupName: number;
-    analyticsData: string;
-    bestCardbookImage: number;
-    groupType: number;
-    code: number;
-    integrateCode?: any;
-    displayStartAt?: number;
-    emblemIndex?: number;
-    emblemBuiltInResId: string;
-    equipableSlot: number;
-    cardLocaleName: number;
-    orderIndex: number;
-    displayEndAt?: number;
-    localeName: number;
-    secondOrderIndex: number;
-    emblemImage: number;
+  profileGroupName: number;
+  analyticsData: string;
+  bestCardbookImage: number;
+  groupType: number;
+  code: number;
+  integrateCode?: any;
+  displayStartAt?: number;
+  emblemIndex?: number;
+  emblemBuiltInResId: string;
+  equipableSlot: number;
+  cardLocaleName: number;
+  orderIndex: number;
+  displayEndAt?: number;
+  localeName: number;
+  secondOrderIndex: number;
+  emblemImage: number;
 }
 
 export interface HeadphoneStoreData {
-    eventCode: string;
-    analyticsData: string;
-    code: number;
-    quantity: number;
-    productImage: number[];
-    sellStartAt?: any;
-    itemCategory: number;
-    price: number;
-    orderIndex: number;
-    sellEndAt?: any;
-    bonusQuantity: number;
+  eventCode: string;
+  analyticsData: string;
+  code: number;
+  quantity: number;
+  productImage: number[];
+  sellStartAt?: any;
+  itemCategory: number;
+  price: number;
+  orderIndex: number;
+  sellEndAt?: any;
+  bonusQuantity: number;
 }
 
 export interface HelpData {
-    groupName: number;
-    code: number;
-    tabTitle: number;
-    contentsKR: string;
-    orderIndex: number;
-    contentTitle: number;
-    contentsUS: string;
-    group: number;
+  groupName: number;
+  code: number;
+  tabTitle: number;
+  contentsKR: string;
+  orderIndex: number;
+  contentTitle: number;
+  contentsUS: string;
+  group: number;
 }
 
 export interface HiddenGameData {
-    conditionScript: string;
-    loadingImage: number;
-    code: number;
-    rate: number;
-    musicCode: number;
-    forceDifficult: number;
+  conditionScript: string;
+  loadingImage: number;
+  code: number;
+  rate: number;
+  musicCode: number;
+  forceDifficult: number;
 }
 
 export interface InputCharRangeData {
-    code: number;
-    min: string;
-    max: string;
+  code: number;
+  min: string;
+  max: string;
 }
 
 export interface IntensifyEventData {
-    code: number;
-    priceRate: number;
-    groupID?: any;
-    allCard: boolean;
-    artistID?: any;
-    theme?: any;
-    probabilityRate: number;
-    endAt: any;
-    startAt: any;
+  code: number;
+  priceRate: number;
+  groupID?: any;
+  allCard: boolean;
+  artistID?: any;
+  theme?: any;
+  probabilityRate: number;
+  endAt: any;
+  startAt: any;
 }
 
 export interface LanguageData {
-    code: number;
-    value: string;
+  code: number;
+  value: string;
 }
 
 export interface LeagueWeeklyInfoData {
-    promote: number;
-    rateLocale: number;
-    code: number;
-    bonusLocale: number;
-    rate: number;
-    className: number;
-    tipImage: number;
-    classColor: string;
-    degrade: number;
+  promote: number;
+  rateLocale: number;
+  code: number;
+  bonusLocale: number;
+  rate: number;
+  className: number;
+  tipImage: number;
+  classColor: string;
+  degrade: number;
 }
 
 export interface LeagueWeeklyRewardData {
-    itemType: number;
-    code: number;
-    quantity: number;
-    paymentCategory: number;
-    grade: number;
-    leagueClass: number;
-    endAt?: number;
-    startAt?: number;
+  itemType: number;
+  code: number;
+  quantity: number;
+  paymentCategory: number;
+  grade: number;
+  leagueClass: number;
+  endAt?: number;
+  startAt?: number;
 }
 
 export interface LiveThemeCardData {
-    liveThemeGifID: number;
-    analyticsData: string;
-    code: number;
-    liveThemeSoundID: number;
-    emptyImageLarge: number;
-    emptyImageSmall: number;
-    artistID: number;
-    liveThemeImageLarge: number;
-    liveThemeSignSmall?: any;
-    artistBgImage: number;
-    liveThemeSignLarge?: any;
-    removeBGImageLarge?: any;
-    liveThemeImageSmall: number;
-    liveThemeID: number;
+  liveThemeGifID: number;
+  analyticsData: string;
+  code: number;
+  liveThemeSoundID: number;
+  emptyImageLarge: number;
+  emptyImageSmall: number;
+  artistID: number;
+  liveThemeImageLarge: number;
+  liveThemeSignSmall?: any;
+  artistBgImage: number;
+  liveThemeSignLarge?: any;
+  removeBGImageLarge?: any;
+  liveThemeImageSmall: number;
+  liveThemeID: number;
 }
 
 export interface LiveThemeData {
-    saleLocaleName: number;
-    analyticsData: string;
-    code: number;
-    groupID: number;
-    orderIndex: number;
-    liveThemeEffect?: any;
-    liveThemeAuraColor: string;
-    localeName: number;
-    liveThemeAuraPreset: number;
+  saleLocaleName: number;
+  analyticsData: string;
+  code: number;
+  groupID: number;
+  orderIndex: number;
+  liveThemeEffect?: any;
+  liveThemeAuraColor: string;
+  localeName: number;
+  liveThemeAuraPreset: number;
 }
 
 export interface LiveThemeGifData {
-    gifSound: boolean;
-    analyticsData: string;
-    code: number;
-    liveThemeGif: number;
+  gifSound: boolean;
+  analyticsData: string;
+  code: number;
+  liveThemeGif: number;
 }
 
 export interface LiveThemeSoundData {
-    analyticsData: string;
-    code: number;
-    liveThemeSound: number;
+  analyticsData: string;
+  code: number;
+  liveThemeSound: number;
 }
 
 export interface LobbyBgData {
-    productFontColor: string;
-    analyticsData: string;
-    code: number;
-    bgImageLarge: number;
-    groupID: number;
-    bgImageSmall: number;
-    bgName: number;
-    productBgColor: string;
+  productFontColor: string;
+  analyticsData: string;
+  code: number;
+  bgImageLarge: number;
+  groupID: number;
+  bgImageSmall: number;
+  bgName: number;
+  productBgColor: string;
 }
 
 export interface LobbyBgStoreData {
-    isLink: boolean;
-    analyticsData: string;
-    product: number;
-    code: number;
-    sellName?: number;
-    paymentCategory?: number;
-    bgPrice: number;
-    description: number;
-    sellType: number;
-    bgSku?: any;
-    lobbyBgID: number;
-    sellStartAt?: number;
-    orderIndex: number;
-    targetDevice?: any;
-    eventManagementID?: number;
-    analyticsPrice?: any;
-    sellEndAt?: number;
-    currencyCode?: any;
+  isLink: boolean;
+  analyticsData: string;
+  product: number;
+  code: number;
+  sellName?: number;
+  paymentCategory?: number;
+  bgPrice: number;
+  description: number;
+  sellType: number;
+  bgSku?: any;
+  lobbyBgID: number;
+  sellStartAt?: number;
+  orderIndex: number;
+  targetDevice?: any;
+  eventManagementID?: number;
+  analyticsPrice?: any;
+  sellEndAt?: number;
+  currencyCode?: any;
 }
 
 export interface LocaleData {
-    zhCN: string | number;
-    code: number;
-    esES: string | number;
-    idID: string | number;
-    enUS: string | number;
-    zhTW: string | number;
-    koKR: string | number;
-    trTR: string | number;
-    ptPT: string | number;
-    jpJP: string | number;
-    arAR: string | number;
+  zhCN: string | number;
+  code: number;
+  esES: string | number;
+  idID: string | number;
+  enUS: string | number;
+  zhTW: string | number;
+  koKR: string | number;
+  trTR: string | number;
+  ptPT: string | number;
+  jpJP: string | number;
+  arAR: string | number;
 }
 
 export interface LocalePopupData {
-    msgs: number[];
-    code: number;
-    icon: number;
-    btns: number[];
-    title: number;
+  msgs: number[];
+  code: number;
+  icon: number;
+  btns: number[];
+  title: number;
 }
 
 export interface MemberData {
-    buttonImage: number;
-    largeImage: number;
-    nameImage: number;
-    code: number;
-    greeting: number;
-    profile: number;
-    voiceScrpitPositionY: number;
-    voiceScrpitPositionX: number;
-    UIReadyBT: number;
-    UIStartBT: number;
-    emptyLiveImage: number;
-    name: number;
-    profileCode: number;
-    signImage: number;
-    UIMusicSelectBT: number;
+  buttonImage: number;
+  largeImage: number;
+  nameImage: number;
+  code: number;
+  greeting: number;
+  profile: number;
+  voiceScrpitPositionY: number;
+  voiceScrpitPositionX: number;
+  UIReadyBT: number;
+  UIStartBT: number;
+  emptyLiveImage: number;
+  name: number;
+  profileCode: number;
+  signImage: number;
+  UIMusicSelectBT: number;
 }
 
 export interface MembershipData {
-    packageItem: string;
-    code: number;
-    icon: number;
-    days: number;
+  packageItem: string;
+  code: number;
+  icon: number;
+  days: number;
 }
 
 export interface MissionData {
-    descLocale: number;
-    item: number;
-    itemName: number;
-    code: number;
-    titleLocale: number;
-    itemIcon: number;
-    orderIndex: number;
-    rewardQuantity: number;
-    type: number;
-    value: number;
-    uri: string;
-    conditionCode: number;
+  descLocale: number;
+  item: number;
+  itemName: number;
+  code: number;
+  titleLocale: number;
+  itemIcon: number;
+  orderIndex: number;
+  rewardQuantity: number;
+  type: number;
+  value: number;
+  uri: string;
+  conditionCode: number;
 }
 
 export interface MissionDetailData {
   /** encoded json */
-    conditionScript: string;
-    code: number;
-    type: number;
+  conditionScript: string;
+  code: number;
+  type: number;
 }
 
 export interface MusicData {
-    albumName: number;
-    analyticsData: string;
-    linkedMusic?: any;
-    code: number;
-    myrecordQualifyingScore: number;
-    seqNormal: number;
-    sound: number;
-    seqHard: number;
-    artistCode: string;
-    cardRotation: number;
-    normalPatternCount: number;
-    isLocked: boolean;
-    worldrecordQualifyingScore: number;
-    groupData: number;
-    albumFontColor: string;
-    seqEasy: number;
-    image: number;
-    trackNumber: number;
-    releaseDate: any;
-    composer?: any;
-    album: number;
-    isMultiTempo: boolean;
-    hardPatternCount: number;
-    easyPatternCount: number;
-    challengable: boolean;
-    isHidden: boolean;
-    twoStarMaxMiss: number;
-    orderIndex: number;
-    previewSound: number;
-    localeDisplayGroupName: number;
-    oneStarMaxMiss: number;
-    localeName: number;
-    secondOrderIndex: number;
-    musicType: string;
-    albumBgColor: string;
-    threeStarMaxMiss: number;
+  albumName: number;
+  analyticsData: string;
+  linkedMusic?: any;
+  code: number;
+  myrecordQualifyingScore: number;
+  seqNormal: number;
+  sound: number;
+  seqHard: number;
+  artistCode: string;
+  cardRotation: number;
+  normalPatternCount: number;
+  isLocked: boolean;
+  worldrecordQualifyingScore: number;
+  groupData: number;
+  albumFontColor: string;
+  seqEasy: number;
+  image: number;
+  trackNumber: number;
+  /** unix timestamp */
+  releaseDate: number;
+  composer?: any;
+  album: number;
+  isMultiTempo: boolean;
+  hardPatternCount: number;
+  easyPatternCount: number;
+  challengable: boolean;
+  isHidden: boolean;
+  twoStarMaxMiss: number;
+  orderIndex: number;
+  previewSound: number;
+  localeDisplayGroupName: number;
+  oneStarMaxMiss: number;
+  localeName: number;
+  secondOrderIndex: number;
+  musicType: string;
+  albumBgColor: string;
+  threeStarMaxMiss: number;
 }
 
 export interface MyRecordData {
-    quantity1: number;
-    code: number;
-    quantity2: number;
-    clearMusicMax: number;
-    icon5?: any;
-    icon3: number;
-    quantity3: number;
-    endAt: any;
-    icon4?: any;
-    quantity4?: any;
-    icon1: number;
-    quantity5?: any;
-    icon2: number;
-    clearMusicMin: number;
-    startAt: any;
+  quantity1: number;
+  code: number;
+  quantity2: number;
+  clearMusicMax: number;
+  icon5?: any;
+  icon3: number;
+  quantity3: number;
+  endAt: any;
+  icon4?: any;
+  quantity4?: any;
+  icon1: number;
+  quantity5?: any;
+  icon2: number;
+  clearMusicMin: number;
+  startAt: any;
 }
 
 export interface NewsData {
-    image: number;
-    externalUrl: number;
-    code: number;
-    targetLanguage: number;
-    orderIndex: number;
-    endAt: number;
-    uri: string;
-    startAt: number;
+  image: number;
+  externalUrl: number;
+  code: number;
+  targetLanguage: number;
+  orderIndex: number;
+  endAt: number;
+  uri: string;
+  startAt: number;
 }
 
 export interface NpcData {
-    code: number;
-    nickname: number;
-    artistID: number;
+  code: number;
+  nickname: number;
+  artistID: number;
 }
 
 export interface PassMissionData {
-    item: number;
-    code: number;
-    titleLocale: number;
-    weeklyMissionType: number;
-    itemIcon: number;
-    uri: string;
-    conditionCode: number;
-    descLocale: number;
-    itemName: number;
-    starPassID: number;
-    orderIndex: number;
-    rewardQuantity: number;
-    dailyMissionType?: number;
-    value: number;
+  item: number;
+  code: number;
+  titleLocale: number;
+  weeklyMissionType: number;
+  itemIcon: number;
+  uri: string;
+  conditionCode: number;
+  descLocale: number;
+  itemName: number;
+  starPassID: number;
+  orderIndex: number;
+  rewardQuantity: number;
+  dailyMissionType?: number;
+  value: number;
 }
 
 export interface PointRewardData {
-    rewardName: number;
-    code: number;
-    pointMaximum: number;
-    quantity: number;
-    description: number;
-    saveEndAt: any;
-    saveStartAt: any;
-    pointColor: string;
+  rewardName: number;
+  code: number;
+  pointMaximum: number;
+  quantity: number;
+  description: number;
+  saveEndAt: any;
+  saveStartAt: any;
+  pointColor: string;
 }
 
 export interface PopupHelpData {
-    code: number;
-    titleLocale: number;
-    Image2: number[];
-    Image1: number[];
-    description: number[];
+  code: number;
+  titleLocale: number;
+  Image2: number[];
+  Image1: number[];
+  description: number[];
 }
 
 export interface PopupStoreData {
-    actionCount: number;
-    analyticsData: string;
-    buyCount: number;
-    code: number;
-    quantity: number;
-    dayCount: number;
-    printSight: number;
-    description: number;
-    popupMessage: number;
-    bonusQuantity: number;
-    popupSubject: number;
-    actionType: number;
-    productImage: number[];
-    onedaySell: boolean;
-    sellStartAt: any;
-    price: number;
-    orderIndex: number;
-    targetDevice: number;
-    analyticsPrice: number;
-    sku: string;
-    sellEndAt: any;
-    currencyCode: string;
+  actionCount: number;
+  analyticsData: string;
+  buyCount: number;
+  code: number;
+  quantity: number;
+  dayCount: number;
+  printSight: number;
+  description: number;
+  popupMessage: number;
+  bonusQuantity: number;
+  popupSubject: number;
+  actionType: number;
+  productImage: number[];
+  onedaySell: boolean;
+  sellStartAt: any;
+  price: number;
+  orderIndex: number;
+  targetDevice: number;
+  analyticsPrice: number;
+  sku: string;
+  sellEndAt: any;
+  currencyCode: string;
 }
 
 export interface PremiumPassRewardData {
-    preview: boolean;
-    code: number;
-    premiumPassQuantity: number;
-    premiumPassItemIcon: number;
-    starPassID: number;
-    passTier: number;
-    previewImage: number[];
+  preview: boolean;
+  code: number;
+  premiumPassQuantity: number;
+  premiumPassItemIcon: number;
+  starPassID: number;
+  passTier: number;
+  previewImage: number[];
 }
 
 export interface PrismData {
-    code: number;
-    prismLocale: string;
-    prismImageLarge: number;
-    serverDataUse: boolean;
-    prismImageSmall: number;
+  code: number;
+  prismLocale: string;
+  prismImageLarge: number;
+  serverDataUse: boolean;
+  prismImageSmall: number;
 }
 
 export interface ProfileData {
-    analyticsData: string;
-    code: number;
-    groupID: number;
-    purchase: number;
-    artistID: number;
-    eventType: number;
-    profileImage: number;
-    endAt?: any;
-    paymentType?: any;
-    eventCode: string;
-    profileType: number;
-    price: number;
-    orderIndex: number;
-    startAt?: any;
+  analyticsData: string;
+  code: number;
+  groupID: number;
+  purchase: number;
+  artistID: number;
+  eventType: number;
+  profileImage: number;
+  endAt?: any;
+  paymentType?: any;
+  eventCode: string;
+  profileType: number;
+  price: number;
+  orderIndex: number;
+  startAt?: any;
 }
 
 export interface ProvidableItem {
-    item: string;
-    code: number;
-    category: string;
+  item: string;
+  code: number;
+  category: string;
 }
 
 export interface RecommendStoreData {
-    analyticsData: string;
-    code: number;
-    description: number;
-    productSmallImage: number[];
-    sellType: number;
-    paymentType: number;
-    bonusQuantity: number;
-    totalBuyCount?: number;
-    productImage: number[];
-    price: number;
-    targetDevice: number;
-    sku: string;
-    pointReward?: number;
-    getPoint?: number;
-    linkData: string;
-    product?: number;
-    buyCount: number;
-    quantity: number;
-    paymentCategory?: number;
-    sellStartAt: any;
-    onedaySell: boolean;
-    liveThemePackageID?: any;
-    orderIndex: number;
-    analyticsPrice?: number;
-    sellEndAt: any;
-    currencyCode: string;
+  analyticsData: string;
+  code: number;
+  description: number;
+  productSmallImage: number[];
+  sellType: number;
+  paymentType: number;
+  bonusQuantity: number;
+  totalBuyCount?: number;
+  productImage: number[];
+  price: number;
+  targetDevice: number;
+  sku: string;
+  pointReward?: number;
+  getPoint?: number;
+  linkData: string;
+  product?: number;
+  buyCount: number;
+  quantity: number;
+  paymentCategory?: number;
+  sellStartAt: any;
+  onedaySell: boolean;
+  liveThemePackageID?: any;
+  orderIndex: number;
+  analyticsPrice?: number;
+  sellEndAt: any;
+  currencyCode: string;
 }
 
 export interface RhythmPointStoreData {
-    eventCode: string;
-    analyticsData: string;
-    code: number;
-    quantity: number;
-    productImage: number[];
-    sellStartAt?: any;
-    price: number;
-    orderIndex: number;
-    sellEndAt?: any;
-    bonusQuantity: number;
+  eventCode: string;
+  analyticsData: string;
+  code: number;
+  quantity: number;
+  productImage: number[];
+  sellStartAt?: any;
+  price: number;
+  orderIndex: number;
+  sellEndAt?: any;
+  bonusQuantity: number;
 }
 
 export interface SelectCardData {
-    cardData: string;
-    code: number;
-    productImage: number;
-    level: number;
-    grade: number;
-    groupData?: any;
+  cardData: string;
+  code: number;
+  productImage: number;
+  level: number;
+  grade: number;
+  groupData?: any;
 }
 
 export interface SpecialStoreData {
-    payment1: number;
-    analyticsData: string;
-    parentsID?: number;
-    code: number;
-    quantity: number;
-    itemCategory: number;
-    payment2?: any;
-    ItemDetailCode: number;
-    description: number;
-    productSmallImage: number[];
-    inventory: boolean;
-    bonusQuantity: number;
-    productImage: number[];
-    sellStartAt?: any;
-    orderIndex: number;
-    sellEndAt?: any;
-    price1: number;
-    price2?: number;
+  payment1: number;
+  analyticsData: string;
+  parentsID?: number;
+  code: number;
+  quantity: number;
+  itemCategory: number;
+  payment2?: any;
+  ItemDetailCode: number;
+  description: number;
+  productSmallImage: number[];
+  inventory: boolean;
+  bonusQuantity: number;
+  productImage: number[];
+  sellStartAt?: any;
+  orderIndex: number;
+  sellEndAt?: any;
+  price1: number;
+  price2?: number;
 }
 
 export interface SpecialUserData {
-    code: number;
-    effectCode: number;
-    imageCode: number;
-    nicknameColor: string;
+  code: number;
+  effectCode: number;
+  imageCode: number;
+  nicknameColor: string;
 }
 
 export interface StarPassData {
-    passEndAt: any;
-    analyticsData: string;
-    code: number;
-    passMaxTier: number;
-    passStartAt: any;
-    tierPrice: number;
+  passEndAt: any;
+  analyticsData: string;
+  code: number;
+  passMaxTier: number;
+  passStartAt: any;
+  tierPrice: number;
 }
 
 export interface StarPassStoreData {
-    analyticsData: string;
-    code: number;
-    passSku: string;
-    description: number;
-    passName: number;
-    passPrice: number;
-    productImage: number[];
-    sellStartAt: any;
-    starPassID: number;
-    targetDevice: number;
-    analyticsPrice: number;
-    sellEndAt: any;
-    currencyCode: string;
+  analyticsData: string;
+  code: number;
+  passSku: string;
+  description: number;
+  passName: number;
+  passPrice: number;
+  productImage: number[];
+  sellStartAt: any;
+  starPassID: number;
+  targetDevice: number;
+  analyticsPrice: number;
+  sellEndAt: any;
+  currencyCode: string;
 }
 
 export interface ThemeData {
-    nameImageSmall: number;
-    analyticsData: string;
-    code: number;
-    nameImageLarge: number;
-    themePercentage: number;
-    selectRate: number;
-    orderIndex: number;
-    limitedType: number;
-    rehearsalTheme: boolean;
-    themeTypeCode: number;
-    cardbookMarkCode: string;
-    localeName: number;
+  nameImageSmall: number;
+  analyticsData: string;
+  code: number;
+  nameImageLarge: number;
+  themePercentage: number;
+  selectRate: number;
+  orderIndex: number;
+  limitedType: number;
+  rehearsalTheme: boolean;
+  themeTypeCode: number;
+  cardbookMarkCode: string;
+  localeName: number;
 }
 
 export interface ThemeTypeData {
-    animationTime?: any;
-    code: number;
-    themePosition?: any;
-    backgroundImage?: any;
-    gradeS: number[];
-    gradeR: number[];
-    backgroundAnimation?: any;
-    emblemPosition: string;
-    animationCount?: any;
-    namePosition?: any;
-    gradeC: number[];
-    gradeB: number[];
-    gradeA: number[];
+  animationTime?: any;
+  code: number;
+  themePosition?: any;
+  backgroundImage?: any;
+  gradeS: number[];
+  gradeR: number[];
+  backgroundAnimation?: any;
+  emblemPosition: string;
+  animationCount?: any;
+  namePosition?: any;
+  gradeC: number[];
+  gradeB: number[];
+  gradeA: number[];
 }
 
 export interface UpdateNoticeData {
-    image: number;
-    showLimit: number;
-    code: number;
-    targetLanguage: number;
-    subject: string;
-    orderIndex: number;
-    description: string;
-    endAt: number;
-    startAt: number;
+  image: number;
+  showLimit: number;
+  code: number;
+  targetLanguage: number;
+  subject: string;
+  orderIndex: number;
+  description: string;
+  endAt: number;
+  startAt: number;
 }
 
 export interface URLs {
-    code: number;
-    size: number;
-    modifiedAt: string;
-    version: string;
-    isExist: boolean;
-    url: string;
+  code: number;
+  size: number;
+  modifiedAt: string;
+  version: string;
+  isExist: boolean;
+  url: string;
 }
 
 export interface VoiceData {
-    code: number;
-    playType: number;
-    voiceResource: string;
-    voiceUse: boolean;
-    voicePlaybackTime: number;
+  code: number;
+  playType: number;
+  voiceResource: string;
+  voiceUse: boolean;
+  voicePlaybackTime: number;
 }
 
 export interface VoiceResourceData {
-    code: number;
-    voiceSound: number;
-    voiceScript?: number;
+  code: number;
+  voiceSound: number;
+  voiceScript?: number;
 }
 
 export interface WordFilterData {
-    code: number;
-    keyword: string;
+  code: number;
+  keyword: string;
 }
 
 export interface WorldRecordData {
-    quantity1: number;
-    code: number;
-    quantity2: number;
-    seasonCode: number;
-    icon5?: any;
-    endAt: any;
-    icon3: number;
-    quantity3: number;
-    version: boolean;
-    icon4?: any;
-    quantity4?: any;
-    icon1: number;
-    quantity5?: any;
-    icon2: number;
-    rank?: number;
-    startAt: any;
+  quantity1: number;
+  code: number;
+  quantity2: number;
+  seasonCode: number;
+  icon5?: any;
+  endAt: any;
+  icon3: number;
+  quantity3: number;
+  version: boolean;
+  icon4?: any;
+  quantity4?: any;
+  icon1: number;
+  quantity5?: any;
+  icon2: number;
+  rank?: number;
+  startAt: any;
 }
