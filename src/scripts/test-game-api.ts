@@ -1,6 +1,6 @@
-import got from 'got';
+import got, { HTTPError } from 'got';
 import * as crypto from 'crypto';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
+import { SuperstarGame } from '../entity/SuperstarGame';
 import { createConnection, getRepository } from 'typeorm';
 
 const gameKey = 'bts';
@@ -30,16 +30,32 @@ export function doRequest<R = any, T = any>(
   const encrypted = cipher.update(bodyStr);
   const finalBuffer = Buffer.concat([encrypted, cipher.final()]);
 
-  return got
-    .post(url, {
-      headers: {
-        'X-SuperStar-AES-IV': iv.toString(),
-        'Content-Type': 'application/json',
-      },
-      body: finalBuffer.toString('base64'),
-      throwHttpErrors: false,
+  const request = got.post(url, {
+    headers: {
+      'X-SuperStar-AES-IV': iv.toString(),
+      'Content-Type': 'application/json',
+    },
+    body: finalBuffer.toString('base64'),
+    throwHttpErrors: false,
+  });
+  return request
+    .then((res) => {
+      console.log(res.url);
+      console.log(res.statusCode);
+      console.log(res.headers);
+      console.log(res.body);
+
+      return JSON.parse(res.body);
     })
-    .json();
+    .catch((reason) => {
+      if (reason instanceof HTTPError) {
+        const res = reason.response;
+        console.log(res.url);
+        console.log(res.statusCode);
+        console.log(res.headers);
+      }
+    });
+  return request.json();
 }
 
 createConnection()
