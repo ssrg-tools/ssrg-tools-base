@@ -1,8 +1,8 @@
 import got, { HTTPError } from 'got';
 import _ from 'lodash';
-import { getRepository, IsNull, Not, Repository } from 'typeorm';
+import { DeepPartial, getRepository, IsNull, Not, Repository } from 'typeorm';
 import { dalcomGradeMap, WRRecordEntry } from './dalcom';
-import { SongWorldRecordArchive } from './entity/Archive/SongWorldRecordArchive';
+import { SongWorldRecordArchive as SWRArchive } from './entity-gamedata/SongWorldRecordArchive';
 import { Song } from './entity/Song';
 import { SongWorldRecord } from './entity/SongWorldRecord';
 import { SuperstarGame } from './entity/SuperstarGame';
@@ -27,7 +27,7 @@ export async function fetchAndInsertSWRForGameAndSeason(
   songList: Song[] = undefined,
   Songs = getRepository(Song),
   SongWorldRecords = getRepository(SongWorldRecord),
-  SongWorldRecordArchives = getRepository(ASWR),
+  SongWorldRecordArchives = getRepository(SWRArchive),
   verbose = false,
 ) {
   if (!game.baseUrlRanking) {
@@ -157,7 +157,7 @@ export async function writeRankingDataToCache(
   contents: object,
   dateObserved = new Date(),
   source = 'manual',
-  SongWorldRecordArchives = getRepository(SongWorldRecordArchive),
+  SongWorldRecordArchives = getRepository(SWRArchive),
 ) {
   const fingerprint = createFingerprint('sha256', JSON.stringify(contents));
 
@@ -170,7 +170,7 @@ export async function writeRankingDataToCache(
 
   const existingArchiveItem = await SongWorldRecordArchives.count({
     where: {
-      gameId: game.id,
+      gameGuid: game.guid,
       fingerprint,
     },
   });
@@ -180,7 +180,8 @@ export async function writeRankingDataToCache(
   }
 
   const archiveItem = SongWorldRecordArchives.create({
-    gameId: game.id,
+    gameGuid: game.guid,
+    gameKey: game.key,
     data: contents,
     dateEntry: new Date(),
     guid: generate_guid(),
@@ -211,9 +212,10 @@ export async function parseRankingData(
   }
 
   if (!season) {
-    const WorldRecordSeasons = getRepository(WorldRecordSeason);
+    const WorldRecordSeasonsRepo =
+      WorldRecordSeasons || getRepository(WorldRecordSeason);
     const seasonDate = new Date(rankingData[0].updatedAt);
-    season = await WorldRecordSeasons.createQueryBuilder('season')
+    season = await WorldRecordSeasonsRepo.createQueryBuilder('season')
       // .cache(true)
       .where('dateStart < :date', { date: seasonDate })
       .andWhere('dateEnd > :date', { date: seasonDate })
@@ -234,7 +236,7 @@ export async function parseRankingData(
   for (let index = 0; index < wrRankingLength; index++) {
     const ranking = rankingData[index];
 
-    const wr = SongWorldRecords.create(ranking as {});
+    const wr = SongWorldRecords.create(ranking as DeepPartial<SongWorldRecord>);
     wr.songId = song.id;
     wr.meta = JSON.stringify({});
     wr.specialUserCode = wr.specialUserCode || 0;
