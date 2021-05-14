@@ -109,7 +109,7 @@ const keyFromUrlData = [
   {
     input:
       'http://scymdori.cloudfront.net/resources/images/store/recommend/1234/4321/somepic.png?v=01293847',
-    key: 'cf-scymdori-images/store/recommend/1234/4321/somepic.png',
+    key: 'cf-scymdori-resources/images/store/recommend/1234/4321/somepic.png',
     bucket: 'cf-scymdori',
   },
   {
