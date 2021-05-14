@@ -19,6 +19,7 @@ import { UserLogin } from './UserLogin';
 import { UserVerification } from './UserVerification';
 import { SongWorldRecord } from './SongWorldRecord';
 import { File } from './Files/File';
+import { EncryptedVarchar } from '../entity-helpers';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {
@@ -52,8 +53,8 @@ export class User {
   @Column('datetime', { name: 'last_login', nullable: true })
   lastLogin: Date | null;
 
-  @Column('varchar', { name: 'email', length: 255 })
-  email: string;
+  @Column(() => EncryptedVarchar)
+  email: EncryptedVarchar;
 
   @Column('varchar', {
     name: 'timezone',
@@ -92,7 +93,10 @@ export class User {
   @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.user)
   songClears: SongClear[];
 
-  @OneToMany(() => SongWorldRecord, (songWorldRecord) => songWorldRecord.observer)
+  @OneToMany(
+    () => SongWorldRecord,
+    (songWorldRecord) => songWorldRecord.observer,
+  )
   observedSongWorldRecords: SongWorldRecord[];
 
   @OneToMany(() => UserCredential, (userCredentials) => userCredentials.user)
