@@ -4,9 +4,6 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
     "baseUrl": ".",
-    "paths": {
-      "@base/*": [ "./src/*" ]
-    },
     "resolveJsonModule": true,
     "sourceMap": true,
     "downlevelIteration": true,
