@@ -1,4 +1,4 @@
-import { SqlBool } from '@base/types';
+import { SqlBool } from '../../types';
 import { Column, Entity } from 'typeorm';
 import { AssetGuidRef, Base } from './helpers';
 

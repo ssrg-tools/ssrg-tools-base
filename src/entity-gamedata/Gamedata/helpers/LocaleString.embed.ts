@@ -1,4 +1,4 @@
-import { LocaleData } from '@base/definitions/data/gameinfo';
+import { LocaleData } from '../../../definitions/data/gameinfo';
 import { Column, Index } from 'typeorm';
 
 export class LocaleString implements Omit<LocaleData, 'code'> {
