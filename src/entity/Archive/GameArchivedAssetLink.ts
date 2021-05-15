@@ -7,7 +7,6 @@ import {
   JoinColumn,
   PrimaryColumn,
 } from 'typeorm';
-import { GameDataFile } from '../GameDataFile';
 import { SuperstarGame } from '../SuperstarGame';
 import { GameArchivedAsset } from './GameArchivedAsset';
 
@@ -22,8 +21,8 @@ export class GameArchivedAssetLink {
   @Column('int', { unsigned: true })
   assetId: number;
 
-  @Column('int', { unsigned: true })
-  gamedataFileId: number;
+  @Column('bigint', { unsigned: true })
+  gamedataFileId: bigint;
 
   /** version of the info file */
   @PrimaryColumn({ type: 'int', unsigned: true })
@@ -66,13 +65,6 @@ export class GameArchivedAssetLink {
   })
   @JoinColumn([{ name: 'assetId', referencedColumnName: 'id' }])
   asset: GameArchivedAsset;
-
-  @ManyToOne(() => GameDataFile, (gamedataFile) => gamedataFile.assetLinks, {
-    onDelete: 'RESTRICT',
-    onUpdate: 'RESTRICT',
-  })
-  @JoinColumn([{ name: 'gamedataFileId', referencedColumnName: 'id' }])
-  gamedataFile: GameDataFile;
 
   @ManyToOne(
     () => SuperstarGame,

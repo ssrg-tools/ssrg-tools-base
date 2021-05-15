@@ -3,6 +3,10 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class MoveGamedataFiles1621033050345 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     queryRunner.query(
+      `ALTER TABLE \`files_gameasset_archive_links\`
+      CHANGE COLUMN \`gamedataFileId\` \`gamedataFileId\` BIGINT UNSIGNED NOT NULL AFTER \`assetId\``,
+    );
+    queryRunner.query(
       `INSERT INTO ssrg_tools_gamedata.assets_files
           (id, gameGuid, version, \`key\`, \`data\`, date, guid, fingerprint)
       SELECT
