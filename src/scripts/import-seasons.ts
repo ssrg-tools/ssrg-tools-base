@@ -1,16 +1,20 @@
-import { SuperstarGame } from '@base/entity/SuperstarGame';
+import { SuperstarGame } from '../entity/SuperstarGame';
 import { createConnection, getRepository, In } from 'typeorm';
-import { GameDataFile } from '@base/entity/GameDataFile';
-import { generate_guid } from '@base/guid';
+import { GamedataFile } from '../entity-gamedata/GamedataFile';
+import { generate_guid } from '../guid';
 import _ from 'lodash';
-import { WorldRecordData } from '@base/definitions/data/gameinfo';
-import { WorldRecordSeason } from '@base/entity/WorldRecordSeason';
+import { WorldRecordData } from '../definitions/data/gameinfo';
+import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import moment from 'moment';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const GamedataOrmConfig = require('../../ormconfig.gamedata');
+GamedataOrmConfig.name = 'gamedata';
 
 createConnection()
+  .then(() => createConnection(GamedataOrmConfig))
   .then(async () => {
     const SuperstarGames = getRepository(SuperstarGame);
-    const GameDataFiles = getRepository(GameDataFile);
+    const GameDataFiles = getRepository(GamedataFile, GamedataOrmConfig.name);
     const WorldRecordSeasons = getRepository(WorldRecordSeason);
 
     const games = _.keyBy(await SuperstarGames.find(), 'key');
@@ -19,7 +23,7 @@ createConnection()
       console.log(`Processing ${game.name}`);
       const gamedataSeasons: WorldRecordData[] = await GameDataFiles.findOne({
         where: {
-          gameId: game.id,
+          gameGuid: game.guid,
           key: 'WorldRecordData',
         },
         order: {

@@ -6,11 +6,11 @@ import 'reflect-metadata';
 import { createConnection, getRepository } from 'typeorm';
 import _, { Dictionary } from 'lodash';
 
-import { Song } from '@base/entity/Song';
-import { SongInfo } from '@base/SongInfo';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
-import { generate_guid } from '@base/guid';
-import { Artist } from '@base/entity/Artist';
+import { Song } from '../entity/Song';
+import { SongInfo } from '../SongInfo';
+import { SuperstarGame } from '../entity/SuperstarGame';
+import { generate_guid } from '../guid';
+import { Artist } from '../entity/Artist';
 
 const verbose = false;
 const dryRun = true;
