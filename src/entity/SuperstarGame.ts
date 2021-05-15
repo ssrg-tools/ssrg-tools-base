@@ -20,9 +20,6 @@ import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 import { Artist } from './Artist';
 import { GamePopulation } from './GamePopulation';
 import { PlayerProfile } from './PlayerProfile';
-import { GameManifest } from './GameManifest';
-import { GameDataFile } from './GameDataFile';
-import { SongWorldRecordArchive } from './Archive/SongWorldRecordArchive';
 import { GameArchivedAssetLink } from './Archive/GameArchivedAssetLink';
 
 @Entity('superstar_games', { schema: 'superstar_log' })
@@ -223,20 +220,8 @@ export class SuperstarGame {
   @OneToMany(() => PlayerProfile, (pop) => pop.game)
   playerProfiles: PlayerProfile[];
 
-  @OneToMany(() => GameManifest, (manifest) => manifest.game)
-  gameManifests: GameManifest[];
-
-  @OneToMany(() => GameDataFile, (dataFile) => dataFile.game)
-  gameDataFiles: GameDataFile[];
-
   @OneToMany(() => GameArchivedAssetLink, (dataFileLink) => dataFileLink.game)
   gameArchivedAssetLinks: GameArchivedAssetLink[];
-
-  @OneToMany(
-    () => SongWorldRecordArchive,
-    (archiveSongWorldRecord) => archiveSongWorldRecord.game,
-  )
-  archiveSongWorldRecords: SongWorldRecordArchive[];
 
   @ManyToMany(() => Division)
   @JoinTable()
