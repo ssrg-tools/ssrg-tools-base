@@ -1,5 +1,10 @@
 import { Column, Entity } from 'typeorm';
-import { AssetGuidOptionalRef, AssetGuidRef, Base, LocaleString } from './helpers';
+import {
+  AssetGuidOptionalRef,
+  AssetGuidRef,
+  Base,
+  LocaleString,
+} from './helpers';
 
 @Entity('gamedata_music')
 export class Music extends Base {

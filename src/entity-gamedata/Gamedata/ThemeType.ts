@@ -16,13 +16,13 @@ export class ThemeType extends Base {
   backgroundAnimation?: AssetGuidRef[];
 
   @Column('json')
-  themePosition?: { x: number, y: number };
+  themePosition?: { x: number; y: number };
 
   @Column('json')
-  emblemPosition: { x: number, y: number };
+  emblemPosition: { x: number; y: number };
 
   @Column('json')
-  namePosition?: { x: number, y: number };
+  namePosition?: { x: number; y: number };
 
   @Column('json')
   gradeC: AssetGuidRef[];

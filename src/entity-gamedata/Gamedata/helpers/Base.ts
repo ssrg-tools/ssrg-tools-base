@@ -13,7 +13,10 @@ export abstract class Base {
   @Column({ unsigned: true, comment: 'first version this entity appeared in' })
   versionLast: number;
 
-  @Column({ unsigned: true, comment: 'current version this entity appeared in' })
+  @Column({
+    unsigned: true,
+    comment: 'current version this entity appeared in',
+  })
   versionSource: number;
 
   @Column()

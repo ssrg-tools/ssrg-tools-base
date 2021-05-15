@@ -1,6 +1,6 @@
 import { Index, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Index('bySongAndSeason', [ 'gameGuid', 'songCode', 'seasonCode' ])
+@Index('bySongAndSeason', ['gameGuid', 'songCode', 'seasonCode'])
 @Entity('song_world_records_archive')
 export class SongWorldRecordArchive {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
@@ -24,10 +24,12 @@ export class SongWorldRecordArchive {
   seasonCode: number;
 
   @Column('json')
-  data: object;
+  data: any;
 
   @Index('byDateEntry')
-  @Column('datetime', { comment: 'the date this entry was entered into the database' })
+  @Column('datetime', {
+    comment: 'the date this entry was entered into the database',
+  })
   dateEntry: Date;
 
   @Index('byDateObserved')

@@ -1,4 +1,3 @@
-
 export * from './Artist';
 export * from './Card';
 export * from './Group';

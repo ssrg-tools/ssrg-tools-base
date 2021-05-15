@@ -2,7 +2,7 @@ import { Index, Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 export const fingerprintAlgo = 'sha256';
 
-@Unique('perGameAndVersionAndKey', [ 'gameGuid', 'version', 'key' ])
+@Unique('perGameAndVersionAndKey', ['gameGuid', 'version', 'key'])
 @Entity('assets_files')
 export class GamedataFile<T = any> {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
@@ -40,7 +40,6 @@ export class GamedataFile<T = any> {
   }
 
   castTo<R>(): R {
-    return this.data as unknown as R;
+    return (this.data as unknown) as R;
   }
 }
-
