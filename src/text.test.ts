@@ -1,10 +1,7 @@
-
 import 'jasmine';
 import { mangleEmail } from './text';
 
-const dataMangleEmailData = [
-  ['test@example.com', 'te****@****le.com'],
-];
+const dataMangleEmailData = [['test@example.com', 'te****@****le.com']];
 
 describe('Card Score test', () => {
   dataMangleEmailData.forEach(([email, expected]) => {

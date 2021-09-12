@@ -143,7 +143,7 @@ export class Song {
   @Column('int', { unsigned: true, nullable: true })
   swrStatMedian: number;
 
-  @ManyToOne(() => Artist,  { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
+  @ManyToOne(() => Artist, { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
   @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
   artist: Artist;
 

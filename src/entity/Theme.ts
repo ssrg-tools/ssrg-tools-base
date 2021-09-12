@@ -24,13 +24,23 @@ export class Theme {
   @Column('varchar', { name: 'album', length: 255 })
   album: string;
 
-  @Column('simple-array', { comment: 'contains theme tags like "Limited", "Event", "Original"' })
+  @Column('simple-array', {
+    comment: 'contains theme tags like "Limited", "Event", "Original"',
+  })
   tags: string[];
 
-  @Column('int', { unsigned: true, default: 0, comment: 'ID of the frame cards, for LE/Event cards' })
+  @Column('int', {
+    unsigned: true,
+    default: 0,
+    comment: 'ID of the frame cards, for LE/Event cards',
+  })
   frameId: number;
 
-  @Column('int', { unsigned: true, default: 1, comment: 'ID of the prism bg, GFriend prism cards' })
+  @Column('int', {
+    unsigned: true,
+    default: 1,
+    comment: 'ID of the prism bg, GFriend prism cards',
+  })
   prismId: number;
 
   @Column('int', { unsigned: true, nullable: true })

@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Song } from './Song';
 
 @Entity('song_beatmaps', { schema: 'superstar_log' })
@@ -15,28 +21,32 @@ export class SongBeatmap {
   @Column('varchar', { name: 'dalcom_beatmap_filename', length: 255 })
   beatmapFilename: string;
 
-  @Column('int', { name: 'index_beat_max', unsigned: true, })
+  @Column('int', { name: 'index_beat_max', unsigned: true })
   indexBeatMax: number;
 
-  @Column('int', { name: 'index_beat_min', unsigned: true, })
+  @Column('int', { name: 'index_beat_min', unsigned: true })
   indexBeatMin: number;
 
-  @Column('int', { name: 'count_notes_total', unsigned: true, })
+  @Column('int', { name: 'count_notes_total', unsigned: true })
   countNotesTotal: number;
 
-  @Column('int', { name: 'count_notes_total_raw', unsigned: true, comment: 'including all bullshit from the beatmaps' })
+  @Column('int', {
+    name: 'count_notes_total_raw',
+    unsigned: true,
+    comment: 'including all bullshit from the beatmaps',
+  })
   countNotesTotalRaw: number;
 
-  @Column('int', { name: 'count_notes_nocombo', unsigned: true, })
+  @Column('int', { name: 'count_notes_nocombo', unsigned: true })
   countNotesNocombo: number;
 
-  @Column('int', { name: 'count_taps', unsigned: true, })
+  @Column('int', { name: 'count_taps', unsigned: true })
   countTaps: number;
 
-  @Column('int', { name: 'count_sliders_nocombo', unsigned: true, })
+  @Column('int', { name: 'count_sliders_nocombo', unsigned: true })
   countSlidersNocombo: number;
 
-  @Column('int', { name: 'count_sliders_total', unsigned: true, })
+  @Column('int', { name: 'count_sliders_total', unsigned: true })
   countSlidersTotal: number;
 
   @Column('datetime', {
@@ -66,10 +76,10 @@ export class SongBeatmap {
   })
   guid: string | null;
 
-  @ManyToOne(() => Song, (songs) => songs.beatmaps, {
-    onDelete: 'RESTRICT',
-    onUpdate: 'RESTRICT',
-  })
-  @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
+  @ManyToOne(() => Song, (songs) => songs.beatmaps, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
   song: Song;
 }

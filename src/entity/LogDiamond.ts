@@ -55,7 +55,7 @@ export class LogDiamond {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.logDiamonds,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;

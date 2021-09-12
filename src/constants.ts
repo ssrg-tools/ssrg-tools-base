@@ -1,4 +1,3 @@
-
 export const cardSizeSmall = {
   width: 85,
   height: 120,

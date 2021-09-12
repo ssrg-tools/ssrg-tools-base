@@ -1,4 +1,12 @@
-import { PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, OneToMany, Entity } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  Column,
+  Index,
+  OneToMany,
+  Entity,
+} from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { SongWorldRecord } from './SongWorldRecord';
 

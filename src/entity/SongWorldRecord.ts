@@ -1,4 +1,11 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  Index,
+  Entity,
+} from 'typeorm';
 import { Song } from './Song';
 import { CardDisplay } from './CardDisplay.embed';
 import { WorldRecordSeason } from './WorldRecordSeason';
@@ -29,7 +36,7 @@ export class SongWorldRecord {
   @Column('int', { name: 'profile_image', unsigned: true, nullable: true })
   profileImage: number;
 
-  @Column(type => CardDisplay)
+  @Column((type) => CardDisplay)
   leaderCard?: CardDisplay;
 
   @Column('int', { unsigned: true })
@@ -79,11 +86,10 @@ export class SongWorldRecord {
   })
   guid?: string;
 
-  @ManyToOne(
-    () => PlayerProfile,
-    player => player.nicknameHistory,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: PlayerProfile;
 
@@ -93,5 +99,4 @@ export class SongWorldRecord {
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
   song: Song;
-
 }

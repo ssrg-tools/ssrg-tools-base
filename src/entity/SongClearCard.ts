@@ -49,7 +49,7 @@ export class SongClearCard {
   @Column('enum', {
     name: 'grade',
     enum: Grade,
-    default: '\'S\'',
+    default: "'S'",
   })
   grade: Grade;
 
@@ -72,11 +72,10 @@ export class SongClearCard {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => SongClear,
-    (songClear) => songClear.cards,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => SongClear, (songClear) => songClear.cards, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'song_clear_id', referencedColumnName: 'id' }])
   songClear: SongClear;
 
@@ -87,8 +86,7 @@ export class SongClearCard {
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
   theme: Theme;
 
-  get canIncreaseGrade()
-  {
+  get canIncreaseGrade() {
     switch (this.grade) {
       case 'R':
         return false;
@@ -101,8 +99,7 @@ export class SongClearCard {
     }
   }
 
-  get canDecreaseGrade()
-  {
+  get canDecreaseGrade() {
     switch (this.grade) {
       case 'None':
         return false;
@@ -115,8 +112,7 @@ export class SongClearCard {
     }
   }
 
-  decreaseGrade()
-  {
+  decreaseGrade() {
     this.level = 1;
     switch (this.grade) {
       case 'R':
@@ -140,8 +136,7 @@ export class SongClearCard {
     }
   }
 
-  increaseGrade()
-  {
+  increaseGrade() {
     this.level = 1;
     switch (this.grade) {
       case 'R':
@@ -164,8 +159,7 @@ export class SongClearCard {
     }
   }
 
-  increaseLevel()
-  {
+  increaseLevel() {
     this.level++;
     if (this.grade === 'None') {
       this.increaseGrade();
@@ -175,8 +169,7 @@ export class SongClearCard {
     }
   }
 
-  decreaseLevel()
-  {
+  decreaseLevel() {
     this.level--;
     if (this.level < 1) {
       this.decreaseGrade();

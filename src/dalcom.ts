@@ -14,14 +14,14 @@ export const dalcomGradeMap: { [dalcomId: number]: GradeNonEmpty } = {
 };
 
 export interface WRRecord {
-    /** dalcom internal song id */
-    code: number;
-    rankDataRaw: {
-      type: number;
-      /** unix timestamp with milli time */
-      nextUpdate: DateNumber;
-      ranking: WRRecordEntry[];
-    };
+  /** dalcom internal song id */
+  code: number;
+  rankDataRaw: {
+    type: number;
+    /** unix timestamp with milli time */
+    nextUpdate: DateNumber;
+    ranking: WRRecordEntry[];
+  };
 }
 
 export interface WRRecordEntry {

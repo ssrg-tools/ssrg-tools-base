@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Index, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Index,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { PlayerProfile } from './PlayerProfile';
 
 @Entity('player_profile_nicknames', { schema: 'superstar_log' })
@@ -25,11 +32,10 @@ export class PlayerNickname {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => PlayerProfile,
-    player => player.nicknameHistory,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: PlayerProfile;
 }

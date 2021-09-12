@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, JoinColumn, Index, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  ManyToOne,
+  JoinColumn,
+  Index,
+  Column,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './User';
 import { SqlBool } from '../types';
 

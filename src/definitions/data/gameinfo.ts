@@ -1,22 +1,81 @@
 import { DateNumber } from '../../dalcom';
 
-export type AllGameInfo = ArenaInfoData | ArenaRewardData | ArtistData | AttendanceConsecutiveData |
-  AttendanceData | CardBalanceData | CardData | CardGradeBonusData | CardIntensifyData |
-  CardInvenExpandStoreData | CardPackYearData | CardSellData | CardStoreData |
-  CashPurchaseEventData | CollectEventData | CollectionAchievementData | CollectionPointData |
-  ComebackAttendanceData | CommonData | DalcomStageMusicData | DalcomStageRewardData |
-  DiamondStoreData | EventManagementData | EventMissionData | ExtraResourceData |
-  FreePassRewardData | GameConfigData | GroupData | HeadphoneStoreData | HelpData |
-  HiddenGameData | InputCharRangeData | IntensifyEventData | LanguageData |
-  LeagueWeeklyInfoData | LeagueWeeklyRewardData | LiveThemeCardData | LiveThemeData |
-  LiveThemeGifData | LiveThemeSoundData | LobbyBgData | LobbyBgStoreData |
-  LocaleData | LocalePopupData | MemberData | MembershipData | MissionData |
-  MissionDetailData | MusicData | MyRecordData | NewsData | NpcData | PassMissionData |
-  PointRewardData | PopupHelpData | PopupStoreData | PremiumPassRewardData | PrismData |
-  ProfileData | ProvidableItem | RecommendStoreData | RhythmPointStoreData | SelectCardData |
-  SpecialStoreData | SpecialUserData | StarPassData | StarPassStoreData | ThemeData |
-  ThemeTypeData | UpdateNoticeData | URLs | VoiceData | VoiceResourceData | WordFilterData |
-  WorldRecordData;
+export type AllGameInfo =
+  | ArenaInfoData
+  | ArenaRewardData
+  | ArtistData
+  | AttendanceConsecutiveData
+  | AttendanceData
+  | CardBalanceData
+  | CardData
+  | CardGradeBonusData
+  | CardIntensifyData
+  | CardInvenExpandStoreData
+  | CardPackYearData
+  | CardSellData
+  | CardStoreData
+  | CashPurchaseEventData
+  | CollectEventData
+  | CollectionAchievementData
+  | CollectionPointData
+  | ComebackAttendanceData
+  | CommonData
+  | DalcomStageMusicData
+  | DalcomStageRewardData
+  | DiamondStoreData
+  | EventManagementData
+  | EventMissionData
+  | ExtraResourceData
+  | FreePassRewardData
+  | GameConfigData
+  | GroupData
+  | HeadphoneStoreData
+  | HelpData
+  | HiddenGameData
+  | InputCharRangeData
+  | IntensifyEventData
+  | LanguageData
+  | LeagueWeeklyInfoData
+  | LeagueWeeklyRewardData
+  | LiveThemeCardData
+  | LiveThemeData
+  | LiveThemeGifData
+  | LiveThemeSoundData
+  | LobbyBgData
+  | LobbyBgStoreData
+  | LocaleData
+  | LocalePopupData
+  | MemberData
+  | MembershipData
+  | MissionData
+  | MissionDetailData
+  | MusicData
+  | MyRecordData
+  | NewsData
+  | NpcData
+  | PassMissionData
+  | PointRewardData
+  | PopupHelpData
+  | PopupStoreData
+  | PremiumPassRewardData
+  | PrismData
+  | ProfileData
+  | ProvidableItem
+  | RecommendStoreData
+  | RhythmPointStoreData
+  | SelectCardData
+  | SpecialStoreData
+  | SpecialUserData
+  | StarPassData
+  | StarPassStoreData
+  | ThemeData
+  | ThemeTypeData
+  | UpdateNoticeData
+  | URLs
+  | VoiceData
+  | VoiceResourceData
+  | WordFilterData
+  | WorldRecordData;
 
 export interface ArenaInfoData {
   entryRewardValue2: number;
@@ -88,7 +147,6 @@ export interface AttendanceConsecutiveData {
   icon: number;
   consecutive: number;
 }
-
 
 export interface AttendanceData {
   birthday?: any;

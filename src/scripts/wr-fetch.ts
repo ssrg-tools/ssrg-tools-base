@@ -34,8 +34,8 @@ createConnection()
     const Songs = getRepository(Song);
     const SongWorldRecords = getRepository(SongWorldRecord);
 
-    let totalInserted = 0;
-    let totalSkipped = 0;
+    const totalInserted = 0;
+    const totalSkipped = 0;
 
     const promises$: Promise<any>[] = [];
 

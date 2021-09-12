@@ -2,7 +2,7 @@
 export interface InfoAggregate {
   version: number;
   context: {
-    [infoName: string]: InfoFileEntry
+    [infoName: string]: InfoFileEntry;
   };
 }
 

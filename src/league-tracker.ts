@@ -1,4 +1,3 @@
-
 export const divGroupIcons = {
   gfriend: { 1: '🍎', 2: '🍏' },
   starship: { 1: '☄️', 2: '🌌' },

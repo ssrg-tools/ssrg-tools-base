@@ -33,7 +33,9 @@ interface ArchiveAssetResultError {
 async function main() {
   const results = [];
   const timeStart = new Date();
-  const { overview, contextMap } = await fetchAllGameData(gameKey, version, ['urls']);
+  const { overview, contextMap } = await fetchAllGameData(gameKey, version, [
+    'urls',
+  ]);
   try {
     const urls = contextMap.urls as URLs[];
     console.log(`All game data loaded.`);
@@ -78,7 +80,12 @@ async function main() {
       const resultUrl = result['uri'] ? apiConfig.endpoint + result['uri'] : '';
       const displayLength = 50;
       const displayCode =
-        'v' + result.assetsubversion + '@' + url.code.toString().padStart(5) + '/' + urls.length;
+        'v' +
+        result.assetsubversion +
+        '@' +
+        url.code.toString().padStart(5) +
+        '/' +
+        urls.length;
       console.log(
         `${displayCode} ...${url.url
           .replace(/\?.+$/, '')
@@ -93,7 +100,9 @@ async function main() {
     }
   } finally {
     const timeEnd = new Date();
-    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}-${overview.version}.json`;
+    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}-${
+      overview.version
+    }.json`;
     await writeFile(
       join(__dirname, '..', '..', '..', logFilename),
       JSON.stringify(

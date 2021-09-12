@@ -29,8 +29,7 @@ export const difficultyNames: Dictionary<DifficultyName> = {
   [Difficulty.Hard]: 'Hard',
 };
 
-export function difficultyToEnum(difficulty: DifficultyName): Difficulty
-{
+export function difficultyToEnum(difficulty: DifficultyName): Difficulty {
   switch (difficulty) {
     case 'Easy':
       return Difficulty.Easy;
@@ -44,7 +43,14 @@ export function difficultyToEnum(difficulty: DifficultyName): Difficulty
 export type NumberLike = number | string;
 export type SqlBool = 0 | 1;
 
-export const MembersGFriend = StringUnion('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji');
+export const MembersGFriend = StringUnion(
+  'Sowon',
+  'Yerin',
+  'Eunha',
+  'Yuju',
+  'SinB',
+  'Umji',
+);
 export type MembersGFriend = typeof MembersGFriend.type;
 
 export const DropSources = StringUnion(
@@ -73,8 +79,7 @@ export const DropSources = StringUnion(
 );
 export type DropSources = typeof DropSources.type;
 
-export class Card
-{
+export class Card {
   constructor(
     public grade: Grade,
     private _level = 1,
@@ -82,9 +87,11 @@ export class Card
     public member?: string,
     public theme?: BasicTheme,
     public maxRLevel: CardSystem = 50,
-  ) { }
+  ) {}
 
-  get level() { return this._level; }
+  get level() {
+    return this._level;
+  }
 
   set level(_level) {
     this._level = _level;
@@ -96,8 +103,7 @@ export class Card
     }
   }
 
-  get score()
-  {
+  get score() {
     let base = 0;
     let levelBonus = 4;
     switch (this.grade) {
@@ -124,13 +130,14 @@ export class Card
       default:
         return -1;
     }
-    const fromLevel = this.level * (levelBonus / ((this.grade === 'R' && this.maxRLevel === 99) ? 2 : 1));
+    const fromLevel =
+      this.level *
+      (levelBonus / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1));
     const calculated = base + fromLevel;
     return Math.floor(calculated * (this.isPrism ? 1.1 : 1));
   }
 
-  get canIncreaseGrade()
-  {
+  get canIncreaseGrade() {
     switch (this.grade) {
       case 'R':
         return false;
@@ -143,8 +150,7 @@ export class Card
     }
   }
 
-  get canDecreaseGrade()
-  {
+  get canDecreaseGrade() {
     switch (this.grade) {
       case 'None':
         return false;
@@ -157,8 +163,7 @@ export class Card
     }
   }
 
-  decreaseGrade()
-  {
+  decreaseGrade() {
     this.level = 1;
     switch (this.grade) {
       case 'R':
@@ -182,8 +187,7 @@ export class Card
     }
   }
 
-  increaseGrade()
-  {
+  increaseGrade() {
     this.level = 1;
     switch (this.grade) {
       case 'R':
@@ -206,8 +210,7 @@ export class Card
     }
   }
 
-  increaseLevel()
-  {
+  increaseLevel() {
     this.level++;
     if (this.grade === 'None') {
       this.increaseGrade();
@@ -217,8 +220,7 @@ export class Card
     }
   }
 
-  decreaseLevel()
-  {
+  decreaseLevel() {
     this._level--;
     if (this._level < 1) {
       this.decreaseGrade();
@@ -229,28 +231,18 @@ export class Card
   }
 }
 
-export class BasicSong
-{
-    constructor(
-        public name: string,
-        public album: string,
-    ) {}
+export class BasicSong {
+  constructor(public name: string, public album: string) {}
 }
 
-export class BasicTheme
-{
-    constructor(
-        public name: string,
-        public album: string,
-    ) {}
+export class BasicTheme {
+  constructor(public name: string, public album: string) {}
 }
 
-export class IdReference
-{
+export class IdReference {
   id: number;
 }
 
-export class GuidReference
-{
+export class GuidReference {
   guid: string;
 }

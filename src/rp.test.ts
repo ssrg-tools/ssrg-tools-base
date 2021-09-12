@@ -20,7 +20,7 @@ const testData: {
     difficulty: 'Hard',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 267,
@@ -30,7 +30,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 267,
@@ -40,7 +40,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 267,
@@ -50,7 +50,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 267,
@@ -60,7 +60,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 279,
@@ -70,7 +70,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 550,
@@ -80,7 +80,7 @@ const testData: {
     difficulty: 'Hard',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 553,
@@ -90,7 +90,7 @@ const testData: {
     difficulty: 'Hard',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 291,
@@ -100,7 +100,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 376,
@@ -110,7 +110,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 456,
@@ -120,7 +120,7 @@ const testData: {
     difficulty: 'Normal',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 556,
@@ -130,7 +130,7 @@ const testData: {
     difficulty: 'Hard',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   {
     rpBase: 561,
@@ -140,7 +140,7 @@ const testData: {
     difficulty: 'Hard',
     isChallenge: false,
     divisionId: 4,
-    divisionBonus: 0.3
+    divisionBonus: 0.3,
   },
   // { //  this is with penalty
   //   rpBase: 176,
@@ -167,7 +167,9 @@ const testData: {
 describe('Base RP calculator basic test', () => {
   testData.forEach((test) => {
     it(`calculates base rp for ${test.scoreTotal}`, () => {
-      expect(calcBaseRP(test.scoreTotal, difficultyToEnum(test.difficulty))).toBe(test.rpBase);
+      expect(
+        calcBaseRP(test.scoreTotal, difficultyToEnum(test.difficulty)),
+      ).toBe(test.rpBase);
     });
   });
 });

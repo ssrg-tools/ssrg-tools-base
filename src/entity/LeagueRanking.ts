@@ -97,7 +97,7 @@ export class LeagueRanking {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.leagueRankings,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;

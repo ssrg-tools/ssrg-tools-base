@@ -1,5 +1,13 @@
 import { SqlBool } from '../types';
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Index,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { PlayerNickname } from './PlayerNickname';
 import { PlayerProfileImage } from './PlayerProfileImage';
@@ -27,7 +35,11 @@ export class PlayerProfile {
   @Column('int', { unsigned: true, nullable: true, default: 0 })
   specialUserCode: number;
 
-  @Column('tinyint', { unsigned: true, nullable: true, comment: 'in SSRGs the divisions are divided into two groups' })
+  @Column('tinyint', {
+    unsigned: true,
+    nullable: true,
+    comment: 'in SSRGs the divisions are divided into two groups',
+  })
   divisionGroup: number;
 
   @Index('bySSRGDiscord')
@@ -58,15 +70,15 @@ export class PlayerProfile {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.playerProfiles,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => PlayerNickname, nickname => nickname.profile)
+  @OneToMany(() => PlayerNickname, (nickname) => nickname.profile)
   nicknameHistory: PlayerNickname[];
 
-  @OneToMany(() => PlayerProfileImage, profileImage => profileImage.profile)
+  @OneToMany(() => PlayerProfileImage, (profileImage) => profileImage.profile)
   profileImageHistory: PlayerProfileImage[];
 }
 

@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { User } from './User';
 import { OAuthClient } from './OAuthClient';
 
@@ -38,4 +44,3 @@ export class OAuthCode {
   })
   guid: string | null;
 }
-

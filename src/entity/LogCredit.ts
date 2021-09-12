@@ -55,7 +55,7 @@ export class LogCredit {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.logCredits,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;

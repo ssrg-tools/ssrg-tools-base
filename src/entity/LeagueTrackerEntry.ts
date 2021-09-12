@@ -1,5 +1,12 @@
 import { SqlBool } from '../types';
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Index,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Division } from './Division';
 import { SuperstarGame } from './SuperstarGame';
 import { PlayerProfile } from './PlayerProfile';
@@ -23,7 +30,10 @@ export class LeagueTrackerEntry {
   @Column('int', { unsigned: true })
   divisionId: number;
 
-  @Column('tinyint', { unsigned: true, comment: 'in SSRGs the divisions are divided into two groups' })
+  @Column('tinyint', {
+    unsigned: true,
+    comment: 'in SSRGs the divisions are divided into two groups',
+  })
   divisionGroup: number;
 
   @Index('bySSRGDiscord')
@@ -33,7 +43,12 @@ export class LeagueTrackerEntry {
   @Column('varchar', { nullable: true, length: 255 })
   comment: string | null;
 
-  @Column('varchar', { nullable: true, length: 255, comment: 'if available, connects people that have been in the same division, e.g. Week 43 Gold III-3' })
+  @Column('varchar', {
+    nullable: true,
+    length: 255,
+    comment:
+      'if available, connects people that have been in the same division, e.g. Week 43 Gold III-3',
+  })
   divisionKey: string | null;
 
   @Column('longtext', { nullable: true })
@@ -59,11 +74,10 @@ export class LeagueTrackerEntry {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => PlayerProfile,
-    player => player.nicknameHistory,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: PlayerProfile;
 
@@ -77,7 +91,7 @@ export class LeagueTrackerEntry {
   @ManyToOne(
     () => SuperstarGame,
     (superstarGames) => superstarGames.leagueTrackerEntries,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
   )
   @JoinColumn([{ referencedColumnName: 'id' }])
   game: SuperstarGame;

@@ -91,7 +91,8 @@ export class SongClear {
     unsigned: false,
     name: 'hit_score',
     generatedType: 'VIRTUAL',
-    asExpression: '2 * `hit_super_perfect` + 1 * `hit_perfect` + 0.5 * `hit_good` + -10 * `hit_miss`',
+    asExpression:
+      '2 * `hit_super_perfect` + 1 * `hit_perfect` + 0.5 * `hit_good` + -10 * `hit_miss`',
   })
   hitScore: number | null;
 
@@ -143,7 +144,7 @@ export class SongClear {
   })
   userId: number;
 
-  @Column('longtext', { name: 'meta', default: '\'{}\'' })
+  @Column('longtext', { name: 'meta', default: "'{}'" })
   meta: string;
 
   @Column('varchar', {

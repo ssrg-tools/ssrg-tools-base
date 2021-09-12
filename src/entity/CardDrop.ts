@@ -73,11 +73,10 @@ export class CardDrop {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.logDrops,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.logDrops, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
@@ -95,8 +94,7 @@ export class CardDrop {
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
-  get canIncreaseGrade()
-  {
+  get canIncreaseGrade() {
     switch (this.grade) {
       case 'R':
         return false;
@@ -109,8 +107,7 @@ export class CardDrop {
     }
   }
 
-  get canDecreaseGrade()
-  {
+  get canDecreaseGrade() {
     switch (this.grade) {
       default:
       case 'C':
@@ -123,8 +120,7 @@ export class CardDrop {
     }
   }
 
-  decreaseGrade()
-  {
+  decreaseGrade() {
     switch (this.grade) {
       case 'R':
         this.grade = 'S';
@@ -144,8 +140,7 @@ export class CardDrop {
     }
   }
 
-  increaseGrade()
-  {
+  increaseGrade() {
     switch (this.grade) {
       case 'R':
         break;

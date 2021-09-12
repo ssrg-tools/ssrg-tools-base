@@ -66,20 +66,19 @@ export class Artist {
   @Column('int', { unsigned: true })
   gameId: number;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.artists,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' }
-  )
+  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.artists, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => ArtistMember, member => member.artist)
+  @OneToMany(() => ArtistMember, (member) => member.artist)
   members: ArtistMember[];
 
-  @OneToMany(() => Song, song => song.artist)
+  @OneToMany(() => Song, (song) => song.artist)
   songs: Song[];
 
-  @OneToMany(() => Theme, theme => theme.artist)
+  @OneToMany(() => Theme, (theme) => theme.artist)
   themes: Theme[];
 }

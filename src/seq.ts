@@ -10,35 +10,35 @@ type NoteType = NoteTap | NoteSlider;
 
 const noteTypes: Dictionary<NoteType> = {
   0x00: 'tap',
-  0x0B: 'slider',
-  0x0C: 'slider',
+  0x0b: 'slider',
+  0x0c: 'slider',
   0x03: 'slider',
   0x15: 'slider',
   0x16: 'slider',
-  0xE8: 'slider',
-  0xE9: 'slider',
+  0xe8: 'slider',
+  0xe9: 'slider',
 };
 
 const noteTypeIDs: NoteTypeID[] = [
   0x00,
-  0x0B,
-  0x0C,
+  0x0b,
+  0x0c,
   0x03,
   0x15,
   0x16,
-  0xE8,
-  0xE9,
+  0xe8,
+  0xe9,
 ];
 
 enum NoteTypeID {
   Tap = 0x00,
-  Slider0B = 0x0B,
-  Slider0C = 0x0C,
+  Slider0B = 0x0b,
+  Slider0C = 0x0c,
   Slider03 = 0x03,
   Slider15 = 0x15,
   Slider16 = 0x16,
-  SliderE8 = 0xE8,
-  SliderE9 = 0xE9,
+  SliderE8 = 0xe8,
+  SliderE9 = 0xe9,
 }
 
 function validNoteTypeID(input: number): input is NoteTypeID {
@@ -46,17 +46,17 @@ function validNoteTypeID(input: number): input is NoteTypeID {
 }
 
 const sliderGroups = {
-  0x0B: 1,
-  0x0C: 1,
+  0x0b: 1,
+  0x0c: 1,
   0x03: 1, // See Starship / YSW - Walk.ogg
   0x15: 2,
   0x16: 2,
-  0xE8: 3,
-  0xE9: 3,
+  0xe8: 3,
+  0xe9: 3,
 };
 
 /** These slider types are starting the slider */
-const sliderStart = [0x0B, 0x15, 0xE8];
+const sliderStart = [0x0b, 0x15, 0xe8];
 
 /**
  * Header information for beatmaps.
@@ -129,29 +129,34 @@ const beatmapTypesInfo: Dictionary<BeatmapTypeInfo> = {
 };
 
 const beatmapOffsets: Dictionary<BeatmapOffsets> = {
-    [BeatmapTypes.Legacy]: {
-        difficultyId: 0x34,
-        noteCount: 0x28,
-        songName: [0xAC],
-        songNameNullBytes: 1,
-        noteDataLength: 20,
-        noteDataStartOffset: 2312, // 2048 + 264 (0x108)
-    },
-    [BeatmapTypes.Normal]: {
-        difficultyId: 0x38,
-        noteCount: 0x2C,
-        songName: [0xBC, 0x19C],
-        songNameNullBytes: 2,
-        noteDataLength: 24,
-        noteDataStartOffset: 2316, // 2048 + 268 (0x10C)
-    },
+  [BeatmapTypes.Legacy]: {
+    difficultyId: 0x34,
+    noteCount: 0x28,
+    songName: [0xac],
+    songNameNullBytes: 1,
+    noteDataLength: 20,
+    noteDataStartOffset: 2312, // 2048 + 264 (0x108)
+  },
+  [BeatmapTypes.Normal]: {
+    difficultyId: 0x38,
+    noteCount: 0x2c,
+    songName: [0xbc, 0x19c],
+    songNameNullBytes: 2,
+    noteDataLength: 24,
+    noteDataStartOffset: 2316, // 2048 + 268 (0x10C)
+  },
 };
 
 const audioSourceExtension = '.ogg';
 
-function readFilenameFromBeatmap(input: Buffer): null | { songName: string, remaining: Buffer } {
+function readFilenameFromBeatmap(
+  input: Buffer,
+): null | { songName: string; remaining: Buffer } {
   const songNameLength = input.readUInt32LE(0);
-  const songName = input.slice(4, songNameLength + 4).toString('utf8').replace(/\0+$/, '');
+  const songName = input
+    .slice(4, songNameLength + 4)
+    .toString('utf8')
+    .replace(/\0+$/, '');
 
   if (songName.endsWith(audioSourceExtension)) {
     return {
@@ -163,10 +168,12 @@ function readFilenameFromBeatmap(input: Buffer): null | { songName: string, rema
   return null;
 }
 
-function readDataCore(input: Buffer): {
-  dataCore: SeqDataCore,
-  remaining: Buffer,
-  layoutInfo: BeatmapTypeInfo,
+function readDataCore(
+  input: Buffer,
+): {
+  dataCore: SeqDataCore;
+  remaining: Buffer;
+  layoutInfo: BeatmapTypeInfo;
 } {
   const layoutVersion = input.readInt32LE(0);
   if (!validBeatmapType(layoutVersion)) {
@@ -175,23 +182,25 @@ function readDataCore(input: Buffer): {
 
   const layoutInfo = beatmapTypesInfo[layoutVersion];
   if (input.length < layoutInfo.dataCoreLength) {
-    throw new Error(`Beatmap file too short, expected at least ${layoutInfo.dataCoreLength} bytes but received ${input.length} bytes.`);
+    throw new Error(
+      `Beatmap file too short, expected at least ${layoutInfo.dataCoreLength} bytes but received ${input.length} bytes.`,
+    );
   }
 
   const skipPadOffset = layoutInfo.hasPadding ? 4 : 0;
 
   const dataCore: SeqDataCore = {
     layoutVersion,
-    tickLength:   input.readInt32LE( 0x04),
-    secLength:    input.readDoubleLE(0x08),
-    tickPerBeat:  input.readInt32LE( 0x10),
-    beatPerTick:  input.readDoubleLE(0x14 + skipPadOffset),
-    tempoCount:   input.readUInt32LE(0x1C + skipPadOffset),
-    objectCount:  input.readUInt32LE(0x20 + skipPadOffset),
+    tickLength: input.readInt32LE(0x04),
+    secLength: input.readDoubleLE(0x08),
+    tickPerBeat: input.readInt32LE(0x10),
+    beatPerTick: input.readDoubleLE(0x14 + skipPadOffset),
+    tempoCount: input.readUInt32LE(0x1c + skipPadOffset),
+    objectCount: input.readUInt32LE(0x20 + skipPadOffset),
     channelCount: input.readUInt32LE(0x24 + skipPadOffset),
-    noteCount:    input.readUInt32LE(0x28 + skipPadOffset),
-    measureCount: input.readUInt32LE(0x2C + skipPadOffset),
-    beatCount:    input.readUInt32LE(0x30 + skipPadOffset),
+    noteCount: input.readUInt32LE(0x28 + skipPadOffset),
+    measureCount: input.readUInt32LE(0x2c + skipPadOffset),
+    beatCount: input.readUInt32LE(0x30 + skipPadOffset),
     difficultyId: input.readUInt32LE(0x34 + skipPadOffset) - 0x64,
   };
 
@@ -231,22 +240,25 @@ export function parseBeatmap(input: Buffer): Beatmap {
 
   const issues: SeqIssue[] = [];
 
-  const {
-    dataCore,
-    layoutInfo,
-    remaining,
-  } = readDataCore(input);
+  const { dataCore, layoutInfo, remaining } = readDataCore(input);
   const offsets = beatmapOffsets[dataCore.layoutVersion];
 
-  const minLength = offsets.noteDataStartOffset + Math.max(...offsets.songName) + offsets.noteDataLength;
+  const minLength =
+    offsets.noteDataStartOffset +
+    Math.max(...offsets.songName) +
+    offsets.noteDataLength;
   if (remaining.length < minLength) {
-    throw new Error(`Beatmap file too short, expected at least ${minLength} bytes but received ${input.length} bytes.`);
+    throw new Error(
+      `Beatmap file too short, expected at least ${minLength} bytes but received ${input.length} bytes.`,
+    );
   }
 
   const tempoDataBufferSize = dataCore.tempoCount * layoutInfo.tempoDataLength;
   // TODO: const tempoDataBuffer = remaining.slice(0, tempoDataBufferSize);
 
-  const remainingAtFilename = remaining.slice(tempoDataBufferSize + layoutInfo.filenameOffset);
+  const remainingAtFilename = remaining.slice(
+    tempoDataBufferSize + layoutInfo.filenameOffset,
+  );
   const songNameInfo = readFilenameFromBeatmap(remainingAtFilename);
   if (_.isNull(songNameInfo)) {
     console.error(remainingAtFilename.slice(0, 60));
@@ -258,14 +270,16 @@ export function parseBeatmap(input: Buffer): Beatmap {
   const noteData = remaining3.slice(offsets.noteDataStartOffset);
 
   const notes = readNoteData(noteData, offsets.noteDataLength);
-  if (notes.notes.length !== (dataCore.noteCount - 2)) {
+  if (notes.notes.length !== dataCore.noteCount - 2) {
     const wrongNoteError = new SeqWrongNoteCountError(
-      `Wrong note count, expected ${dataCore.noteCount - 1} but got ${notes.notes.length}.`,
+      `Wrong note count, expected ${dataCore.noteCount - 1} but got ${
+        notes.notes.length
+      }.`,
       dataCore,
     );
     issues.push(wrongNoteError);
   }
-  notes.issues?.forEach(noteIssue => issues.push(noteIssue));
+  notes.issues?.forEach((noteIssue) => issues.push(noteIssue));
 
   return {
     info: dataCore,
@@ -293,9 +307,14 @@ interface Note {
   };
 }
 
-function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[], noteCountRaw: number, issues?: SeqIssue[] } {
-  if ((noteData.length % noteDataLength) !== 0) {
-    throw new Error(`Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`);
+function readNoteData(
+  noteData: Buffer,
+  noteDataLength: number,
+): { notes: Note[]; noteCountRaw: number; issues?: SeqIssue[] } {
+  if (noteData.length % noteDataLength !== 0) {
+    throw new Error(
+      `Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`,
+    );
   }
   const notes: Note[] = [];
   const issues: SeqIssue[] = [];
@@ -324,7 +343,11 @@ function readNoteData(noteData: Buffer, noteDataLength: number): { notes: Note[]
     }
 
     if (!validNoteTypeID(typeID)) {
-      issues.push(new Error(`Unknown note type ID: 0x${typeID.toString(16).padStart(2, '0')}.`));
+      issues.push(
+        new Error(
+          `Unknown note type ID: 0x${typeID.toString(16).padStart(2, '0')}.`,
+        ),
+      );
     }
 
     notes.push({
@@ -354,10 +377,7 @@ export async function parseBeatmapFile(filepath: string) {
 }
 
 export class SeqIssue extends Error {
-  constructor(
-    message: string,
-    public readonly beatmapInfo?: SeqDataCore,
-  ) {
+  constructor(message: string, public readonly beatmapInfo?: SeqDataCore) {
     super(message);
   }
 }

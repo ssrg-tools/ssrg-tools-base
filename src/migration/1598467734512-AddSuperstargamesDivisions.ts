@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class AddSuperstargamesDivisions1598467734512 implements MigrationInterface {
-
+export class AddSuperstargamesDivisions1598467734512
+  implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       INSERT INTO superstar_games_divisions_divisions
@@ -29,5 +29,4 @@ export class AddSuperstargamesDivisions1598467734512 implements MigrationInterfa
   public async down(queryRunner: QueryRunner): Promise<void> {
     // down left empty
   }
-
 }

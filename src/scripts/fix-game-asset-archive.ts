@@ -1,6 +1,6 @@
-import { GameArchivedAsset } from "../entity/Archive/GameArchivedAsset";
-import { GameArchivedAssetLink } from "../entity/Archive/GameArchivedAssetLink";
-import { createConnection, getRepository } from "typeorm";
+import { GameArchivedAsset } from '../entity/Archive/GameArchivedAsset';
+import { GameArchivedAssetLink } from '../entity/Archive/GameArchivedAssetLink';
+import { createConnection, getRepository } from 'typeorm';
 
 createConnection()
   .then(async () => {
@@ -13,13 +13,16 @@ createConnection()
       .innerJoin('gaa.gamedataFileLinks', 'gaal')
       .orderBy('gaa.sourceUrl', 'DESC')
       .groupBy('gaa.sourceUrl')
-      .having('c > 1').andHaving('distinctGAA > 1');
+      .having('c > 1')
+      .andHaving('distinctGAA > 1');
     const dupeGAAs = await dupeGAAQuery.getMany();
 
     let ii = 0;
     for (const dupe of dupeGAAs) {
       // Relations get swallowed by the GROUP BY, re-fetch them
-      const dupeMain = await GAA.findOne(dupe, { relations: ['gamedataFileLinks'] });
+      const dupeMain = await GAA.findOne(dupe, {
+        relations: ['gamedataFileLinks'],
+      });
       const dupeSecondaries = await GAA.createQueryBuilder('gaa')
         .innerJoinAndSelect('gaa.gamedataFileLinks', 'gamedataFileLinks')
         .where('gaa.sourceUrl = :sourceUrl AND NOT gaa.id = :id', dupeMain)
@@ -45,9 +48,10 @@ createConnection()
     const emptyGAAs = await GAA.createQueryBuilder('gaa')
       .leftJoinAndSelect('gaa.gamedataFileLinks', 'gaal')
       .where('gaal.assetId IS NULL')
-      .getMany()
-      ;
-    const deleteResult = await GAA.delete(emptyGAAs.map(emptyGAA => emptyGAA.id));
+      .getMany();
+    const deleteResult = await GAA.delete(
+      emptyGAAs.map((emptyGAA) => emptyGAA.id),
+    );
     console.log(deleteResult);
 
     console.log('All done.');

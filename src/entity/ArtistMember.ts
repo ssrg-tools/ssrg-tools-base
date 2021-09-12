@@ -35,7 +35,11 @@ export class ArtistMember {
   })
   guid: string;
 
-  @ManyToOne(() => Artist,  { onDelete: 'RESTRICT', onUpdate: 'RESTRICT', nullable: false })
+  @ManyToOne(() => Artist, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+    nullable: false,
+  })
   @JoinColumn([{ name: 'artistId', referencedColumnName: 'id' }])
   artist: Artist;
 }
