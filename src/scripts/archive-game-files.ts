@@ -2,8 +2,8 @@ import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import { join } from 'path';
 import { BaseApiResponse } from '../api';
-import { URLs } from '../definitions/data/gameinfo';
 import { api, apiConfig, fetchAllGameData } from '../backend-interface';
+import { URLs } from '../definitions/data/gameinfo';
 
 const gameKey = process.argv[2];
 if (!gameKey) {
@@ -36,6 +36,13 @@ async function main() {
   const { overview, contextMap } = await fetchAllGameData(gameKey, version, [
     'urls',
   ]);
+  const resultsCounts = {
+    exists: 0,
+    httpError: 0,
+    bigError: 0,
+    success: 0,
+    unknown: 0,
+  };
   try {
     const urls = contextMap.urls as URLs[];
     console.log(`All game data loaded.`);
@@ -47,15 +54,34 @@ async function main() {
         .version;
       const apiEndpoint = `/v1/${gameKey}/gamedata/urls/${overview.version}/${assetsubversion}/archiveAsset/${url.code}`;
 
-      const result = await api
+      type ArchiveAssetHandlerResult = (
+        | (ArchiveAssetResultOk & {
+            timeTakenMs: number;
+          })
+        | ArchiveAssetResultError
+      ) & {
+        assetsubversion: number;
+      };
+
+      const result: ArchiveAssetHandlerResult = await api
         .post<BaseApiResponse<ArchiveAssetResult>>(apiEndpoint)
-        .then((response) => ({
-          timeTakenMs: response.timeTakenMs,
-          assetsubversion,
-          ...response.data,
-        }))
+        .then((response) => {
+          if (response.data.result === 'success') {
+            resultsCounts.success++;
+          } else if (response.data.result === 'exists') {
+            resultsCounts.exists++;
+          } else {
+            resultsCounts.unknown++;
+          }
+          return {
+            timeTakenMs: response.timeTakenMs,
+            assetsubversion,
+            ...response.data,
+          };
+        })
         .catch((reason) => {
           if (reason instanceof HTTPError) {
+            resultsCounts.httpError++;
             return {
               result: 'http-error',
               name: reason.name,
@@ -64,6 +90,7 @@ async function main() {
               ...JSON.parse(reason.response.body as string),
             };
           }
+          resultsCounts.bigError++;
           return {
             result: 'big-error',
             name: reason.name,
@@ -110,6 +137,7 @@ async function main() {
           timeStart,
           timeEnd,
           timeTakenMs: timeEnd.getTime() - timeStart.getTime(),
+          resultsCounts,
           gameKey,
           results,
         },
@@ -117,6 +145,8 @@ async function main() {
         2,
       ),
     );
+    console.log(resultsCounts);
+    console.log(`Log written to ${logFilename}`);
   }
 }
 
