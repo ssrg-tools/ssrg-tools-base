@@ -39,7 +39,6 @@
     "@typescript-eslint/parser": "^4.23.0",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
     "jasmine": "^3.6.1",
     "prettier": "^2.5.1",
     "ts-node": "^8.10.2",
