@@ -43,6 +43,7 @@ import {
   LobbyBgStoreData,
   LocaleData,
   LocalePopupData,
+  MajorGroupData,
   MemberData,
   MembershipData,
   MissionData,
@@ -227,6 +228,11 @@ export async function loadGameConfigData(
 }
 export async function loadGroupData(dir: string): Promise<GroupData[]> {
   return loadFileGeneric<GroupData>('GroupData', dir);
+}
+export async function loadMajorGroupData(
+  dir: string,
+): Promise<MajorGroupData[]> {
+  return loadFileGeneric<MajorGroupData>('MajorGroupData', dir);
 }
 export async function loadHeadphoneStoreData(
   dir: string,

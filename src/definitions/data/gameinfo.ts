@@ -29,6 +29,7 @@ export type AllGameInfo =
   | FreePassRewardData
   | GameConfigData
   | GroupData
+  | MajorGroupData
   | HeadphoneStoreData
   | HelpData
   | HiddenGameData
@@ -726,6 +727,13 @@ export interface GroupData {
   displayEndAt?: number;
   localeName: number;
   secondOrderIndex: number;
+  emblemImage: number;
+}
+
+export interface MajorGroupData {
+  analyticsData: string;
+  code: number;
+  integrateLocale: number;
   emblemImage: number;
 }
 
