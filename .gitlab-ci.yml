@@ -41,6 +41,7 @@ test-check-types-tsc:
   stage: test
   needs: ["npm-install"]
   script:
+    - cp ./fixtures/config.api.json ./config.api.json
     - npm run test:ci:check-types
   cache:
     <<: *global_npm_cache
