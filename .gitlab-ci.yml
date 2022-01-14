@@ -16,6 +16,8 @@ image: node:14-alpine
 npm-install:
   stage: install
   tags: ["ssd"]
+  before_script:
+    - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
   script:
     - npm ci
   cache: &global_npm_cache
