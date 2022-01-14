@@ -5,9 +5,9 @@ import 'reflect-metadata';
 import { createConnection, getRepository } from 'typeorm';
 import _ from 'lodash';
 
-import { Song } from '@base/entity/Song';
-import { SongBeatmap } from '@base/entity/SongBeatmap';
-import { SongInfo } from '@base/SongInfo';
+import { Song } from '../entity/Song';
+import { SongBeatmap } from '../entity/SongBeatmap';
+import { SongInfo } from '../SongInfo';
 
 const verbose = false;
 

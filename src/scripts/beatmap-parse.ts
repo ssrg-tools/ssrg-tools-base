@@ -1,4 +1,4 @@
-import { parseBeatmapFile } from '@base/seq';
+import { parseBeatmapFile } from '../seq';
 
 const path = process.argv[2];
 if (!path) {

@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { isReversedFile } from '@base/dalcom-files';
+import { isReversedFile } from '../dalcom-files';
 
 const path = process.argv[2];
 if (!path) {

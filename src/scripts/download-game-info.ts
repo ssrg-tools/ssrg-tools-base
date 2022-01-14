@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
+import { SuperstarGame } from '../entity/SuperstarGame';
 import { createConnection, getRepository } from 'typeorm';
-import { InfoAggregate } from '@base/definitions/data/InfoAggregate';
-import { processAggregate } from '@base/gamedata';
+import { InfoAggregate } from '../definitions/data/InfoAggregate';
+import { processAggregate } from '../gamedata';
 
 const argv = process.argv.slice(2);
 if (argv.length < 2) {

@@ -3,14 +3,14 @@ import * as path from 'path';
 
 import 'reflect-metadata';
 import { createConnection, getRepository } from 'typeorm';
-import { Song } from '@base/entity/Song';
-import { SongWorldRecord } from '@base/entity/SongWorldRecord';
-import { WRRecord, dalcomGradeMap } from '@base/dalcom';
+import { Song } from '../entity/Song';
+import { SongWorldRecord } from '../entity/SongWorldRecord';
+import { WRRecord, dalcomGradeMap } from '../dalcom';
 import _ from 'lodash';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
-import { WorldRecordSeason } from '@base/entity/WorldRecordSeason';
-import { generate_guid } from '@base/guid';
-import { writeRankingDataToCache } from '@base/wr';
+import { SuperstarGame } from '../entity/SuperstarGame';
+import { WorldRecordSeason } from '../entity/WorldRecordSeason';
+import { generate_guid } from '../guid';
+import { writeRankingDataToCache } from '../wr';
 
 const verbose = false;
 const stubSongs = false;

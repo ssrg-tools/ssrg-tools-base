@@ -1,7 +1,7 @@
 import { Dictionary } from 'lodash';
-import { AllGameInfo } from '@base/definitions/data/gameinfo';
-import { BaseApiResponse } from '@base/api';
-import { api } from '@base/backend-interface';
+import { AllGameInfo } from '../definitions/data/gameinfo';
+import { BaseApiResponse } from '../api';
+import { api } from '../backend-interface';
 
 async function main(gameKey: string, contextKey: string, verifyKey: string) {
   const contextDataEndpoint = `/v1/${gameKey}/gamedata/${contextKey}`;

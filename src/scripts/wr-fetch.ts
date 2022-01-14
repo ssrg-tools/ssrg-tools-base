@@ -1,10 +1,10 @@
-import { Song } from '@base/entity/Song';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
+import { Song } from '../entity/Song';
+import { SuperstarGame } from '../entity/SuperstarGame';
 import { createConnection, getRepository } from 'typeorm';
 import got from 'got';
-import { WorldRecordSeason } from '@base/entity/WorldRecordSeason';
-import { WRRecordEntry } from '@base/dalcom';
-import { SongWorldRecord } from '@base/entity/SongWorldRecord';
+import { WorldRecordSeason } from '../entity/WorldRecordSeason';
+import { WRRecordEntry } from '../dalcom';
+import { SongWorldRecord } from '../entity/SongWorldRecord';
 import moment from 'moment';
 import {
   buildUrlRanking,

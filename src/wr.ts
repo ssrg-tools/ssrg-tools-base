@@ -154,6 +154,7 @@ export async function writeRankingDataToCache(
   game: SuperstarGame,
   song: Song,
   seasonCode: number,
+  // eslint-disable-next-line @typescript-eslint/ban-types
   contents: object,
   dateObserved = new Date(),
   source = 'manual',

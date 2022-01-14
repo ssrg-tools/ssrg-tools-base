@@ -1,7 +1,7 @@
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
-import { difficultyNames } from '@base/types';
-import { Beatmap, parseBeatmapFile } from '@base/seq';
+import { difficultyNames } from '../types';
+import { Beatmap, parseBeatmapFile } from '../seq';
 
 const path = process.argv[2];
 if (!path) {

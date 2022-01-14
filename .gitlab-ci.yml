@@ -1,0 +1,45 @@
+stages:
+  - install
+  - test
+
+include:
+  - template: Jobs/Code-Quality.gitlab-ci.yml
+  - template: Jobs/Code-Intelligence.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+sast:
+  stage: test
+
+image: node:14-alpine
+
+npm-install:
+  stage: install
+  tags: ["ssd"]
+  script:
+    - npm ci
+  cache: &global_npm_cache
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+    policy: pull-push
+
+test-test-jasmine:
+  stage: test
+  needs: ["npm-install"]
+  script:
+    - npm test
+  cache:
+    <<: *global_npm_cache
+    policy: pull
+
+test-check-types-tsc:
+  stage: test
+  needs: ["npm-install"]
+  script:
+    - npm run test:ci:check-types
+  cache:
+    <<: *global_npm_cache
+    policy: pull

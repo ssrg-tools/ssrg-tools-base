@@ -3,10 +3,10 @@ import fs from 'fs';
 import { createConnection, getRepository } from 'typeorm';
 import csvParser from 'csv-parse/lib/sync';
 import moment from 'moment';
-import { LeagueTrackerEntry } from '@base/entity/LeagueTrackerEntry';
-import { generate_guid } from '@base/guid';
-import { SuperstarGame } from '@base/entity/SuperstarGame';
-import { SongWorldRecord } from '@base/entity/SongWorldRecord';
+import { LeagueTrackerEntry } from '../entity/LeagueTrackerEntry';
+import { generate_guid } from '../guid';
+import { SuperstarGame } from '../entity/SuperstarGame';
+import { SongWorldRecord } from '../entity/SongWorldRecord';
 import { Dictionary } from 'lodash';
 
 createConnection()
