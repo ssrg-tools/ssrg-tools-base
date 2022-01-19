@@ -92,3 +92,7 @@ export function userCanViewAllKeys(user: User) {
 export function hasUri(file: File): file is FileWithUri {
   return (file as any).uri;
 }
+
+export function urlForEblob(file: File): string {
+  return `/v1/files/eblobs/${file.guid}`;
+}
