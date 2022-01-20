@@ -1,13 +1,7 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  TableInheritance,
-  Index,
-  Unique,
-  JoinColumn,
+  Column, Entity, Index, JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToOne, PrimaryGeneratedColumn, TableInheritance, Unique
 } from 'typeorm';
 import { GameArchivedAsset } from '../Archive/GameArchivedAsset';
 import { User } from '../User';

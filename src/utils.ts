@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import _ from 'lodash';
-import moment, { Moment } from 'moment-timezone';
 import crypto from 'crypto';
+import _ from 'lodash';
+import { extension } from 'mime-types';
+import moment, { Moment } from 'moment-timezone';
 
 export const KST = 'Asia/Seoul';
 
@@ -207,4 +208,14 @@ export function s3BucketName(url: string): string | null {
   }
 
   return null;
+}
+
+const bytesExtRegex = /\.bytes$/;
+
+export function replaceBytesExtension(path: string, mime?: string): string {
+  if (!bytesExtRegex.test(path) || !mime) {
+    return path;
+  }
+
+  return path.replace(bytesExtRegex, '.' + extension(mime));
 }

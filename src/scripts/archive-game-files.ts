@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import { join } from 'path';
-import { BaseApiResponse } from '../api';
+import { ArchiveAssetResult, ArchiveAssetResultError, ArchiveAssetResultOk, BaseApiResponse } from '../api';
 import { api, apiConfig, fetchAllGameData } from '../backend-interface';
 import { URLs } from '../definitions/data/gameinfo';
 
@@ -11,24 +11,6 @@ if (!gameKey) {
   process.exit(1);
 }
 const version = process.argv[3] || 'latest';
-
-type ArchiveAssetResult = ArchiveAssetResultOk | ArchiveAssetResultError;
-interface ArchiveAssetResultOk {
-  result: 'success' | 'exists';
-  uri: string;
-  fileEntity: {
-    guid: string;
-    fingerprint: string;
-  };
-  archiveEntity: {
-    guid: string;
-    game: { key: string };
-  };
-}
-
-interface ArchiveAssetResultError {
-  result: 'error';
-}
 
 async function main() {
   const results = [];
@@ -127,7 +109,7 @@ async function main() {
     }
   } finally {
     const timeEnd = new Date();
-    const logFilename = `log-archive-game-${timeEnd.getUTCFullYear()}-${timeEnd.getUTCMonth()}-${timeEnd.getUTCDay()}_${timeEnd.getUTCHours()}-${timeEnd.getUTCMinutes()}-${gameKey}-${
+    const logFilename = `log-archive-game-${(new Date()).toISOString().replace(/[:T]/g, '-')}-${gameKey}-${
       overview.version
     }.json`;
     await writeFile(

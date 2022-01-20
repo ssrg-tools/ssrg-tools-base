@@ -1,7 +1,7 @@
 import got, { OptionsOfTextResponseBody } from 'got';
 import _ from 'lodash';
 import { Dictionary } from 'lodash';
-import { BaseApiResponse } from './api';
+import { BaseApiResponse, ResolvedUrls } from './api';
 import { AllGameInfo } from './definitions/data/gameinfo';
 
 import apiConfig_ from '../config.api.json';
@@ -113,4 +113,15 @@ export async function fetchAllGameData(
     contextMap,
     contextMapByCode,
   };
+}
+
+export async function fetchResolvedFiles(
+  gameKey: string,
+  version = 'latest',
+) {
+  const response = await got(
+    apiConfig.endpoint + '/v1/' + gameKey + `/gamedata/urls/` + version + '/resolvedFiles?selectIsExist=true',
+  ).json<BaseApiResponse<ResolvedUrls>>();
+
+  return response.data;
 }

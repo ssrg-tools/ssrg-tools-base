@@ -1,8 +1,9 @@
-import { NumberLike, DropSources, GradeNonEmpty, SqlBool } from './types';
-import { SongWorldRecord } from './entity/SongWorldRecord';
+import { Moment } from 'moment';
+import { URLs } from './definitions/data/gameinfo';
 import { SongClear } from './entity/SongClear';
 import { SongClearCard } from './entity/SongClearCard';
-import { Moment } from 'moment';
+import { SongWorldRecord } from './entity/SongWorldRecord';
+import { DropSources, GradeNonEmpty, NumberLike, SqlBool } from './types';
 
 export interface BaseApiResponse<T> {
   data: T;
@@ -111,3 +112,29 @@ export interface GameAssetsListingResult {
   }[];
   uri: string;
 }
+
+export type ArchiveAssetResult = ArchiveAssetResultOk | ArchiveAssetResultError;
+export interface ArchiveAssetResultOk {
+  result: 'success' | 'exists';
+  uri: string;
+  fileEntity: {
+    guid: string;
+    fingerprint: string;
+  };
+  archiveEntity: {
+    guid: string;
+    game: { key: string };
+  };
+}
+
+export interface ArchiveAssetResultError {
+  result: 'error';
+}
+
+export interface ResolvedUrl extends URLs {
+  originalUrl: string;
+  sourceDateModified: string;
+  mime: string;
+}
+
+export type ResolvedUrls = ResolvedUrl[];
