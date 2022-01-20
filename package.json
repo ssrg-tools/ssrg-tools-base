@@ -1,8 +1,11 @@
 {
   "name": "@ssrg-tools/base",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "description": "",
-  "main": "index.js",
+  "main": "./cjs/src/index.js",
+  "module": "./esm5/src/index.js",
+  "es2015": "./esm2015/src/index.js",
+  "typings": "./types/src/index.d.ts",
   "scripts": {
     "build": "npm run build:cjs",
     "build:clean": "rimraf build",
@@ -16,10 +19,15 @@
     "lint": "eslint --fix \"src/**/*.ts\"",
     "postinstall": "patch-package"
   },
-  "author": "",
+  "author": "Anh Nhân Nguyễn",
   "license": "ISC",
+  "publishConfig": {
+    "registry": "https://server.nellman.net/api/v4/projects/6/packages/npm/"
+  },
   "dependencies": {
     "@sindresorhus/fnv1a": "^2.0.1",
+    "csv-parse": "^4.12.0",
+    "get-audio-duration": "^2.0.3",
     "got": "^11.7.0",
     "kuuid": "^0.5.1",
     "libsodium-wrappers": "^0.7.9",
@@ -29,14 +37,13 @@
     "moment-timezone": "^0.5.33",
     "patch-package": "^6.2.2",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.25"
-  },
-  "peerDependencies": {
-    "csv-parse": "^4.12.0",
-    "get-audio-duration": "^2.0.3",
-    "mysql2": "^2.1.0",
+    "tslib": "^2.3.1",
+    "typeorm": "^0.2.25",
     "utimes": "^4.1.1",
     "zip-stream": "^4.1.0"
+  },
+  "peerDependencies": {
+    "mysql2": "^2.1.0"
   },
   "devDependencies": {
     "@types/jasmine": "^3.5.12",

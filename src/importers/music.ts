@@ -32,7 +32,7 @@ export const keyDifficultyMap = {
 export async function loadGamedataForMusicImport(
   gameKey: string,
   version: string,
-): ReturnType<typeof fetchAllGameData> {
+) {
   return fetchAllGameData(gameKey, version, [
     'artistdata',
     'localedata',

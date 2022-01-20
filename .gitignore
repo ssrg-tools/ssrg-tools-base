@@ -25,6 +25,7 @@ npm-debug.log*
 /.sourcemaps
 /.versions
 /.vscode
+/build
 /coverage
 /dist
 /node_modules

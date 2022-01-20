@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "declaration": false,
+  },
+  "exclude": [
+    "./build/**",
+    "./dist/**",
+    "./ormconfig*",
+    "./*.json",
+    "./src/scripts/**",
+  ],
+}
