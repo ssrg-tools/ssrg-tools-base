@@ -73,4 +73,6 @@ publish:
     - NPM_VERSION=$(jq '.version' package.json -r)
     - NPM_TARBALL_URL=$(curl ${CI_SERVER_URL}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/@ssrg-tools%2Fbase | jq ".versions[\"$NPM_VERSION\"].dist.tarball" -r)
     - >-
+      echo curl -X POST -H "JOB-TOKEN: ${CI_JOB_TOKEN}" -H "Content-Type: application/json" -d "{\"tag_name\": \"${CI_COMMIT_TAG}\", \"name\": \"${CI_COMMIT_TAG}\", \"body\": \"${CI_COMMIT_MESSAGE//[$'\t\r\n\"']}\", \"released_at\": \"${CI_COMMIT_TIMESTAMP}\", \"assets\": {\"links\": [{\"name\": \"$(basename "$NPM_TARBALL_URL")\", \"url\": \"${NPM_TARBALL_URL}\"}]}}" "${CI_SERVER_URL}/api/v4/projects/${CI_PROJECT_ID}/releases" -v --show-error --fail
+    - >-
       curl -X POST -H "JOB-TOKEN: ${CI_JOB_TOKEN}" -H "Content-Type: application/json" -d "{\"tag_name\": \"${CI_COMMIT_TAG}\", \"name\": \"${CI_COMMIT_TAG}\", \"body\": \"${CI_COMMIT_MESSAGE//[$'\t\r\n\"']}\", \"released_at\": \"${CI_COMMIT_TIMESTAMP}\", \"assets\": {\"links\": [{\"name\": \"$(basename "$NPM_TARBALL_URL")\", \"url\": \"${NPM_TARBALL_URL}\"}]}}" "${CI_SERVER_URL}/api/v4/projects/${CI_PROJECT_ID}/releases" -v --show-error --fail
