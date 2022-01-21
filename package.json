@@ -3,6 +3,12 @@
   "version": "0.5.2",
   "description": "",
   "main": "./cjs/src/index.js",
+  "exports": {
+    "*": {
+      "default": "./cjs/src/*.js",
+      "import": "./esm2015/src/*.js"
+    }
+  },
   "module": "./esm5/src/index.js",
   "es2015": "./esm2015/src/index.js",
   "typings": "./types/src/index.d.ts",
