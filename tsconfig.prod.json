@@ -11,5 +11,6 @@
     "./*.json",
     "./src/scripts/**",
     "**/*.{test,spec}.{js,jsx,ts,tsx}",
+    "**/migration*/**",
   ],
 }
