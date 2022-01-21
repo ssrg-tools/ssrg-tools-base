@@ -2,7 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { AssetGuidRef, Base, LocaleString } from './helpers';
 
 @Entity('gamedata_theme')
-export class Theme extends Base {
+export class ThemeGamedata extends Base {
   @Column(() => AssetGuidRef)
   nameImageSmall: AssetGuidRef;
 

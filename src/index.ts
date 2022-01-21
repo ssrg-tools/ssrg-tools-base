@@ -1,4 +1,3 @@
-// Entities are not export in root.
 export * from './api';
 export * from './backend-interface';
 export * from './constants';
@@ -14,3 +13,7 @@ export * from './seq';
 export * from './types';
 export * from './utils';
 export * from './wr';
+
+export * from './definitions/data';
+export * from './entity';
+export * from './entity-gamedata';

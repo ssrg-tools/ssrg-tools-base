@@ -3,7 +3,7 @@ import { Column, Entity } from 'typeorm';
 import { AssetGuidRef, Base } from './helpers';
 
 @Entity('gamedata_card')
-export class Card extends Base {
+export class CardGamedata extends Base {
   @Column()
   intensifyPercentage: number;
 

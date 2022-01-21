@@ -5,7 +5,7 @@ import { AssetGuidRef, Base, LocaleString } from './helpers';
  * Maps to ArtistMember
  */
 @Entity('gamedata_artist')
-export class Artist extends Base {
+export class ArtistGamedata extends Base {
   @Column(() => LocaleString)
   birthday: LocaleString;
 

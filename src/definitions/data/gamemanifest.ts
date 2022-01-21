@@ -1,6 +1,6 @@
 import { StringCBool } from '../../types';
 
-export interface GameManifest {
+export interface GameManifestData {
   /** version number, e.g. 1.10.5, may point to the next version */
   ActiveVersion_Android: string;
   /** version number, e.g. 1.10.5, may point to the next version */

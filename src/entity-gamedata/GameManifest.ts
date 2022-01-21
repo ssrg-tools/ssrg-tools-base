@@ -6,7 +6,7 @@ import {
   Unique,
   BeforeInsert,
 } from 'typeorm';
-import { GameManifest as GameManifestType } from '../definitions/data/gamemanifest';
+import { GameManifestData as GameManifestType } from '../definitions/data/gamemanifest';
 
 @Unique('perGameAndVersion', ['gameGuid', 'versionString'])
 @Entity('assets_manifests')
