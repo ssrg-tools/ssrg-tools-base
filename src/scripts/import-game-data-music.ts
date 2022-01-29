@@ -60,7 +60,14 @@ async function main() {
         SongBeatmaps,
         Artists,
       );
-      console.log('Processed song:', song.id || '<no-id>', song.album, song.name, song.dateReleasedGame || '<no-date>');
+      console.log(
+        'Processed song:',
+        song.internalSongId,
+        song.id || '<no-id>',
+        song.album,
+        song.name,
+        song.dateReleasedGame || '<no-date-game-release>',
+      );
       processedMusic.push({
         songEntity: song,
         beatmaps,
@@ -68,8 +75,10 @@ async function main() {
       });
 
       if (!artist.id) {
-        console.log('Encountered new artist:', song.artist.name);
-        await Artists.save(song.artist);
+        console.log('Encountered new artist:', artist.name);
+        await Artists.save(artist);
+        song.artistId = artist.id;
+        song.artist = artist;
       }
 
       try {
@@ -79,7 +88,7 @@ async function main() {
           process.stdout.write('Updating song! ');
         }
         await Songs.save(song);
-        console.log('Saved song.', song.id, song.album, song.name, song.dateReleasedGame);
+        console.log('Saved song.');
       } catch (error) {
         if (error instanceof UpdateValuesMissingError) {
           console.log('Song not changed (UpdateValuesMissingError).');
@@ -100,7 +109,13 @@ async function main() {
           process.stdout.write('Inserting new beatmap! ');
           beatmap.songId = song.id;
           await SongBeatmaps.save(beatmap);
-          console.log('Saved song beatmap.', beatmap.id, beatmap.difficulty, beatmap.beatmapFilename);
+          console.log(
+            'Saved song beatmap.',
+            song.internalSongId,
+            beatmap.id,
+            beatmap.difficulty,
+            beatmap.beatmapFilename,
+          );
         } catch (error) {
           if (error instanceof UpdateValuesMissingError) {
             console.log('Song not changed.');

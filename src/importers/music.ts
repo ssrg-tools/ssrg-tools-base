@@ -53,18 +53,25 @@ export function handleStreamDownload(
 ) => Promise<
   [
     string,
-    {
-      gameAssetInfo: ArchiveAssetResultOk;
-      stream: Buffer;
-      beatmap: Beatmap | undefined;
-      audioLength: number | undefined;
-      fingerprint: string;
-    },
+    (
+      | {
+          gameAssetInfo: ArchiveAssetResultOk;
+          stream: Buffer;
+          beatmap: Beatmap | undefined;
+          audioLength: number | undefined;
+          fingerprint: string;
+        }
+      | undefined
+    ),
   ]
 > {
   return async key => {
+    const fileCode = songdata[key];
+    if (typeof fileCode !== 'number') {
+      return [key, undefined];
+    }
     const gameAssetInfoResponse = await client.post<BaseApiResponse<ArchiveAssetResult>>(
-      `/v1/${gameKey}/gamedata/urls/${gamedataVersion}/${urlsVersion}/archiveAsset/${songdata[key]}`,
+      `/v1/${gameKey}/gamedata/urls/${gamedataVersion}/${urlsVersion}/archiveAsset/${fileCode}`,
     );
 
     if (gameAssetInfoResponse.data.result === 'error') {
@@ -124,7 +131,7 @@ export async function processSongData(
     beatmap?: Beatmap;
     audioLength?: number;
     fingerprint: string;
-  }> = Object.fromEntries(fileStreams$);
+  }> = Object.fromEntries(fileStreams$.filter(([, stream]) => stream !== undefined));
 
   const song: ExtendedMusicData = cloneDeep(songdata) as unknown as ExtendedMusicData;
   song.albumName = getLocaleString(songdata.albumName);
@@ -145,7 +152,7 @@ export async function processSongData(
   const artist = await getGroupFromData(game, groups[songdata.groupData], majorgroups, getLocaleString, Artists);
 
   if (songEntity) {
-    console.log(`Song ${song.localeName} exists as ${songEntity.name} (${songEntity.guid})`);
+    console.log(`Song: Song '${song.localeName}' exists as '${songEntity.name}' (${songEntity.guid})`);
     let existsChanged = false;
 
     if (!songEntity.artistId) {
@@ -180,21 +187,21 @@ export async function processSongData(
 
     // await Songs.save(songEntity);
     const existsChangedLabel = existsChanged ? 'exists changed' : 'not changed';
-    console.log(`Updated song ${songEntity.name} (${songEntity.guid}): ${existsChangedLabel}`);
+    console.log(`Song: Updated song '${songEntity.name}' (${songEntity.guid}): ${existsChangedLabel}`);
   } else {
     songEntity = Songs.create({
       album: song.localeDisplayGroupName,
       name: song.localeName,
       internalSongId: String(song.code),
       ingame: 1,
-      songFilename: streamMap.seqEasy.beatmap.filename,
+      songFilename: Object.values(streamMap).find(x => x.beatmap)?.beatmap?.filename,
       gameId: game.id,
       dateReleasedWorld: song.releaseDate,
       beatmaps: [],
       guid: generate_guid(),
       artist,
     });
-    console.log(`Creating song ${song.localeName} (${songEntity.guid})`);
+    console.log(`Song: Creating song ${song.localeName} (${songEntity.guid})`);
   }
 
   const audioLength = streamMap.sound.audioLength;
@@ -214,7 +221,12 @@ export async function processSongData(
   const songBeatmaps = keyBy(songEntity.beatmaps, 'difficulty');
   for (const beatmapKey of beatmapKeys) {
     const difficultyName = difficultyNames[keyDifficultyMap[beatmapKey]];
-    const beatmap = streamMap[beatmapKey].beatmap;
+    const beatmap = streamMap[beatmapKey]?.beatmap;
+
+    if (!beatmap) {
+      console.log(`Beatmap: No beatmap for ${beatmapKey}`);
+      continue;
+    }
 
     let songBeatmap = songBeatmaps[difficultyName];
     if (!songBeatmap) {
@@ -235,10 +247,10 @@ export async function processSongData(
         indexBeatMin: Math.min(...beatmap.notes.map(n => n.beat)),
         guid: generate_guid(),
       });
-
-      beatmaps.push(songBeatmap);
-      songBeatmaps[difficultyName] = songBeatmap;
     }
+
+    beatmaps.push(songBeatmap);
+    songBeatmaps[difficultyName] = songBeatmap;
   }
 
   return { songEntity, beatmaps, artist };

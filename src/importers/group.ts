@@ -1,9 +1,9 @@
 import { Dictionary } from 'lodash';
-import { GroupData, MajorGroupData } from '../definitions/data/gameinfo';
-import { generate_guid } from '../guid';
 import { getRepository } from 'typeorm';
-import { SuperstarGame } from '../entity/SuperstarGame';
+import { GroupData, MajorGroupData } from '../definitions/data/gameinfo';
 import { Artist } from '../entity/Artist';
+import { SuperstarGame } from '../entity/SuperstarGame';
+import { generate_guid } from '../guid';
 
 export async function getGroupFromData(
   game: SuperstarGame,
@@ -12,7 +12,7 @@ export async function getGroupFromData(
   getLocaleString: (code: number) => string,
   Artists = getRepository(Artist),
 ): Promise<Artist> {
-  const name = getLocaleString(groupdata.localeName);
+  const name = getLocaleString(groupdata.localeName).replace(/[ _\-]\((?:event|hidden)\)/gi, '');
   const groupName =
     groupdata.integrateCode && majorgroupdata
       ? getLocaleString(majorgroupdata[groupdata.integrateCode].integrateLocale)
@@ -27,27 +27,49 @@ export async function getGroupFromData(
     .getOne();
 
   if (existingGroup) {
+    let changed = false;
+    if (!existingGroup.group && groupName) {
+      existingGroup.group = groupName;
+      changed = true;
+    }
+    if (!existingGroup.sort && groupdata.orderIndex) {
+      existingGroup.sort = groupdata.orderIndex;
+      changed = true;
+    }
+    if (!existingGroup.cardCount && groupdata.equipableSlot) {
+      existingGroup.cardCount = groupdata.equipableSlot;
+      changed = true;
+    }
+    if (!existingGroup.imageId && groupdata.emblemImage) {
+      existingGroup.imageId = groupdata.emblemImage.toString();
+      changed = true;
+    }
+    if (changed) {
+      console.log(`Artist: Updating group ${existingGroup.name}`);
+      await Artists.save(existingGroup);
+    }
     return existingGroup;
   }
 
   // Case 2: Group already exists, with name but no ID
-  const group2 = await Artists.findOne(null, {
-    where: {
-      gameId: game.id,
-      name,
-    },
-  });
+  const group2 = await Artists.createQueryBuilder('artist')
+    .where({ gameId: game.id })
+    .andWhere('LOWER(artist.name) = LOWER(:name)', { name })
+    .getOne();
 
   if (group2) {
+    console.log(`Artist: Group ${name} already exists, but no ID`);
     group2.internalIds = group2.internalIds.concat(groupdata.code);
     group2.group = groupName;
     group2.cardCount = groupdata.equipableSlot;
     group2.imageId = String(groupdata.emblemImage);
     group2.sort = groupdata.orderIndex;
+    group2.name = name;
     return Artists.save(group2);
   }
 
   // Case 3: Create new group
+  console.log(`Artist: Creating new group ${name}`);
   const newGroup = Artists.create({
     name,
     internalIds: [groupdata.code],
