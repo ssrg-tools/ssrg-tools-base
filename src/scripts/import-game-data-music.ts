@@ -1,13 +1,13 @@
-import { writeFileSync } from 'fs';
+import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import { Dictionary } from 'lodash';
-import { createConnection, getRepository } from 'typeorm';
+import { createConnection, getRepository, UpdateValuesMissingError } from 'typeorm';
 import { GroupData, LocaleData, MajorGroupData, MusicData } from '../definitions/data/gameinfo';
 import { Artist } from '../entity/Artist';
 import { Song } from '../entity/Song';
 import { SongBeatmap } from '../entity/SongBeatmap';
 import { SuperstarGame } from '../entity/SuperstarGame';
-import { loadGamedataForMusicImport, processSongData } from '../importers/music';
+import { loadGamedataForMusicImport, ProcessedSongData, processSongData } from '../importers/music';
 
 const gameKey = process.argv[2];
 if (!gameKey) {
@@ -42,17 +42,13 @@ async function main() {
       where: { key: gameKey },
     });
 
-    // const music = musicdata.slice(0, 1);
-    // for (const songdata of music) {
-    //   const { songEntity } = await processSongData(gamedataVersion, urlsVersion, songdata, getLocaleString, game, groups, majorgroups, Songs, SongBeatmaps, Artists);
-    //   console.log(songEntity);
-    //   // console.log(inspect(streamMap, false, null));
-    //   // console.log(song, songEntity);
-    //   // process.exit();
-    // }
-
-    const processedMusic$ = musicdata.map(songdata =>
-      processSongData(
+    const processedMusic: ProcessedSongData[] = [];
+    for (const songdata of musicdata) {
+      const {
+        songEntity: song,
+        beatmaps,
+        artist,
+      } = await processSongData(
         gamedataVersion,
         urlsVersion,
         songdata,
@@ -63,16 +59,65 @@ async function main() {
         Songs,
         SongBeatmaps,
         Artists,
-      ).then(({ songEntity }) => songEntity),
-    );
-    const processedMusic = await Promise.all(processedMusic$);
+      );
+      console.log('Processed song:', song.id || '<no-id>', song.album, song.name, song.dateReleasedGame || '<no-date>');
+      processedMusic.push({
+        songEntity: song,
+        beatmaps,
+        artist,
+      });
+
+      if (!artist.id) {
+        console.log('Encountered new artist:', song.artist.name);
+        await Artists.save(song.artist);
+      }
+
+      try {
+        if (!song.id) {
+          process.stdout.write('Inserting new song! ');
+        } else {
+          process.stdout.write('Updating song! ');
+        }
+        await Songs.save(song);
+        console.log('Saved song.', song.id, song.album, song.name, song.dateReleasedGame);
+      } catch (error) {
+        if (error instanceof UpdateValuesMissingError) {
+          console.log('Song not changed (UpdateValuesMissingError).');
+          continue;
+        }
+        console.error('Error:', error);
+        continue;
+      }
+
+      console.log('Saving song beatmaps...');
+      for (const beatmap of beatmaps) {
+        try {
+          if (beatmap.id) {
+            console.log(`Skipping existing ${beatmap.difficulty} beatmap!`);
+            continue;
+          }
+
+          process.stdout.write('Inserting new beatmap! ');
+          beatmap.songId = song.id;
+          await SongBeatmaps.save(beatmap);
+          console.log('Saved song beatmap.', beatmap.id, beatmap.difficulty, beatmap.beatmapFilename);
+        } catch (error) {
+          if (error instanceof UpdateValuesMissingError) {
+            console.log('Song not changed.');
+            continue;
+          }
+          console.error('Error:', error);
+        }
+      }
+    }
+
     const logTimestamp = new Date().toISOString().replace(/:/g, '-');
-    console.log(processedMusic);
     console.log(logTimestamp);
-    writeFileSync(
-      __dirname + `/../../log-music-import-${logTimestamp}-${gameKey}-${gamedataVersion}.json`,
+    await writeFile(
+      __dirname + `/../../../log-music-import-${logTimestamp}-${gameKey}-${gamedataVersion}.json`,
       JSON.stringify({ processedMusic }, null, 2),
     );
+    console.log('Songs saved.');
   } catch (error) {
     console.error(error);
     if (error instanceof HTTPError) {

@@ -4,11 +4,11 @@ import { Difficulty, difficultyIds } from './types';
 
 export const seqParserVersion = 3;
 
-type NoteTap = 'tap';
-type NoteSlider = 'slider';
-type NoteType = NoteTap | NoteSlider;
+export type NoteTap = 'tap';
+export type NoteSlider = 'slider';
+export type NoteType = NoteTap | NoteSlider;
 
-const noteTypes: Dictionary<NoteType> = {
+export const noteTypes: Dictionary<NoteType> = {
   0x00: 'tap',
   0x0b: 'slider',
   0x0c: 'slider',
@@ -19,7 +19,7 @@ const noteTypes: Dictionary<NoteType> = {
   0xe9: 'slider',
 };
 
-const noteTypeIDs: NoteTypeID[] = [
+export const noteTypeIDs: NoteTypeID[] = [
   0x00,
   0x0b,
   0x0c,
@@ -30,7 +30,7 @@ const noteTypeIDs: NoteTypeID[] = [
   0xe9,
 ];
 
-enum NoteTypeID {
+export enum NoteTypeID {
   Tap = 0x00,
   Slider0B = 0x0b,
   Slider0C = 0x0c,
@@ -41,11 +41,11 @@ enum NoteTypeID {
   SliderE9 = 0xe9,
 }
 
-function validNoteTypeID(input: number): input is NoteTypeID {
+export function validNoteTypeID(input: number): input is NoteTypeID {
   return noteTypeIDs.includes(input);
 }
 
-const sliderGroups = {
+export const sliderGroups = {
   0x0b: 1,
   0x0c: 1,
   0x03: 1, // See Starship / YSW - Walk.ogg
@@ -56,7 +56,7 @@ const sliderGroups = {
 };
 
 /** These slider types are starting the slider */
-const sliderStart = [0x0b, 0x15, 0xe8];
+export const sliderStart = [0x0b, 0x15, 0xe8];
 
 /**
  * Header information for beatmaps.

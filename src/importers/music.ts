@@ -9,7 +9,7 @@ import { Song } from '../entity/Song';
 import { SongBeatmap } from '../entity/SongBeatmap';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { generate_guid } from '../guid';
-import { Beatmap, parseBeatmap } from '../seq';
+import { Beatmap, parseBeatmap, sliderStart } from '../seq';
 import { Difficulty, difficultyNames } from '../types';
 import { getGroupFromData } from './group';
 
@@ -29,10 +29,7 @@ export const keyDifficultyMap = {
   seqHard: Difficulty.Hard,
 };
 
-export async function loadGamedataForMusicImport(
-  gameKey: string,
-  version: string,
-) {
+export async function loadGamedataForMusicImport(gameKey: string, version: string) {
   return fetchAllGameData(gameKey, version, [
     'artistdata',
     'localedata',
@@ -99,6 +96,12 @@ export function handleStreamDownload(
   };
 }
 
+export interface ProcessedSongData {
+  songEntity: Song;
+  beatmaps: SongBeatmap[];
+  artist: Artist;
+}
+
 export async function processSongData(
   gamedataVersion: number,
   urlsVersion: number,
@@ -111,7 +114,7 @@ export async function processSongData(
   SongBeatmaps = getRepository(SongBeatmap),
   Artists = getRepository(Artist),
   client: typeof api = api,
-) {
+): Promise<ProcessedSongData> {
   const fileStreams$ = await Promise.all(
     downloadDataKeys.map(handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, client)),
   );
@@ -136,6 +139,7 @@ export async function processSongData(
       gameKey: game.key,
       internalSongId: songdata.code,
     })
+    .addSelect('song.meta')
     .getOne();
 
   const artist = await getGroupFromData(game, groups[songdata.groupData], majorgroups, getLocaleString, Artists);
@@ -152,7 +156,7 @@ export async function processSongData(
     const updateSongInfo = <K extends keyof Song>(key: K, v: any) => {
       songEntity.meta = {
         ...(songEntity.meta || {}),
-        ['old' + key.slice(0, 1).toUpperCase() + key.slice(1)]: v,
+        ['old' + key.slice(0, 1).toUpperCase() + key.slice(1)]: songEntity[key],
       };
       songEntity[key] = v;
     };
@@ -205,6 +209,8 @@ export async function processSongData(
     songEntity.lengthDisplay = `${audioMinutesF}:${audioSecondsF}.${audioFraction}`;
   }
 
+  const beatmaps: SongBeatmap[] = [];
+
   const songBeatmaps = keyBy(songEntity.beatmaps, 'difficulty');
   for (const beatmapKey of beatmapKeys) {
     const difficultyName = difficultyNames[keyDifficultyMap[beatmapKey]];
@@ -220,15 +226,20 @@ export async function processSongData(
         beatmapDateProcessed: new Date(),
         countNotesTotal: beatmap.notes.length,
         countNotesTotalRaw: beatmap.noteCountRaw,
+        countSlidersNocombo: beatmap.notes.filter(n => n.type === 'slider' && sliderStart.includes(n.typeID)).length,
+        countNotesNocombo: beatmap.notes.filter(n => n.type === 'tap' || sliderStart.includes(n.typeID)).length,
+        countSlidersTotal: beatmap.notes.filter(n => n.type === 'slider').length,
         countTaps: beatmap.notes.filter(n => n.type === 'tap').length,
         beatmapFingerprint: streamMap[beatmapKey].fingerprint,
+        indexBeatMax: Math.max(...beatmap.notes.map(n => n.beat)),
+        indexBeatMin: Math.min(...beatmap.notes.map(n => n.beat)),
         guid: generate_guid(),
       });
 
-      songEntity.beatmaps.push(songBeatmap);
+      beatmaps.push(songBeatmap);
       songBeatmaps[difficultyName] = songBeatmap;
     }
   }
 
-  return { songEntity };
+  return { songEntity, beatmaps, artist };
 }
