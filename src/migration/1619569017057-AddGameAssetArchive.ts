@@ -16,25 +16,13 @@ export class AddGameAssetArchive1619569017057 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_5539a59caa01d26f73a9f508554`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_740f3cba470150459d15c51ea8d`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `REL_5539a59caa01d26f73a9f50855` ON `files_gameasset_archive`',
-    );
+    await queryRunner.query('ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_5539a59caa01d26f73a9f508554`');
+    await queryRunner.query('ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_740f3cba470150459d15c51ea8d`');
+    await queryRunner.query('DROP INDEX `REL_5539a59caa01d26f73a9f50855` ON `files_gameasset_archive`');
     await queryRunner.query('DROP INDEX `byGuid` ON `files_gameasset_archive`');
-    await queryRunner.query(
-      'DROP INDEX `byVersionsAndCode` ON `files_gameasset_archive`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `bySourceDateModified` ON `files_gameasset_archive`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDateArchival` ON `files_gameasset_archive`',
-    );
+    await queryRunner.query('DROP INDEX `byVersionsAndCode` ON `files_gameasset_archive`');
+    await queryRunner.query('DROP INDEX `bySourceDateModified` ON `files_gameasset_archive`');
+    await queryRunner.query('DROP INDEX `byDateArchival` ON `files_gameasset_archive`');
     await queryRunner.query('DROP TABLE `files_gameasset_archive`');
   }
 }

@@ -19,16 +19,7 @@ export const noteTypes: Dictionary<NoteType> = {
   0xe9: 'slider',
 };
 
-export const noteTypeIDs: NoteTypeID[] = [
-  0x00,
-  0x0b,
-  0x0c,
-  0x03,
-  0x15,
-  0x16,
-  0xe8,
-  0xe9,
-];
+export const noteTypeIDs: NoteTypeID[] = [0x00, 0x0b, 0x0c, 0x03, 0x15, 0x16, 0xe8, 0xe9];
 
 export enum NoteTypeID {
   Tap = 0x00,
@@ -149,9 +140,7 @@ const beatmapOffsets: Dictionary<BeatmapOffsets> = {
 
 const audioSourceExtension = '.ogg';
 
-function readFilenameFromBeatmap(
-  input: Buffer,
-): null | { songName: string; remaining: Buffer } {
+function readFilenameFromBeatmap(input: Buffer): null | { songName: string; remaining: Buffer } {
   const songNameLength = input.readUInt32LE(0);
   const songName = input
     .slice(4, songNameLength + 4)
@@ -168,9 +157,7 @@ function readFilenameFromBeatmap(
   return null;
 }
 
-function readDataCore(
-  input: Buffer,
-): {
+function readDataCore(input: Buffer): {
   dataCore: SeqDataCore;
   remaining: Buffer;
   layoutInfo: BeatmapTypeInfo;
@@ -243,22 +230,15 @@ export function parseBeatmap(input: Buffer): Beatmap {
   const { dataCore, layoutInfo, remaining } = readDataCore(input);
   const offsets = beatmapOffsets[dataCore.layoutVersion];
 
-  const minLength =
-    offsets.noteDataStartOffset +
-    Math.max(...offsets.songName) +
-    offsets.noteDataLength;
+  const minLength = offsets.noteDataStartOffset + Math.max(...offsets.songName) + offsets.noteDataLength;
   if (remaining.length < minLength) {
-    throw new Error(
-      `Beatmap file too short, expected at least ${minLength} bytes but received ${input.length} bytes.`,
-    );
+    throw new Error(`Beatmap file too short, expected at least ${minLength} bytes but received ${input.length} bytes.`);
   }
 
   const tempoDataBufferSize = dataCore.tempoCount * layoutInfo.tempoDataLength;
   // TODO: const tempoDataBuffer = remaining.slice(0, tempoDataBufferSize);
 
-  const remainingAtFilename = remaining.slice(
-    tempoDataBufferSize + layoutInfo.filenameOffset,
-  );
+  const remainingAtFilename = remaining.slice(tempoDataBufferSize + layoutInfo.filenameOffset);
   const songNameInfo = readFilenameFromBeatmap(remainingAtFilename);
   if (_.isNull(songNameInfo)) {
     console.error(remainingAtFilename.slice(0, 60));
@@ -272,14 +252,12 @@ export function parseBeatmap(input: Buffer): Beatmap {
   const notes = readNoteData(noteData, offsets.noteDataLength);
   if (notes.notes.length !== dataCore.noteCount - 2) {
     const wrongNoteError = new SeqWrongNoteCountError(
-      `Wrong note count, expected ${dataCore.noteCount - 1} but got ${
-        notes.notes.length
-      }.`,
+      `Wrong note count, expected ${dataCore.noteCount - 1} but got ${notes.notes.length}.`,
       dataCore,
     );
     issues.push(wrongNoteError);
   }
-  notes.issues?.forEach((noteIssue) => issues.push(noteIssue));
+  notes.issues?.forEach(noteIssue => issues.push(noteIssue));
 
   return {
     info: dataCore,
@@ -312,9 +290,7 @@ function readNoteData(
   noteDataLength: number,
 ): { notes: Note[]; noteCountRaw: number; issues?: SeqIssue[] } {
   if (noteData.length % noteDataLength !== 0) {
-    throw new Error(
-      `Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`,
-    );
+    throw new Error(`Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`);
   }
   const notes: Note[] = [];
   const issues: SeqIssue[] = [];
@@ -343,11 +319,7 @@ function readNoteData(
     }
 
     if (!validNoteTypeID(typeID)) {
-      issues.push(
-        new Error(
-          `Unknown note type ID: 0x${typeID.toString(16).padStart(2, '0')}.`,
-        ),
-      );
+      issues.push(new Error(`Unknown note type ID: 0x${typeID.toString(16).padStart(2, '0')}.`));
     }
 
     notes.push({

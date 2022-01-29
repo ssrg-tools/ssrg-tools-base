@@ -10,8 +10,6 @@ export class SongMaxRLevel1597072046532 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `superstar_games` DROP COLUMN `max_r_level`',
-    );
+    await queryRunner.query('ALTER TABLE `superstar_games` DROP COLUMN `max_r_level`');
   }
 }

@@ -27,10 +27,7 @@ createConnection()
       select: ['id', 'internalSongId', 'gameId', 'name', 'album'],
       where: 'dalcom_song_id IS NOT NULL',
     });
-    const songsByGames = _.mapValues(
-      _.groupBy(songs, 'gameId'),
-      (songsToSort) => _.keyBy(songsToSort, 'internalSongId'),
-    );
+    const songsByGames = _.mapValues(_.groupBy(songs, 'gameId'), songsToSort => _.keyBy(songsToSort, 'internalSongId'));
     const songsByID = _.keyBy(songs, 'id');
 
     const inputPaths = process.argv.slice(2);
@@ -44,29 +41,22 @@ createConnection()
     let skipped = 0;
 
     await Promise.all(
-      inputPaths.map(async (inputPath) => {
-        if (
-          !fs.existsSync(inputPath) ||
-          !(await fs.promises.lstat(inputPath)).isDirectory()
-        ) {
-          console.error(
-            `Path ${inputPath} does not exist or is not a directory.`,
-          );
+      inputPaths.map(async inputPath => {
+        if (!fs.existsSync(inputPath) || !(await fs.promises.lstat(inputPath)).isDirectory()) {
+          console.error(`Path ${inputPath} does not exist or is not a directory.`);
           process.exit(1);
         }
       }),
     );
 
     await Promise.all(
-      inputPaths.map(async (inputPath) => {
+      inputPaths.map(async inputPath => {
         const files = await fs.promises.readdir(inputPath);
         await Promise.all(
-          files.map(async (file) => {
+          files.map(async file => {
             const filepath = path.join(inputPath, file);
             const isDir = (await fs.promises.lstat(filepath)).isDirectory();
-            const isWr = /^wr-|^(133928|9865992|674379|245395|16680625|120908)$/.test(
-              file,
-            );
+            const isWr = /^wr-|^(133928|9865992|674379|245395|16680625|120908)$/.test(file);
 
             if (isDir && isWr) {
               wrFolders.push(filepath);
@@ -77,10 +67,10 @@ createConnection()
     );
 
     await Promise.all(
-      wrFolders.map(async (wrFolder) => {
+      wrFolders.map(async wrFolder => {
         const files = await fs.promises.readdir(wrFolder);
         await Promise.all(
-          files.map(async (file) => {
+          files.map(async file => {
             if (!/\.json$/.test(file)) {
               return;
             }
@@ -88,24 +78,18 @@ createConnection()
             const filepath = path.resolve(relpath);
 
             const pathparts = filepath.split(path.sep);
-            const dalcomfoldername = pathparts.find((part) =>
-              part.match('dalcomsoft'),
-            );
+            const dalcomfoldername = pathparts.find(part => part.match('dalcomsoft'));
             const game = apkMap[dalcomfoldername];
 
             if (!game) {
-              console.error(
-                `[ERROR] Could not find game for ${relpath} (${dalcomfoldername})`,
-              );
+              console.error(`[ERROR] Could not find game for ${relpath} (${dalcomfoldername})`);
               console.error(apkMap);
               return;
             }
 
             const songsForGame = songsByGames[game.id];
             if (!songsForGame) {
-              console.error(
-                `[ERROR] Could not find songs for game ${game.name} (${filepath})`,
-              );
+              console.error(`[ERROR] Could not find songs for game ${game.name} (${filepath})`);
               return;
             }
 
@@ -120,19 +104,13 @@ createConnection()
             fs.closeSync(fsHandle);
 
             if (!stubSongs && !mentionedSong) {
-              console.error(
-                `[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`,
-              );
+              console.error(`[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' was not found.`);
               return;
             } else if (stubSongs && !mentionedSong) {
               mentionedSong = await Songs.save(
                 Songs.create({
-                  name: `${game.key.toLocaleUpperCase()} song #${
-                    dalcomWR.code
-                  }`,
-                  album: `${game.key.toLocaleUpperCase()} song #${
-                    dalcomWR.code
-                  }`,
+                  name: `${game.key.toLocaleUpperCase()} song #${dalcomWR.code}`,
+                  album: `${game.key.toLocaleUpperCase()} song #${dalcomWR.code}`,
                   ingame: 0,
                   imageId: dalcomWR.code.toString(),
                   internalSongId: dalcomWR.code.toString(),
@@ -140,25 +118,18 @@ createConnection()
                   game,
                 }),
               );
-              console.warn(
-                `[WARN] Created stub song for dalcom ID '${dalcomWR.code} - ${game.key}'`,
-              );
+              console.warn(`[WARN] Created stub song for dalcom ID '${dalcomWR.code} - ${game.key}'`);
             }
 
             const wrRankingLength = dalcomWR.rankDataRaw.ranking.length;
-            if (
-              !dalcomWR.rankDataRaw.ranking ||
-              !dalcomWR.rankDataRaw.ranking[0]
-            ) {
+            if (!dalcomWR.rankDataRaw.ranking || !dalcomWR.rankDataRaw.ranking[0]) {
               console.error(
                 `[ERROR] Song with dalcom ID '${dalcomWR.code} - ${game.key}' had an error - no ranking data?. ${filepath}`,
               );
               return;
             }
 
-            const seasonDate = new Date(
-              dalcomWR.rankDataRaw.ranking[0].updatedAt,
-            );
+            const seasonDate = new Date(dalcomWR.rankDataRaw.ranking[0].updatedAt);
             const season = await getRepository(WorldRecordSeason)
               .createQueryBuilder('season')
               .cache(true)
@@ -240,14 +211,13 @@ createConnection()
               }
               worldRecords.push(wr);
               console.log(
-                `[INFO] inserting ${game.key}/${mentionedSong.album}/${
-                  mentionedSong.name
-                }[${wr.rank.toLocaleString('en', {
-                  minimumIntegerDigits: 3,
-                  useGrouping: false,
-                })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${
-                  wr.dateRecorded
-                }`,
+                `[INFO] inserting ${game.key}/${mentionedSong.album}/${mentionedSong.name}[${wr.rank.toLocaleString(
+                  'en',
+                  {
+                    minimumIntegerDigits: 3,
+                    useGrouping: false,
+                  },
+                )}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`,
               );
             }
           }),
@@ -256,7 +226,7 @@ createConnection()
     );
 
     // De-duplicate new entries
-    const deduplicated = _.uniqBy(worldRecords, (wr) => {
+    const deduplicated = _.uniqBy(worldRecords, wr => {
       return JSON.stringify({
         songId: wr.songId,
         objectID: wr.objectID,
@@ -269,22 +239,19 @@ createConnection()
     // process.exit();
     // console.log(wrFolders, worldRecords.length);
     const saved = await SongWorldRecords.save(deduplicated);
-    console.log(
-      `Done, inserted ${saved.length} entries and skipped ${skipped}.`,
-    );
+    console.log(`Done, inserted ${saved.length} entries and skipped ${skipped}.`);
     console.log(
       _.mapKeys(
         _.mapValues(
-          _.groupBy(saved, (swr) => songsByID[swr.songId]?.gameId),
-          (group) => group.length,
+          _.groupBy(saved, swr => songsByID[swr.songId]?.gameId),
+          group => group.length,
         ),
-        (group, key) =>
-          games[key]?.name || `Unknown Game #${key} (${group} values)`,
+        (group, key) => games[key]?.name || `Unknown Game #${key} (${group} values)`,
       ),
     );
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

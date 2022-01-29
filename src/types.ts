@@ -43,14 +43,7 @@ export function difficultyToEnum(difficulty: DifficultyName): Difficulty {
 export type NumberLike = number | string;
 export type SqlBool = 0 | 1;
 
-export const MembersGFriend = StringUnion(
-  'Sowon',
-  'Yerin',
-  'Eunha',
-  'Yuju',
-  'SinB',
-  'Umji',
-);
+export const MembersGFriend = StringUnion('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji');
 export type MembersGFriend = typeof MembersGFriend.type;
 
 export const DropSources = StringUnion(
@@ -130,9 +123,7 @@ export class Card {
       default:
         return -1;
     }
-    const fromLevel =
-      this.level *
-      (levelBonus / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1));
+    const fromLevel = this.level * (levelBonus / (this.grade === 'R' && this.maxRLevel === 99 ? 2 : 1));
     const calculated = base + fromLevel;
     return Math.floor(calculated * (this.isPrism ? 1.1 : 1));
   }

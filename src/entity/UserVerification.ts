@@ -1,12 +1,5 @@
 import { StringUnion } from '../string-union';
-import {
-  Entity,
-  ManyToOne,
-  JoinColumn,
-  Index,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, Index, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 import moment from 'moment';
 
@@ -32,7 +25,7 @@ export class UserVerification {
   @Column({ nullable: true })
   expire?: Date;
 
-  @ManyToOne(() => User, (users) => users.verifications, {
+  @ManyToOne(() => User, users => users.verifications, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
@@ -40,17 +33,10 @@ export class UserVerification {
   user: User;
 }
 
-export const VerificationIntents = StringUnion(
-  '2fa',
-  'verify-account',
-  'pw-reset',
-);
+export const VerificationIntents = StringUnion('2fa', 'verify-account', 'pw-reset');
 export type VerificationIntents = typeof VerificationIntents.type;
 
-export const verificationExpireOffsets: Record<
-  VerificationIntents,
-  moment.DurationInputArg1
-> = {
+export const verificationExpireOffsets: Record<VerificationIntents, moment.DurationInputArg1> = {
   '2fa': { minutes: 10 },
   'verify-account': { days: 1 },
   'pw-reset': { days: 7 },

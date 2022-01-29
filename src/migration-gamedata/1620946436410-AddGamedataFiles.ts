@@ -54,33 +54,17 @@ export class AddGamedataFiles1620946436410 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'DROP INDEX `perGameAndVersion` ON `assets_manifests`',
-    );
+    await queryRunner.query('DROP INDEX `perGameAndVersion` ON `assets_manifests`');
     await queryRunner.query('DROP INDEX `byDate` ON `assets_manifests`');
-    await queryRunner.query(
-      'ALTER TABLE `assets_manifests` DROP INDEX `IDX_a4db39d07694a4973c163769dc`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `assets_files` DROP INDEX `IDX_6567641ee6f53ea262cdbfe7ef`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `assets_files` DROP INDEX `perGameAndVersionAndKey`',
-    );
+    await queryRunner.query('ALTER TABLE `assets_manifests` DROP INDEX `IDX_a4db39d07694a4973c163769dc`');
+    await queryRunner.query('ALTER TABLE `assets_files` DROP INDEX `IDX_6567641ee6f53ea262cdbfe7ef`');
+    await queryRunner.query('ALTER TABLE `assets_files` DROP INDEX `perGameAndVersionAndKey`');
     await queryRunner.query('ALTER TABLE `assets_files` DROP INDEX `byDate`');
 
-    await queryRunner.query(
-      'ALTER TABLE `song_world_records_archive` DROP INDEX `IDX_63ea2135f900847fcb0c1b3e25`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `song_world_records_archive` DROP INDEX `byDateEntry`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `song_world_records_archive` DROP INDEX `byDateObserved`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `song_world_records_archive` DROP INDEX `bySongAndSeason`',
-    );
+    await queryRunner.query('ALTER TABLE `song_world_records_archive` DROP INDEX `IDX_63ea2135f900847fcb0c1b3e25`');
+    await queryRunner.query('ALTER TABLE `song_world_records_archive` DROP INDEX `byDateEntry`');
+    await queryRunner.query('ALTER TABLE `song_world_records_archive` DROP INDEX `byDateObserved`');
+    await queryRunner.query('ALTER TABLE `song_world_records_archive` DROP INDEX `bySongAndSeason`');
 
     await queryRunner.query('DROP TABLE `assets_files`');
     await queryRunner.query('DROP TABLE `assets_manifests`');

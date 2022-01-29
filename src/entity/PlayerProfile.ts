@@ -1,13 +1,5 @@
 import { SqlBool } from '../types';
-import {
-  Index,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { PlayerNickname } from './PlayerNickname';
 import { PlayerProfileImage } from './PlayerProfileImage';
@@ -67,18 +59,17 @@ export class PlayerProfile {
   @Column('datetime', { nullable: true, select: false })
   dateRegistered: Date;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.playerProfiles,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.playerProfiles, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => PlayerNickname, (nickname) => nickname.profile)
+  @OneToMany(() => PlayerNickname, nickname => nickname.profile)
   nicknameHistory: PlayerNickname[];
 
-  @OneToMany(() => PlayerProfileImage, (profileImage) => profileImage.profile)
+  @OneToMany(() => PlayerProfileImage, profileImage => profileImage.profile)
   profileImageHistory: PlayerProfileImage[];
 }
 

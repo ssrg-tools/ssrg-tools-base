@@ -11,15 +11,8 @@ export class ArtistsImportArtists1600365081098 implements MigrationInterface {
       gameId;
     }[] = await queryRunner.query(`SELECT themes.album, themes.cardCount, themes.game_id as gameId
     FROM themes WHERE not themes.game_id = 1 GROUP BY themes.album;`);
-    const themes = themesRaw.map((rawTheme) =>
-      _.extend(rawTheme, { guid: generate_guid() }),
-    );
-    console.log(
-      `About to insert ${themes.length} artists with ${_.sumBy(
-        themes,
-        'cardCount',
-      )} members.`,
-    );
+    const themes = themesRaw.map(rawTheme => _.extend(rawTheme, { guid: generate_guid() }));
+    console.log(`About to insert ${themes.length} artists with ${_.sumBy(themes, 'cardCount')} members.`);
 
     for await (const theme of themes) {
       const artistResult = await connection
@@ -43,7 +36,7 @@ export class ArtistsImportArtists1600365081098 implements MigrationInterface {
         .insert()
         .into('artists_members')
         .values(
-          _.range(0, theme.cardCount).map((memberOffset) => ({
+          _.range(0, theme.cardCount).map(memberOffset => ({
             name: `${theme.album} member #${memberOffset + 1}`,
             memberOffset,
             guid: generate_guid(),
@@ -51,9 +44,7 @@ export class ArtistsImportArtists1600365081098 implements MigrationInterface {
           })),
         )
         .execute();
-      console.log(
-        `Added ${theme.album} with ${membersResult.identifiers.length} members.`,
-      );
+      console.log(`Added ${theme.album} with ${membersResult.identifiers.length} members.`);
     }
     await queryRunner.query(`UPDATE songs
       INNER JOIN artists ON songs.album = artists.name

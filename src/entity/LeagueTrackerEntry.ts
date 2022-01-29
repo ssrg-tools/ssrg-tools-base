@@ -1,12 +1,5 @@
 import { SqlBool } from '../types';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Index,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { Division } from './Division';
 import { SuperstarGame } from './SuperstarGame';
 import { PlayerProfile } from './PlayerProfile';
@@ -46,8 +39,7 @@ export class LeagueTrackerEntry {
   @Column('varchar', {
     nullable: true,
     length: 255,
-    comment:
-      'if available, connects people that have been in the same division, e.g. Week 43 Gold III-3',
+    comment: 'if available, connects people that have been in the same division, e.g. Week 43 Gold III-3',
   })
   divisionKey: string | null;
 
@@ -74,25 +66,24 @@ export class LeagueTrackerEntry {
   })
   guid: string | null;
 
-  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+  @ManyToOne(() => PlayerProfile, player => player.nicknameHistory, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: PlayerProfile;
 
-  @ManyToOne(() => Division, (divisions) => divisions.leagueTrackerEntries, {
+  @ManyToOne(() => Division, divisions => divisions.leagueTrackerEntries, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
   division: Division;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.leagueTrackerEntries,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.leagueTrackerEntries, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ referencedColumnName: 'id' }])
   game: SuperstarGame;
 }

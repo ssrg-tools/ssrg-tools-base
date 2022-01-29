@@ -1,11 +1,4 @@
-import {
-  Column,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 
 @Entity('user_credentials', { schema: 'superstar_log' })
@@ -27,8 +20,7 @@ export class UserCredential {
 
   @Column('varbinary', {
     name: 'keyId',
-    comment:
-      'contains either the secret itself, or the id of the secret (e.g. pub-key)',
+    comment: 'contains either the secret itself, or the id of the secret (e.g. pub-key)',
     length: 255,
   })
   keyId: Buffer;
@@ -53,7 +45,7 @@ export class UserCredential {
   @Column('datetime', { nullable: true })
   expired: Date;
 
-  @ManyToOne(() => User, (users) => users.userCredentials, {
+  @ManyToOne(() => User, users => users.userCredentials, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

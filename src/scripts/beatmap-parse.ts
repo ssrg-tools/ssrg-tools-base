@@ -7,9 +7,9 @@ if (!path) {
 }
 
 parseBeatmapFile(path)
-  .then((beatmap) => {
+  .then(beatmap => {
     console.log(`Number of (valid) notes: ${beatmap.notes.length}`);
     beatmap.notes = beatmap.notes.slice(0, 50);
     console.log(beatmap);
   })
-  .catch((reason) => console.error('Error during processing.', reason));
+  .catch(reason => console.error('Error during processing.', reason));

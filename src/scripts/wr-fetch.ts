@@ -6,11 +6,7 @@ import { WorldRecordSeason } from '../entity/WorldRecordSeason';
 import { WRRecordEntry } from '../dalcom';
 import { SongWorldRecord } from '../entity/SongWorldRecord';
 import moment from 'moment';
-import {
-  buildUrlRanking,
-  parseRankingData,
-  writeRankingDataToCache,
-} from '../wr';
+import { buildUrlRanking, parseRankingData, writeRankingDataToCache } from '../wr';
 
 const verbose = false;
 
@@ -50,19 +46,16 @@ createConnection()
         process.exit(1);
       }
 
-      const season = await getRepository(WorldRecordSeason).findOneOrFail(
-        null,
-        { where: { dalcomSeasonId: seasonId } },
-      );
+      const season = await getRepository(WorldRecordSeason).findOneOrFail(null, {
+        where: { dalcomSeasonId: seasonId },
+      });
       const buildUrl = buildUrlRanking(game.baseUrlRanking, season.bonusSystem);
 
       const songs = await Songs.find({ where: { gameId: game.id } });
       for (const song of songs) {
-        console.log(
-          `Fetching ${gameKey}/${seasonId}/${song.internalSongId}/${song.album}/${song.name}`,
-        );
+        console.log(`Fetching ${gameKey}/${seasonId}/${song.internalSongId}/${song.album}/${song.name}`);
         const endpoint = buildUrl(seasonId, song.internalSongId);
-        const resp = await got(endpoint).catch((e) => {
+        const resp = await got(endpoint).catch(e => {
           console.error(endpoint, e);
         });
         if (!resp) {
@@ -75,25 +68,9 @@ createConnection()
         }
 
         const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
-        promises$.push(
-          writeRankingDataToCache(
-            game,
-            song,
-            seasonId,
-            rankingData,
-            new Date(),
-            'script/wr-fetch',
-          ),
-        );
+        promises$.push(writeRankingDataToCache(game, song, seasonId, rankingData, new Date(), 'script/wr-fetch'));
 
-        const result = await parseRankingData(
-          rankingData,
-          game,
-          song,
-          season,
-          SongWorldRecords,
-          new Date(),
-        );
+        const result = await parseRankingData(rankingData, game, song, season, SongWorldRecords, new Date());
         let entries: SongWorldRecord[] = [];
         const output = result?.dots?.join('') || '';
         if (result.result === 'ok' && result.entries?.length) {
@@ -106,11 +83,9 @@ createConnection()
         }
 
         if (verbose) {
-          entries.forEach((wr) =>
+          entries.forEach(wr =>
             console.log(
-              `  [INFO] inserting ${game.key}/${song.album}/${
-                song.name
-              }[${wr.rank.toLocaleString('en', {
+              `  [INFO] inserting ${game.key}/${song.album}/${song.name}[${wr.rank.toLocaleString('en', {
                 minimumIntegerDigits: 3,
                 useGrouping: false,
               })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`,
@@ -130,16 +105,14 @@ createConnection()
     await Promise.all(promises$);
 
     const timeEnd = new Date();
-    const timeTaken = Math.round(
-      moment(timeEnd).diff(moment(timeStart)) / 1000,
-    );
+    const timeTaken = Math.round(moment(timeEnd).diff(moment(timeStart)) / 1000);
     const timeTakenH = timeTaken / 60 / 60;
 
     console.log(`Processed in ${timeTaken}s (${timeTakenH}h)`);
     console.log(`Inserted ${totalInserted} and skipped ${totalSkipped}.`);
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

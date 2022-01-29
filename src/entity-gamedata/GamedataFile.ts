@@ -40,6 +40,6 @@ export class GamedataFile<T = any> {
   }
 
   castTo<R>(): R {
-    return (this.data as unknown) as R;
+    return this.data as unknown as R;
   }
 }

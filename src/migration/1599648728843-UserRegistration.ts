@@ -20,16 +20,10 @@ export class UserRegistration1599648728843 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `users_verifications` DROP FOREIGN KEY `FK_41e98794ccf9f055ddab737c9d5`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `users_logins` DROP FOREIGN KEY `FK_9afce9c631e9dd84f6f4c9b0bc9`',
-    );
+    await queryRunner.query('ALTER TABLE `users_verifications` DROP FOREIGN KEY `FK_41e98794ccf9f055ddab737c9d5`');
+    await queryRunner.query('ALTER TABLE `users_logins` DROP FOREIGN KEY `FK_9afce9c631e9dd84f6f4c9b0bc9`');
 
-    await queryRunner.query(
-      'DROP INDEX `byCompleted` ON `users_verifications`',
-    );
+    await queryRunner.query('DROP INDEX `byCompleted` ON `users_verifications`');
     await queryRunner.query('DROP INDEX `byCreated` ON `users_verifications`');
     await queryRunner.query('DROP TABLE `users_verifications`');
     await queryRunner.query('DROP INDEX `byDate` ON `users_logins`');

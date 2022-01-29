@@ -14,11 +14,7 @@ import { createFingerprint } from './utils';
 /**
  * 'top100-2021-tie': SSM starting client 3.1.4, July 2021 season
  */
-export type WRSeasonType =
-  | 'top1-tie'
-  | 'top100-no-tie'
-  | 'top100-tie'
-  | 'top100-2021-3day-tie';
+export type WRSeasonType = 'top1-tie' | 'top100-no-tie' | 'top100-tie' | 'top100-2021-3day-tie';
 
 export async function fetchAndInsertSWRForGameAndSeason(
   source: string,
@@ -35,14 +31,10 @@ export async function fetchAndInsertSWRForGameAndSeason(
   }
 
   if (!season.dalcomSeasonId) {
-    return new Error(
-      `gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`,
-    );
+    return new Error(`gameKey '${game.key}' season #${season.id} not supported, no dalcom season code.`);
   }
 
-  const buildUrl = _.curry(
-    buildUrlRanking(game.baseUrlRanking, season.bonusSystem),
-  )(season.dalcomSeasonId);
+  const buildUrl = _.curry(buildUrlRanking(game.baseUrlRanking, season.bonusSystem))(season.dalcomSeasonId);
   const responseText: string[] = [];
 
   const songs = songList?.length
@@ -59,7 +51,7 @@ export async function fetchAndInsertSWRForGameAndSeason(
     const label = `${game.key}/${season.dalcomSeasonId}/${song.internalSongId}/${song.album}/${song.name}`;
     responseText.push(`Fetching ${label}`);
     const endpoint = buildUrl(song.internalSongId);
-    const resp = await got(endpoint).catch((e) => {
+    const resp = await got(endpoint).catch(e => {
       if (e instanceof HTTPError && e.response.statusCode === 403) {
         responseText.push(`[SKIP] Song has no WR`);
         return 'skip';
@@ -101,14 +93,7 @@ export async function fetchAndInsertSWRForGameAndSeason(
       SongWorldRecordArchives,
     );
 
-    const result = await parseRankingData(
-      rankingData,
-      game,
-      song,
-      season,
-      SongWorldRecords,
-      new Date(),
-    );
+    const result = await parseRankingData(rankingData, game, song, season, SongWorldRecords, new Date());
     let entries: SongWorldRecord[] = [];
     const output = result?.dots?.join('') || '';
     if (result.result === 'ok' && result.entries?.length) {
@@ -121,11 +106,9 @@ export async function fetchAndInsertSWRForGameAndSeason(
     }
 
     if (verbose) {
-      entries.forEach((wr) =>
+      entries.forEach(wr =>
         responseText.push(
-          `  [INFO] inserting ${game.key}/${song.album}/${
-            song.name
-          }[${wr.rank.toLocaleString('en', {
+          `  [INFO] inserting ${game.key}/${song.album}/${song.name}[${wr.rank.toLocaleString('en', {
             minimumIntegerDigits: 3,
             useGrouping: false,
           })}] - ${wr.nickname} - ${wr.highscore} \t\t- ${wr.dateRecorded}`,
@@ -164,9 +147,7 @@ export async function writeRankingDataToCache(
 
   const songCode = parseInt(song.internalSongId, 10);
   if (isNaN(songCode)) {
-    throw new Error(
-      `Song ${song.name} (${game.key}) has an invalid song code.`,
-    );
+    throw new Error(`Song ${song.name} (${game.key}) has an invalid song code.`);
   }
 
   const existingArchiveItem = await SongWorldRecordArchives.count({
@@ -213,8 +194,7 @@ export async function parseRankingData(
   }
 
   if (!season) {
-    const WorldRecordSeasonsRepo =
-      WorldRecordSeasons || getRepository(WorldRecordSeason);
+    const WorldRecordSeasonsRepo = WorldRecordSeasons || getRepository(WorldRecordSeason);
     const seasonDate = new Date(rankingData[0].updatedAt);
     season = await WorldRecordSeasonsRepo.createQueryBuilder('season')
       // .cache(true)

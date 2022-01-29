@@ -1,8 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import sodium from 'libsodium-wrappers';
 
-export class AddEncryptedEmailForUser1621010539113
-  implements MigrationInterface {
+export class AddEncryptedEmailForUser1621010539113 implements MigrationInterface {
   name = 'AddEncryptedEmailForUser1621010539113';
 
   // add key here
@@ -23,12 +22,8 @@ export class AddEncryptedEmailForUser1621010539113
       if (!user.email) {
         continue;
       }
-      const nonce = Buffer.from(
-        sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES),
-      );
-      const encryptedValue = Buffer.from(
-        sodium.crypto_secretbox_easy(user.email, nonce, this.key),
-      );
+      const nonce = Buffer.from(sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES));
+      const encryptedValue = Buffer.from(sodium.crypto_secretbox_easy(user.email, nonce, this.key));
       await queryRunner.query(
         `UPDATE users SET encryptedEmailEncryptedvalue = UNHEX(?), encryptedEmailNonce = UNHEX(?)
         WHERE users.id = ?`,
@@ -45,26 +40,16 @@ export class AddEncryptedEmailForUser1621010539113
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE \`users\` ADD \`email\` VARCHAR(255) NOT NULL AFTER \`last_login\``,
-    );
+    await queryRunner.query(`ALTER TABLE \`users\` ADD \`email\` VARCHAR(255) NOT NULL AFTER \`last_login\``);
 
     const users2 = await queryRunner.query('SELECT * FROM `users`');
     for (const u of users2) {
       await queryRunner.query(`UPDATE users SET email = ? WHERE users.id = ?`, [
-        Buffer.from(
-          sodium.crypto_secretbox_open_easy(
-            u.emailEncryptedvalue,
-            u.emailNonce,
-            this.key,
-          ),
-        ).toString(),
+        Buffer.from(sodium.crypto_secretbox_open_easy(u.emailEncryptedvalue, u.emailNonce, this.key)).toString(),
         u.id,
       ]);
     }
 
-    await queryRunner.query(
-      'ALTER TABLE `users` DROP COLUMN `emailEncryptedvalue`, DROP COLUMN `emailNonce`',
-    );
+    await queryRunner.query('ALTER TABLE `users` DROP COLUMN `emailEncryptedvalue`, DROP COLUMN `emailNonce`');
   }
 }

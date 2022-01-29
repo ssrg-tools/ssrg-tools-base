@@ -1,13 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CardDrop } from './CardDrop';
 import { SongClearCard } from './SongClearCard';
 import { SuperstarGame } from './SuperstarGame';
@@ -85,13 +76,13 @@ export class Theme {
   @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
   artist: Artist;
 
-  @OneToMany(() => CardDrop, (logDrops) => logDrops.theme)
+  @OneToMany(() => CardDrop, logDrops => logDrops.theme)
   logDrops: CardDrop[];
 
-  @OneToMany(() => SongClearCard, (songClearCards) => songClearCards.theme)
+  @OneToMany(() => SongClearCard, songClearCards => songClearCards.theme)
   songClearCards: SongClearCard[];
 
-  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.themes, {
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.themes, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

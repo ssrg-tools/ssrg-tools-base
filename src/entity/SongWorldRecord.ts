@@ -1,11 +1,4 @@
-import {
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  Index,
-  Entity,
-} from 'typeorm';
+import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';
 import { Song } from './Song';
 import { CardDisplay } from './CardDisplay.embed';
 import { WorldRecordSeason } from './WorldRecordSeason';
@@ -36,7 +29,7 @@ export class SongWorldRecord {
   @Column('int', { name: 'profile_image', unsigned: true, nullable: true })
   profileImage: number;
 
-  @Column((type) => CardDisplay)
+  @Column(() => CardDisplay)
   leaderCard?: CardDisplay;
 
   @Column('int', { unsigned: true })
@@ -61,14 +54,14 @@ export class SongWorldRecord {
   @Column('int', { name: 'season_id', unsigned: true })
   seasonId: number;
 
-  @ManyToOne(() => WorldRecordSeason, (season) => season.entries, {
+  @ManyToOne(() => WorldRecordSeason, season => season.entries, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'season_id', referencedColumnName: 'id' }])
   season: WorldRecordSeason;
 
-  @ManyToOne(() => User, (users) => users.observedSongWorldRecords, {
+  @ManyToOne(() => User, users => users.observedSongWorldRecords, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
@@ -86,14 +79,14 @@ export class SongWorldRecord {
   })
   guid?: string;
 
-  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+  @ManyToOne(() => PlayerProfile, player => player.nicknameHistory, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
   profile: PlayerProfile;
 
-  @ManyToOne(() => Song, (songs) => songs.worldRecords, {
+  @ManyToOne(() => Song, songs => songs.worldRecords, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

@@ -1,12 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  Unique,
-  OneToOne,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, Unique, OneToOne, OneToMany } from 'typeorm';
 import { File } from '../Files/File';
 import { GameArchivedAssetLink } from './GameArchivedAssetLink';
 
@@ -29,13 +21,13 @@ export class GameArchivedAsset {
   })
   guid: string;
 
-  @OneToOne(() => File, (file) => file.gameAsset, {
+  @OneToOne(() => File, file => file.gameAsset, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn({ name: 'fileId' })
   file: File;
 
-  @OneToMany(() => GameArchivedAssetLink, (link) => link.asset)
+  @OneToMany(() => GameArchivedAssetLink, link => link.asset)
   gamedataFileLinks: GameArchivedAssetLink[];
 }

@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Song } from './Song';
 
 @Entity('song_beatmaps', { schema: 'superstar_log' })
@@ -76,7 +70,7 @@ export class SongBeatmap {
   })
   guid: string | null;
 
-  @ManyToOne(() => Song, (songs) => songs.beatmaps, {
+  @ManyToOne(() => Song, songs => songs.beatmaps, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

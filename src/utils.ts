@@ -24,7 +24,7 @@ export function scoreBonusCalculate(
     bonus += 3;
   }
 
-  dateArtists.forEach((date) => {
+  dateArtists.forEach(date => {
     if (scoreBonusInDateRange(date, dateNow)) {
       bonus += 2;
     }
@@ -33,20 +33,11 @@ export function scoreBonusCalculate(
   return bonus;
 }
 
-export function scoreBonusInDateRange(
-  datePoint: Date | Moment,
-  dateNow: Date | Moment = moment(),
-) {
+export function scoreBonusInDateRange(datePoint: Date | Moment, dateNow: Date | Moment = moment()) {
   const scoreBonusDayDiff = 3;
   const mDatePoint = moment(datePoint).tz(KST);
-  const mDatePointStart = mDatePoint
-    .clone()
-    .add(-scoreBonusDayDiff, 'day')
-    .startOf('day');
-  const mDatePointEnd = mDatePoint
-    .clone()
-    .add(scoreBonusDayDiff, 'day')
-    .endOf('day');
+  const mDatePointStart = mDatePoint.clone().add(-scoreBonusDayDiff, 'day').startOf('day');
+  const mDatePointEnd = mDatePoint.clone().add(scoreBonusDayDiff, 'day').endOf('day');
 
   const mDateNow = moment(dateNow).tz(KST);
 
@@ -58,18 +49,12 @@ export function scoreBonusInDateRange(
   return false;
 }
 
-export function scoreBonusCountdown(
-  datePoint: Date | Moment,
-  dateNow: Date | Moment = moment(),
-) {
+export function scoreBonusCountdown(datePoint: Date | Moment, dateNow: Date | Moment = moment()) {
   const scoreBonusDayDiff = 3;
   const mDateNow = moment(dateNow).tz(KST).startOf('day');
   const mDatePoint = moment(datePoint).tz(KST).year(mDateNow.year());
   const mDatePointStart = mDatePoint.clone().startOf('day');
-  const mDatePointEnd = mDatePoint
-    .clone()
-    .add(scoreBonusDayDiff, 'day')
-    .endOf('day');
+  const mDatePointEnd = mDatePoint.clone().add(scoreBonusDayDiff, 'day').endOf('day');
   if (mDateNow > mDatePointEnd) {
     mDatePointStart.year(mDateNow.year() + 1);
   }
@@ -92,8 +77,7 @@ function buildPrefixKeysFromQuery(query: object, prefix) {
     ) {
       const value = JSON.parse(query[extractKey] as string);
       const fieldNameRaw = extractKey.slice(prefix.length);
-      const fieldName =
-        fieldNameRaw.slice(0, 1).toLowerCase() + fieldNameRaw.slice(1);
+      const fieldName = fieldNameRaw.slice(0, 1).toLowerCase() + fieldNameRaw.slice(1);
       map.push([fieldName, value]);
     }
   }
@@ -101,16 +85,11 @@ function buildPrefixKeysFromQuery(query: object, prefix) {
 }
 
 /** ?selectCode=123 => .filter(x => x.code === 123) */
-export function selectDataByQuery<T>(
-  data: T[],
-  query: object,
-  selectPrefix = 'select',
-) {
+export function selectDataByQuery<T>(data: T[], query: object, selectPrefix = 'select') {
   const selectMap = buildPrefixKeysFromQuery(query, selectPrefix);
 
   if (selectMap.length) {
-    const select: (e: any) => boolean = (e) =>
-      selectMap.some((param) => e[param[0]] === param[1]);
+    const select: (e: any) => boolean = e => selectMap.some(param => e[param[0]] === param[1]);
 
     data = data.filter(select);
   }
@@ -119,10 +98,7 @@ export function selectDataByQuery<T>(
 }
 
 /** ?selectCode=123 => .filter(x => x.code === 123) */
-export function extractDataByQuery<T>(
-  data: T | T[],
-  extractBy: string | string[],
-) {
+export function extractDataByQuery<T>(data: T | T[], extractBy: string | string[]) {
   if (typeof data !== 'object') {
     return data;
   }
@@ -133,9 +109,9 @@ export function extractDataByQuery<T>(
   let extract: (e: T) => any;
 
   if (typeof finalExtractBy === 'string') {
-    extract = (e) => e[finalExtractBy];
+    extract = e => e[finalExtractBy];
   } else {
-    extract = (e) => _.pick(e, finalExtractBy);
+    extract = e => _.pick(e, finalExtractBy);
   }
 
   if (data instanceof Array) {
@@ -162,9 +138,7 @@ export function createKeyFromUrl(url: string) {
   // tslint:disable: no-conditional-assignment
   if ((hostmatch = hostname.match(/^([\w\-]+)\.cloudfront\.net$/))) {
     hostname = 'cf-' + hostmatch[1];
-  } else if (
-    (hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/))
-  ) {
+  } else if ((hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/))) {
     hostname = 's3-' + hostmatch[1];
   } else if (/^s3.ap-[\w\-]+\.amazonaws\.com$/.test(hostname)) {
     if (!pathname.match(/^\/([\w.\-]+)\//)) {
@@ -194,9 +168,7 @@ export function s3BucketName(url: string): string | null {
   // tslint:disable: no-conditional-assignment
   if ((hostmatch = hostname.match(/^([\w\-]+)\.cloudfront\.net$/))) {
     return 'cf-' + hostmatch[1];
-  } else if (
-    (hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/))
-  ) {
+  } else if ((hostmatch = hostname.match(/^([\w\-]+)\.s3-ap-[\w\-]+\.amazonaws\.com$/))) {
     return hostmatch[1];
   } else if (/^s3.ap-[\w\-]+\.amazonaws\.com$/.test(hostname)) {
     if (!pathname.match(/^\/([\w.\-]+)\//)) {

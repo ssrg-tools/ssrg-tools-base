@@ -9,15 +9,9 @@ export class RemoveOldGamedataFiles1621033472853 implements MigrationInterface {
     await queryRunner.query(
       'ALTER TABLE `superstar_log`.`zz_gamedata_files` DROP FOREIGN KEY `FK_ec1d70d65bd4292f0c80ccc2eb0`',
     );
-    await queryRunner.query(
-      'DROP INDEX `perGameAndVersionAndKey` ON `superstar_log`.`zz_gamedata_files`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_b4558fd6b95c960ad030cbd348` ON `superstar_log`.`zz_gamedata_files`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDate` ON `superstar_log`.`zz_gamedata_files`',
-    );
+    await queryRunner.query('DROP INDEX `perGameAndVersionAndKey` ON `superstar_log`.`zz_gamedata_files`');
+    await queryRunner.query('DROP INDEX `IDX_b4558fd6b95c960ad030cbd348` ON `superstar_log`.`zz_gamedata_files`');
+    await queryRunner.query('DROP INDEX `byDate` ON `superstar_log`.`zz_gamedata_files`');
     await queryRunner.query('DROP TABLE `superstar_log`.`zz_gamedata_files`');
   }
 

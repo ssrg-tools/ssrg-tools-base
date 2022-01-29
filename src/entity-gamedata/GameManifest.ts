@@ -1,11 +1,4 @@
-import {
-  Index,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  Unique,
-  BeforeInsert,
-} from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert } from 'typeorm';
 import { GameManifestData as GameManifestType } from '../definitions/data/gamemanifest';
 
 @Unique('perGameAndVersion', ['gameGuid', 'versionString'])
@@ -46,7 +39,7 @@ export class GameManifest {
   }
 
   versionParts() {
-    return this.versionString.split('.').map((x) => parseInt(x, 10));
+    return this.versionString.split('.').map(x => parseInt(x, 10));
   }
 
   @BeforeInsert()

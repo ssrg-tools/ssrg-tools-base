@@ -26,17 +26,13 @@ async function traverseDir(dirname: string) {
         const beatmap = await parseBeatmapFile(entryPath);
         const version = beatmap.info.layoutVersion - 0x64;
         console.log(
-          `${entryPath.padEnd(55)}: v${version}, ${difficultyNames[
-            beatmap.info.difficultyId
-          ].padEnd(6)}, ${beatmap.issues?.length
-            ?.toString()
-            ?.padStart(2)}x issues, ${beatmap.notes.length
+          `${entryPath.padEnd(55)}: v${version}, ${difficultyNames[beatmap.info.difficultyId].padEnd(
+            6,
+          )}, ${beatmap.issues?.length?.toString()?.padStart(2)}x issues, ${beatmap.notes.length
             .toString()
-            .padStart(4)}x /${beatmap.info.noteCount
-            .toString()
-            .padStart(4)}x notes, ${beatmap.info.tempoCount}x tempo(s), "${
-            beatmap.filename
-          }"`,
+            .padStart(4)}x /${beatmap.info.noteCount.toString().padStart(4)}x notes, ${
+            beatmap.info.tempoCount
+          }x tempo(s), "${beatmap.filename}"`,
         );
         if (beatmap?.issues?.length) {
           issues.push({ path: entryPath, beatmap });
@@ -54,16 +50,12 @@ async function traverseDir(dirname: string) {
 const timeStart = Date.now();
 
 traverseDir(path).then(() => {
-  issues.forEach((entry) => {
+  issues.forEach(entry => {
     console.log(`[WARNING] ${entry.path}:`);
-    entry.beatmap.issues.forEach((issue) =>
-      console.log(`  - ${issue.message}`),
-    );
+    entry.beatmap.issues.forEach(issue => console.log(`  - ${issue.message}`));
     console.log('');
   });
-  errors
-    .map((entry) => `[ERROR] ${entry.path.padEnd(55)}: ${entry.error.message}`)
-    .forEach((line) => console.log(line));
+  errors.map(entry => `[ERROR] ${entry.path.padEnd(55)}: ${entry.error.message}`).forEach(line => console.log(line));
 
   console.log(`Processed ${beatmapCount}x beatmaps.`);
   if (errors.length) {

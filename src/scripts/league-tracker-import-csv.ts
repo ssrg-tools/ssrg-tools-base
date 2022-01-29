@@ -22,9 +22,7 @@ createConnection()
       process.exit(1);
     }
     if (/[/\/]/.test(gameKey)) {
-      console.error(
-        `gameKey had slashes. Was it intended as the source file parameter?`,
-      );
+      console.error(`gameKey had slashes. Was it intended as the source file parameter?`);
       process.exit(1);
     }
     const leagueDataFilePath = path.resolve(process.argv[3]);
@@ -53,21 +51,9 @@ createConnection()
           const gfScoreOffset = 1;
           const nickname = record[2];
           const dateRaw = record[4 + gfScoreOffset];
-          const date = moment(
-            dateRaw + ' 17:00:00+00:00',
-            'MM/DD/YYYY HH:mm:ssZ',
-          );
-          const score = parseInt(
-            (record[3 + gfScoreOffset] || '').replace(/[,.]/g, ''),
-            10,
-          );
-          if (
-            !nickname ||
-            !score ||
-            score < 5000000 ||
-            !dateRaw ||
-            !date.isValid()
-          ) {
+          const date = moment(dateRaw + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ');
+          const score = parseInt((record[3 + gfScoreOffset] || '').replace(/[,.]/g, ''), 10);
+          if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
             console.error('entry was invalid', record);
           }
           const leagueTrackerEntry = LeagueTrackerEntries.create({
@@ -87,18 +73,9 @@ createConnection()
         readEntry(record) {
           const nickname = record[0];
           const dateRaw = record[2];
-          const date = moment(
-            dateRaw + ' 17:00:00+00:00',
-            'MM/DD/YYYY HH:mm:ssZ',
-          );
+          const date = moment(dateRaw + ' 17:00:00+00:00', 'MM/DD/YYYY HH:mm:ssZ');
           const score = parseInt((record[1] || '').replace(/[,.]/g, ''), 10);
-          if (
-            !nickname ||
-            !score ||
-            score < 5000000 ||
-            !dateRaw ||
-            !date.isValid()
-          ) {
+          if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
             console.error('entry was invalid', record);
             return;
           }
@@ -118,23 +95,14 @@ createConnection()
         skipLines: 5,
         readEntry(record) {
           const dateRaw = record[5];
-          const date = moment(
-            dateRaw + ' 17:00:00+00:00',
-            'DD/MM/YYYY HH:mm:ssZ',
-          );
+          const date = moment(dateRaw + ' 17:00:00+00:00', 'DD/MM/YYYY HH:mm:ssZ');
           const divisionGroup = /\bComet\b/.test(leagueDataFilePath) ? 1 : 2;
           const score = parseInt((record[4] || '').replace(/[,.]/g, ''), 10);
           if (score === 0) {
             return 'skip';
           }
           const nickname = record[1];
-          if (
-            !nickname ||
-            !score ||
-            score < 5000000 ||
-            !dateRaw ||
-            !date.isValid()
-          ) {
+          if (!nickname || !score || score < 5000000 || !dateRaw || !date.isValid()) {
             console.error('entry was invalid', record);
             return;
           }
@@ -225,12 +193,10 @@ createConnection()
     }
     console.log('   Done!');
 
-    console.log(
-      `Finished, inserted ${inserted} records and skipped ${skipped}`,
-    );
+    console.log(`Finished, inserted ${inserted} records and skipped ${skipped}`);
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

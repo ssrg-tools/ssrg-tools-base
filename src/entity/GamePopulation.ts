@@ -1,11 +1,4 @@
-import {
-  Index,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 
 @Entity('superstar_games_populations', { schema: 'superstar_log' })
@@ -29,11 +22,10 @@ export class GamePopulation {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.populationHistory,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.populationHistory, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
 }

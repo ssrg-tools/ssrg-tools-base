@@ -9,12 +9,8 @@ export class RevampDB1599475866334 implements MigrationInterface {
     await queryRunner.query(
       "ALTER TABLE `songs` ADD `imageId` varchar(255) NULL COMMENT 'defaults to game internal song id' DEFAULT NULL AFTER `dalcom_song_id`",
     );
-    await queryRunner.query(
-      'ALTER TABLE `songs` CHANGE `dateReleasedGame` `dateReleasedGame` datetime NULL',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `songs` CHANGE `dateReleasedWorld` `dateReleasedWorld` datetime NULL',
-    );
+    await queryRunner.query('ALTER TABLE `songs` CHANGE `dateReleasedGame` `dateReleasedGame` datetime NULL');
+    await queryRunner.query('ALTER TABLE `songs` CHANGE `dateReleasedWorld` `dateReleasedWorld` datetime NULL');
 
     await queryRunner.query(
       'ALTER TABLE `song_clears_v2` CHANGE `theme_buff_bonus` `theme_buff_bonus` int UNSIGNED NULL DEFAULT 6000',
@@ -27,9 +23,7 @@ export class RevampDB1599475866334 implements MigrationInterface {
       "ALTER TABLE `song_clear_cards` CHANGE `member` `member` enum ('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji') NULL",
     );
 
-    await queryRunner.query(
-      'ALTER TABLE `themes` CHANGE `dateReleased` `dateReleased` datetime NULL',
-    );
+    await queryRunner.query('ALTER TABLE `themes` CHANGE `dateReleased` `dateReleased` datetime NULL');
     await queryRunner.query('ALTER TABLE `themes` DROP COLUMN `prismMap`');
     await queryRunner.query(
       "ALTER TABLE `themes` ADD `frameId` int UNSIGNED NOT NULL COMMENT 'ID of the frame cards, for LE/Event cards' DEFAULT 0",
@@ -37,15 +31,9 @@ export class RevampDB1599475866334 implements MigrationInterface {
     await queryRunner.query(
       "ALTER TABLE `themes` ADD `prismId` int UNSIGNED NOT NULL COMMENT 'ID of the prism bg, GFriend prism cards' DEFAULT 1",
     );
-    await queryRunner.query(
-      'ALTER TABLE `themes` ADD `cardIdStart` int UNSIGNED NULL',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `themes` ADD `prismCardIdStart` int UNSIGNED NULL',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `themes` ADD `cardCount` int UNSIGNED NULL',
-    );
+    await queryRunner.query('ALTER TABLE `themes` ADD `cardIdStart` int UNSIGNED NULL');
+    await queryRunner.query('ALTER TABLE `themes` ADD `prismCardIdStart` int UNSIGNED NULL');
+    await queryRunner.query('ALTER TABLE `themes` ADD `cardCount` int UNSIGNED NULL');
 
     await queryRunner.query(
       "ALTER TABLE `log_drops` CHANGE `member` `member` enum ('Sowon', 'Yerin', 'Eunha', 'Yuju', 'SinB', 'Umji', 'Power Up') NULL",

@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { SongClear } from './SongClear';
 import { SongBeatmap } from './SongBeatmap';
@@ -147,19 +139,19 @@ export class Song {
   @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])
   artist: Artist;
 
-  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.songs, {
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.songs, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @OneToMany(() => SongBeatmap, (beatmap) => beatmap.song)
+  @OneToMany(() => SongBeatmap, beatmap => beatmap.song)
   beatmaps: SongBeatmap[];
 
-  @OneToMany(() => SongWorldRecord, (worldRecord) => worldRecord.song)
+  @OneToMany(() => SongWorldRecord, worldRecord => worldRecord.song)
   worldRecords: SongWorldRecord[];
 
-  @OneToMany(() => SongClear, (songClear) => songClear.song)
+  @OneToMany(() => SongClear, songClear => songClear.song)
   songClears: SongClear[];
 }

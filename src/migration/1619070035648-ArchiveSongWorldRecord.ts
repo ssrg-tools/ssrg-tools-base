@@ -19,17 +19,9 @@ export class ArchiveSongWorldRecord1619070035648 implements MigrationInterface {
     await queryRunner.query(
       'DROP INDEX `IDX_a878b35267e6fe895ef4bd6041` ON `superstar_log`.`zz__archive_song_world_records`',
     );
-    await queryRunner.query(
-      'DROP INDEX `bySongAndSeason` ON `superstar_log`.`zz__archive_song_world_records`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDateObserved` ON `superstar_log`.`zz__archive_song_world_records`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDateEntry` ON `superstar_log`.`zz__archive_song_world_records`',
-    );
-    await queryRunner.query(
-      'DROP TABLE `superstar_log`.`zz__archive_song_world_records`',
-    );
+    await queryRunner.query('DROP INDEX `bySongAndSeason` ON `superstar_log`.`zz__archive_song_world_records`');
+    await queryRunner.query('DROP INDEX `byDateObserved` ON `superstar_log`.`zz__archive_song_world_records`');
+    await queryRunner.query('DROP INDEX `byDateEntry` ON `superstar_log`.`zz__archive_song_world_records`');
+    await queryRunner.query('DROP TABLE `superstar_log`.`zz__archive_song_world_records`');
   }
 }

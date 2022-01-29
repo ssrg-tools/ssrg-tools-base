@@ -19,16 +19,11 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
 
   timeTakenMs: number;
 
-  constructor(
-    [data, total]: [T[], number],
-    pageSize: NumberLike,
-    page: number | string = 0,
-  ) {
+  constructor([data, total]: [T[], number], pageSize: NumberLike, page: number | string = 0) {
     this.data = data;
     this.total = total;
     this.page = page;
-    this.pageSize =
-      typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
+    this.pageSize = typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
   }
 }
 

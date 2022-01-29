@@ -30,18 +30,10 @@ export class AddSongWorldRecord1597150578591 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `song_world_records` DROP FOREIGN KEY `FK_78d80285e88cbbe7b7bab1c6b89`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_b5d5ba411f77be0ea054ddb88d` ON `song_world_records`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_fefab589657440640cfda575fd` ON `song_world_records`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_78d80285e88cbbe7b7bab1c6b8` ON `song_world_records`',
-    );
+    await queryRunner.query('ALTER TABLE `song_world_records` DROP FOREIGN KEY `FK_78d80285e88cbbe7b7bab1c6b89`');
+    await queryRunner.query('DROP INDEX `IDX_b5d5ba411f77be0ea054ddb88d` ON `song_world_records`');
+    await queryRunner.query('DROP INDEX `IDX_fefab589657440640cfda575fd` ON `song_world_records`');
+    await queryRunner.query('DROP INDEX `IDX_78d80285e88cbbe7b7bab1c6b8` ON `song_world_records`');
     await queryRunner.query('DROP TABLE `song_world_records`');
   }
 }

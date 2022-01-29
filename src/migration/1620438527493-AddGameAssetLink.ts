@@ -41,12 +41,8 @@ export class AddGameAssetLink1620438527493 implements MigrationInterface {
       'ALTER TABLE `files_gameasset_archive_links` DROP FOREIGN KEY `FK_b796408fdcd7d3267c438b62155`',
     );
 
-    await queryRunner.query(
-      'ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_fc124abf040f63fe0d61f12cd4b`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `REL_fc124abf040f63fe0d61f12cd4` ON `files_gameasset_archive`',
-    );
+    await queryRunner.query('ALTER TABLE `files_gameasset_archive` DROP FOREIGN KEY `FK_fc124abf040f63fe0d61f12cd4b`');
+    await queryRunner.query('DROP INDEX `REL_fc124abf040f63fe0d61f12cd4` ON `files_gameasset_archive`');
     await queryRunner.query('DROP INDEX `byGuid` ON `files_gameasset_archive`');
     await queryRunner.query('DROP TABLE `files_gameasset_archive`');
 
@@ -60,15 +56,9 @@ export class AddGameAssetLink1620438527493 implements MigrationInterface {
     await queryRunner.query(
       'ALTER TABLE `files_gameasset_archive_links` DROP FOREIGN KEY `FK_dab48f6ce70cf627c100c469606`',
     );
-    await queryRunner.query(
-      'DROP INDEX `byVersionsAndCode` ON `files_gameasset_archive_links`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `bySourceDateModified` ON `files_gameasset_archive_links`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDateArchival` ON `files_gameasset_archive_links`',
-    );
+    await queryRunner.query('DROP INDEX `byVersionsAndCode` ON `files_gameasset_archive_links`');
+    await queryRunner.query('DROP INDEX `bySourceDateModified` ON `files_gameasset_archive_links`');
+    await queryRunner.query('DROP INDEX `byDateArchival` ON `files_gameasset_archive_links`');
     await queryRunner.query('DROP TABLE `files_gameasset_archive_links`');
   }
 }

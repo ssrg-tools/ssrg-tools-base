@@ -1,4 +1,4 @@
-import { Difficulty, GradeNonEmpty } from './types';
+import { Difficulty } from './types';
 
 export function calcBaseRP(scoreTotal: number, difficulty: Difficulty) {
   let base: number;

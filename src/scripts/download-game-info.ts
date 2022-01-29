@@ -32,21 +32,13 @@ createConnection()
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const infoAggregate: InfoAggregate = require(infoPath);
 
-    const basedir = resolve(
-      __dirname,
-      '..',
-      '..',
-      '..',
-      'assets',
-      'gameInfo',
-      gameKey,
-    );
+    const basedir = resolve(__dirname, '..', '..', '..', 'assets', 'gameInfo', gameKey);
     mkdirSync(basedir, { recursive: true });
 
     return processAggregate(game.encryptionKey, infoAggregate, basedir);
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

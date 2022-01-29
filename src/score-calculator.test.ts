@@ -86,9 +86,7 @@ const testData: {
 
 describe('Score calculator basic test', () => {
   testData.forEach(({ cards, themeBonus, expectedScore }) => {
-    it(`Card score from calcular for ${JSON.stringify(
-      cards,
-    )} should be ${expectedScore}`, () => {
+    it(`Card score from calcular for ${JSON.stringify(cards)} should be ${expectedScore}`, () => {
       expect(calculateIdealScore(cards, themeBonus)).toBe(expectedScore);
     });
   });

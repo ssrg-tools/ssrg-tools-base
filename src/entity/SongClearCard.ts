@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SongClear } from './SongClear';
 import { Theme } from './Theme';
 import { Grade, MembersGFriend, SqlBool } from './../types';
@@ -72,14 +65,14 @@ export class SongClearCard {
   })
   guid: string | null;
 
-  @ManyToOne(() => SongClear, (songClear) => songClear.cards, {
+  @ManyToOne(() => SongClear, songClear => songClear.cards, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_clear_id', referencedColumnName: 'id' }])
   songClear: SongClear;
 
-  @ManyToOne(() => Theme, (themes) => themes.songClearCards, {
+  @ManyToOne(() => Theme, themes => themes.songClearCards, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

@@ -15,7 +15,7 @@ const verbose = false;
 // TODO: Detect data discrepancies when updating
 
 createConnection()
-  .then(async (connection) => {
+  .then(async connection => {
     const songs = getRepository(Song);
 
     const songInfoFile = path.resolve(process.argv[2]);
@@ -59,32 +59,20 @@ createConnection()
           continue;
         }
 
-        if (
-          song.beatmapFingerprint &&
-          song.beatmapFingerprint === songInfo.beatmap_fingerprint
-        ) {
+        if (song.beatmapFingerprint && song.beatmapFingerprint === songInfo.beatmap_fingerprint) {
           if (verbose) {
-            console.log(
-              `Skipping ${baseId} ${song.name} (${song.album}) - already inserted`,
-            );
+            console.log(`Skipping ${baseId} ${song.name} (${song.album}) - already inserted`);
           }
           continue;
         }
 
-        if (
-          song.beatmapFingerprint &&
-          song.beatmapFingerprint !== songInfo.beatmap_fingerprint
-        ) {
-          console.error(
-            `Song ${baseId} ${song.name} (${song.album}) - has changed, manual review required`,
-          );
+        if (song.beatmapFingerprint && song.beatmapFingerprint !== songInfo.beatmap_fingerprint) {
+          console.error(`Song ${baseId} ${song.name} (${song.album}) - has changed, manual review required`);
           continue;
         }
 
         if (song.beatmaps.length > 0) {
-          console.error(
-            `Song ${baseId} ${song.name} (${song.album}) - already has beatmaps, manual review required`,
-          );
+          console.error(`Song ${baseId} ${song.name} (${song.album}) - already has beatmaps, manual review required`);
           continue;
         }
 
@@ -99,9 +87,7 @@ createConnection()
         for (const difficultyKey in songInfo.bydifficulties) {
           if (songInfo.bydifficulties.hasOwnProperty(difficultyKey)) {
             const songBeatmap = songInfo.bydifficulties[difficultyKey];
-            if (
-              song.beatmaps.find((beatmap) => beatmap.guid === songBeatmap.guid)
-            ) {
+            if (song.beatmaps.find(beatmap => beatmap.guid === songBeatmap.guid)) {
               console.log(
                 `Song ${baseId} ${song.name} (${song.album}) - ${songBeatmap.difficulty} - beatmap exists, skipping`,
               );
@@ -120,9 +106,7 @@ createConnection()
             beatmap.indexBeatMin = songBeatmap.index_beat_min;
             beatmap.indexBeatMax = songBeatmap.index_beat_max;
             beatmap.countNotesTotal = songBeatmap.count_notes_total;
-            beatmap.countNotesTotalRaw =
-              songBeatmap.count_notes_total_raw ||
-              songBeatmap.count_notes_total;
+            beatmap.countNotesTotalRaw = songBeatmap.count_notes_total_raw || songBeatmap.count_notes_total;
             beatmap.countNotesNocombo = songBeatmap.count_notes_nocombo;
             beatmap.countTaps = songBeatmap.count_taps;
             beatmap.countSlidersNocombo = songBeatmap.count_sliders_nocombo;
@@ -136,9 +120,7 @@ createConnection()
       }
     }
 
-    const savedBeatmaps = await connection
-      .getRepository(SongBeatmap)
-      .save(updatedBeatMaps);
+    const savedBeatmaps = await connection.getRepository(SongBeatmap).save(updatedBeatMaps);
     const savedBeatmapsBySong = _.groupBy(savedBeatmaps, 'songId');
     const savedSongs = await songs.save(updatedSongs);
 
@@ -146,20 +128,16 @@ createConnection()
       console.log(
         `[${song.game.key}] ${song.internalSongId} ${song.album} - ${song.name}: ` +
           ((savedBeatmapsBySong[song.id] || [])
-            .map(
-              (beatmap) => `${beatmap.difficulty} (${beatmap.countNotesTotal})`,
-            )
+            .map(beatmap => `${beatmap.difficulty} (${beatmap.countNotesTotal})`)
             .sort()
             .join(', ') || 'No beatmaps?'),
       );
     }
 
-    console.log(
-      `Done. ${savedBeatmaps.length} beatmaps for ${savedSongs.length} songs.`,
-    );
+    console.log(`Done. ${savedBeatmaps.length} beatmaps for ${savedSongs.length} songs.`);
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

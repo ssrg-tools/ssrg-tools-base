@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { LogCredit } from './LogCredit';
 import { LogDiamond } from './LogDiamond';
@@ -58,8 +50,7 @@ export class SuperstarGame {
   @Column('tinyint', {
     unsigned: true,
     default: 1,
-    comment:
-      'whether this entry is active in the application and should be displayed and interacted with',
+    comment: 'whether this entry is active in the application and should be displayed and interacted with',
   })
   active: SqlBool;
 
@@ -184,43 +175,40 @@ export class SuperstarGame {
   })
   guid: string | null;
 
-  @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.game)
+  @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.game)
   leagueRankings: LeagueRanking[];
 
-  @OneToMany(
-    () => LeagueTrackerEntry,
-    (leagueTrackerEntry) => leagueTrackerEntry.game,
-  )
+  @OneToMany(() => LeagueTrackerEntry, leagueTrackerEntry => leagueTrackerEntry.game)
   leagueTrackerEntries: LeagueTrackerEntry[];
 
-  @OneToMany(() => LogCredit, (logCredits) => logCredits.game)
+  @OneToMany(() => LogCredit, logCredits => logCredits.game)
   logCredits: LogCredit[];
 
-  @OneToMany(() => LogDiamond, (logDiamonds) => logDiamonds.game)
+  @OneToMany(() => LogDiamond, logDiamonds => logDiamonds.game)
   logDiamonds: LogDiamond[];
 
-  @OneToMany(() => LogDiamondAd, (logDiamondsAds) => logDiamondsAds.game)
+  @OneToMany(() => LogDiamondAd, logDiamondsAds => logDiamondsAds.game)
   logDiamondsAds: LogDiamondAd[];
 
-  @OneToMany(() => CardDrop, (logDrops) => logDrops.game)
+  @OneToMany(() => CardDrop, logDrops => logDrops.game)
   logDrops: CardDrop[];
 
-  @OneToMany(() => Song, (songs) => songs.game)
+  @OneToMany(() => Song, songs => songs.game)
   songs: Song[];
 
-  @OneToMany(() => Theme, (themes) => themes.game)
+  @OneToMany(() => Theme, themes => themes.game)
   themes: Theme[];
 
-  @OneToMany(() => Artist, (artist) => artist.game)
+  @OneToMany(() => Artist, artist => artist.game)
   artists: Artist[];
 
-  @OneToMany(() => GamePopulation, (pop) => pop.game)
+  @OneToMany(() => GamePopulation, pop => pop.game)
   populationHistory: GamePopulation[];
 
-  @OneToMany(() => PlayerProfile, (pop) => pop.game)
+  @OneToMany(() => PlayerProfile, pop => pop.game)
   playerProfiles: PlayerProfile[];
 
-  @OneToMany(() => GameArchivedAssetLink, (dataFileLink) => dataFileLink.game)
+  @OneToMany(() => GameArchivedAssetLink, dataFileLink => dataFileLink.game)
   gameArchivedAssetLinks: GameArchivedAssetLink[];
 
   @ManyToMany(() => Division)

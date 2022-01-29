@@ -1,7 +1,13 @@
 import {
-  Column, Entity, Index, JoinColumn,
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
   ManyToOne,
-  OneToOne, PrimaryGeneratedColumn, TableInheritance, Unique
+  OneToOne,
+  PrimaryGeneratedColumn,
+  TableInheritance,
+  Unique,
 } from 'typeorm';
 import { GameArchivedAsset } from '../Archive/GameArchivedAsset';
 import { User } from '../User';
@@ -61,14 +67,14 @@ export abstract class File {
   })
   userId: number;
 
-  @ManyToOne(() => User, (users) => users.files, {
+  @ManyToOne(() => User, users => users.files, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToOne(() => GameArchivedAsset, (gameAsset) => gameAsset.file)
+  @OneToOne(() => GameArchivedAsset, gameAsset => gameAsset.file)
   gameAsset: GameArchivedAsset;
 }
 

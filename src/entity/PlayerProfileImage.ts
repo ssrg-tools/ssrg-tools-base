@@ -1,11 +1,4 @@
-import {
-  Index,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
 import { CardDisplay } from './CardDisplay.embed';
 import { PlayerProfile } from './PlayerProfile';
 
@@ -20,7 +13,7 @@ export class PlayerProfileImage {
   @Column('int', { unsigned: true })
   profileImage: number;
 
-  @Column((type) => CardDisplay)
+  @Column(() => CardDisplay)
   leaderCard?: CardDisplay;
 
   @Index('byDate')
@@ -33,7 +26,7 @@ export class PlayerProfileImage {
   })
   guid: string | null;
 
-  @ManyToOne(() => PlayerProfile, (player) => player.nicknameHistory, {
+  @ManyToOne(() => PlayerProfile, player => player.nicknameHistory, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

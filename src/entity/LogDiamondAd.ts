@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { User } from './User';
 
@@ -40,15 +33,14 @@ export class LogDiamondAd {
   })
   guid: string | null;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.logDiamondsAds,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.logDiamondsAds, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @ManyToOne(() => User, (users) => users.logDiamondsAds, {
+  @ManyToOne(() => User, users => users.logDiamondsAds, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

@@ -1,7 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ExtendCardDropAndDivisionEnums1598467205574
-  implements MigrationInterface {
+export class ExtendCardDropAndDivisionEnums1598467205574 implements MigrationInterface {
   name = 'ExtendCardDropAndDivisionEnums1598467205574';
 
   public async up(queryRunner: QueryRunner): Promise<void> {

@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { LeagueTrackerEntry } from './LeagueTrackerEntry';
 import { SongClear } from './SongClear';
@@ -50,16 +44,13 @@ export class Division {
   })
   guid: string | null;
 
-  @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.division)
+  @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.division)
   leagueRankings: LeagueRanking[];
 
-  @OneToMany(
-    () => LeagueTrackerEntry,
-    (leagueTrackerEntry) => leagueTrackerEntry.division,
-  )
+  @OneToMany(() => LeagueTrackerEntry, leagueTrackerEntry => leagueTrackerEntry.division)
   leagueTrackerEntries: LeagueTrackerEntry[];
 
-  @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.division)
+  @OneToMany(() => SongClear, songClearsV2 => songClearsV2.division)
   songClears: SongClear[];
 
   @ManyToMany(() => SuperstarGame)

@@ -1,12 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Song } from './Song';
 import { Division } from './Division';
 import { User } from './User';
@@ -91,8 +83,7 @@ export class SongClear {
     unsigned: false,
     name: 'hit_score',
     generatedType: 'VIRTUAL',
-    asExpression:
-      '2 * `hit_super_perfect` + 1 * `hit_perfect` + 0.5 * `hit_good` + -10 * `hit_miss`',
+    asExpression: '2 * `hit_super_perfect` + 1 * `hit_perfect` + 0.5 * `hit_good` + -10 * `hit_miss`',
   })
   hitScore: number | null;
 
@@ -155,27 +146,27 @@ export class SongClear {
   })
   guid?: string;
 
-  @ManyToOne(() => Song, (songs) => songs.songClears, {
+  @ManyToOne(() => Song, songs => songs.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
   song: Song;
 
-  @ManyToOne(() => Division, (divisions) => divisions.songClears, {
+  @ManyToOne(() => Division, divisions => divisions.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'division_id', referencedColumnName: 'id' }])
   division?: Division;
 
-  @ManyToOne(() => User, (users) => users.songClears, {
+  @ManyToOne(() => User, users => users.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => SongClearCard, (songClearCard) => songClearCard.songClear)
+  @OneToMany(() => SongClearCard, songClearCard => songClearCard.songClear)
   cards: SongClearCard[];
 }

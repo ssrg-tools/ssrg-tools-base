@@ -4,16 +4,8 @@ import { SongBeatmap } from './entity/SongBeatmap';
 import { SongClear } from './entity/SongClear';
 import { SongClearCard } from './entity/SongClearCard';
 
-export function calculateIdealScore(
-  cards: Card[],
-  themeBonus: number,
-  cardbookBonus = 0,
-) {
-  return (
-    Math.round((_.meanBy(cards, 'score') + 3) * 29000) +
-    themeBonus +
-    cardbookBonus
-  );
+export function calculateIdealScore(cards: Card[], themeBonus: number, cardbookBonus = 0) {
+  return Math.round((_.meanBy(cards, 'score') + 3) * 29000) + themeBonus + cardbookBonus;
 }
 
 export function calculateThemeBonus(cards: Card[]) {
@@ -22,11 +14,7 @@ export function calculateThemeBonus(cards: Card[]) {
   }
 
   const firstTheme = cards[0].theme;
-  if (
-    cards.every(
-      (card) => card.grade === 'R' && _.isEqual(firstTheme, card.theme),
-    )
-  ) {
+  if (cards.every(card => card.grade === 'R' && _.isEqual(firstTheme, card.theme))) {
     return 500000 + Math.min(0, (cards.length - 3) * 15000);
   }
 }
@@ -36,15 +24,10 @@ export function calcRawBaseScore(cards: Card[]) {
 }
 
 export function songClearCardsToCards(songClearCards: SongClearCard[]) {
-  return songClearCards.map(
-    (card) => new Card(card.grade, card.level, !!card.isPrism),
-  );
+  return songClearCards.map(card => new Card(card.grade, card.level, !!card.isPrism));
 }
 
-export function calcTrueNotScore(
-  songClear: SongClear,
-  beatmaps: Dictionary<SongBeatmap>,
-) {
+export function calcTrueNotScore(songClear: SongClear, beatmaps: Dictionary<SongBeatmap>) {
   // check if unequipped first
   if (
     songClear.scoreBase > 60000 ||
@@ -61,15 +44,13 @@ export function calcTrueNotScore(
     }
     const firstCard = songClear.cards[0];
     if (
-      !songClear.cards.every((card) => card.grade === 'R') ||
-      !songClear.cards.every((card) => card.level === firstCard.level) ||
-      !songClear.cards.every((card) => card.isPrism === firstCard.isPrism)
+      !songClear.cards.every(card => card.grade === 'R') ||
+      !songClear.cards.every(card => card.level === firstCard.level) ||
+      !songClear.cards.every(card => card.isPrism === firstCard.isPrism)
     ) {
       return;
     }
-    const balancedBase = calcRawBaseScore(
-      songClearCardsToCards(songClear.cards),
-    );
+    const balancedBase = calcRawBaseScore(songClearCardsToCards(songClear.cards));
     const calc = calcTrueNoteScoreBasic(songClear, beatmaps, balancedBase);
     if (calc) {
       return calc;
@@ -88,19 +69,11 @@ export function calcTrueNotScore(
     return;
   }
   const baseScoreUnequipped =
-    songClear.difficulty === 'Hard'
-      ? 60000
-      : songClear.difficulty === 'Normal'
-      ? 54000
-      : 48000;
+    songClear.difficulty === 'Hard' ? 60000 : songClear.difficulty === 'Normal' ? 54000 : 48000;
   return calcTrueNoteScoreBasic(songClear, beatmaps, baseScoreUnequipped);
 }
 
-function calcTrueNoteScoreBasic(
-  songClear: SongClear,
-  beatmaps: Dictionary<SongBeatmap>,
-  baseScore: number,
-) {
+function calcTrueNoteScoreBasic(songClear: SongClear, beatmaps: Dictionary<SongBeatmap>, baseScore: number) {
   const beatmap = beatmaps[songClear.difficulty];
   const countNotesTotal = beatmap.countNotesTotal;
   const spPerNote = baseScore / countNotesTotal;
@@ -109,16 +82,12 @@ function calcTrueNoteScoreBasic(
 
   const rawScoreBase =
     songClear.scoreBase -
-    (songClear.scoreThemeGradeBonus ||
-      calculateThemeBonus(songClearCardsToCards(songClear.cards)));
+    (songClear.scoreThemeGradeBonus || calculateThemeBonus(songClearCardsToCards(songClear.cards)));
   const gap = baseScore - rawScoreBase;
 
   if (
     rawScoreBase === baseScore ||
-    (songClear.hitSuperPerfect &&
-      songClear.hitPerfect === 0 &&
-      songClear.hitGood === 0 &&
-      songClear.hitMiss === 0)
+    (songClear.hitSuperPerfect && songClear.hitPerfect === 0 && songClear.hitGood === 0 && songClear.hitMiss === 0)
   ) {
     // straight FSP
     return {
@@ -137,16 +106,12 @@ function calcTrueNoteScoreBasic(
     };
   }
 
-  const rangeP = songClear.hitPerfect
-    ? _.range(1, songClear.hitPerfect + 1)
-    : [0];
+  const rangeP = songClear.hitPerfect ? _.range(1, songClear.hitPerfect + 1) : [0];
   const rangeG = _.range(1, songClear.hitGood + 1);
-  const rangeX = _.flatMap(rangeP, (pCount) =>
-    rangeG.map((gCount) => {
+  const rangeX = _.flatMap(rangeP, pCount =>
+    rangeG.map(gCount => {
       const spCount = countNotesTotal - pCount - gCount;
-      const rawDistance =
-        rawScoreBase -
-        (spCount * spPerNote + pCount * pPerNote + gCount * gPerNote);
+      const rawDistance = rawScoreBase - (spCount * spPerNote + pCount * pPerNote + gCount * gPerNote);
       return {
         spCount,
         pCount,
@@ -168,7 +133,7 @@ function calcTrueNoteScoreBasic(
 }
 
 export function calcThemeLevel(cards: SongClearCard[]) {
-  const groups = _.groupBy(cards, (card) => card.theme?.guid || 'no-theme');
+  const groups = _.groupBy(cards, card => card.theme?.guid || 'no-theme');
   const entries = Object.entries(groups);
   const totalCount = cards.length;
   const lvl1 = Math.ceil(totalCount * 0.33);
@@ -178,10 +143,7 @@ export function calcThemeLevel(cards: SongClearCard[]) {
   if (entriesWithTheme.length === 0) {
     return 0;
   }
-  const biggestGroup = _.maxBy(
-    entriesWithTheme,
-    ([key, group]) => group.length,
-  );
+  const biggestGroup = _.maxBy(entriesWithTheme, ([, group]) => group.length);
   const biggestGroupCount = biggestGroup[1]?.length;
   if (biggestGroupCount === totalCount) {
     return 3;

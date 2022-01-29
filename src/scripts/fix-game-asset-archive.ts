@@ -38,26 +38,24 @@ createConnection()
         }
       }
       const saved = await GAAL.save(rewritten);
-      // console.log(`Rewrote ${saved.length} links.`);
-      process.stdout.write('.');
+
+      saved.forEach(() => process.stdout.write('.'));
     }
     console.log('');
-    console.log(`Processed ${dupeGAAs.length} entities.`);
+    console.log(`Processed ${dupeGAAs.length} entities, ${ii} total.`);
 
     console.log('Cleaning up dupes.');
     const emptyGAAs = await GAA.createQueryBuilder('gaa')
       .leftJoinAndSelect('gaa.gamedataFileLinks', 'gaal')
       .where('gaal.assetId IS NULL')
       .getMany();
-    const deleteResult = await GAA.delete(
-      emptyGAAs.map((emptyGAA) => emptyGAA.id),
-    );
+    const deleteResult = await GAA.delete(emptyGAAs.map(emptyGAA => emptyGAA.id));
     console.log(deleteResult);
 
     console.log('All done.');
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

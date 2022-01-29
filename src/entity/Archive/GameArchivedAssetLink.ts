@@ -1,21 +1,8 @@
-import {
-  Unique,
-  Entity,
-  Column,
-  Index,
-  ManyToOne,
-  JoinColumn,
-  PrimaryColumn,
-} from 'typeorm';
+import { Unique, Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { SuperstarGame } from '../SuperstarGame';
 import { GameArchivedAsset } from './GameArchivedAsset';
 
-@Unique('byVersionsAndCode', [
-  'gameId',
-  'bundleVersion',
-  'resourceVersion',
-  'originalCode',
-])
+@Unique('byVersionsAndCode', ['gameId', 'bundleVersion', 'resourceVersion', 'originalCode'])
 @Entity('files_gameasset_archive_links', { schema: 'superstar_log' })
 export class GameArchivedAssetLink {
   @Column('int', { unsigned: true })
@@ -53,24 +40,22 @@ export class GameArchivedAssetLink {
 
   @Index('bySourceDateModified')
   @Column('datetime', {
-    comment:
-      'the date this file was last modified according to the original entry',
+    comment: 'the date this file was last modified according to the original entry',
     nullable: true,
   })
   sourceDateModified: Date;
 
-  @ManyToOne(() => GameArchivedAsset, (asset) => asset.gamedataFileLinks, {
+  @ManyToOne(() => GameArchivedAsset, asset => asset.gamedataFileLinks, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'assetId', referencedColumnName: 'id' }])
   asset: GameArchivedAsset;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.gameArchivedAssetLinks,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.gameArchivedAssetLinks, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
   game: SuperstarGame;
 }

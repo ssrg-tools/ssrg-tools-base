@@ -3,9 +3,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class ArtistsImportGFriend1600365065460 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `INSERT INTO artists VALUES (NULL, 'GFRIEND', 6, '${generate_guid()}', 1);`,
-    );
+    await queryRunner.query(`INSERT INTO artists VALUES (NULL, 'GFRIEND', 6, '${generate_guid()}', 1);`);
     await queryRunner.query(`INSERT INTO artists_members VALUES
       (NULL, (SELECT id FROM artists WHERE artists.gameId = 1), 'Sowon', 0, '${generate_guid()}'),
       (NULL, (SELECT id FROM artists WHERE artists.gameId = 1), 'Yerin', 1, '${generate_guid()}'),

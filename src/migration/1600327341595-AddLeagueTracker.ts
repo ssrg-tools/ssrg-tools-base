@@ -35,16 +35,10 @@ export class AddLeagueTracker1600327341595 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `league_tracker` DROP FOREIGN KEY `FK_900818981d9eb49fd11fd70287c`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `league_tracker` DROP FOREIGN KEY `FK_e0b3f9fcf35ff316a213c23d986`',
-    );
+    await queryRunner.query('ALTER TABLE `league_tracker` DROP FOREIGN KEY `FK_900818981d9eb49fd11fd70287c`');
+    await queryRunner.query('ALTER TABLE `league_tracker` DROP FOREIGN KEY `FK_e0b3f9fcf35ff316a213c23d986`');
 
-    await queryRunner.query(
-      'DROP INDEX `IDX_a5b797770833ca08ffadcb9967` ON `league_tracker`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_a5b797770833ca08ffadcb9967` ON `league_tracker`');
     await queryRunner.query('DROP INDEX `byDate` ON `league_tracker`');
     await queryRunner.query('DROP TABLE `league_tracker`');
   }

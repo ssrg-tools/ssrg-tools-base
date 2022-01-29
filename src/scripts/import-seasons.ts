@@ -29,7 +29,7 @@ createConnection()
         order: {
           version: 'DESC',
         },
-      }).then((gdf) => gdf?.data as WorldRecordData[]);
+      }).then(gdf => gdf?.data as WorldRecordData[]);
 
       if (!gamedataSeasons || _.isEmpty(gamedataSeasons)) {
         console.log(' No game data.');
@@ -41,7 +41,7 @@ createConnection()
 
       const existingSeasons = await WorldRecordSeasons.find({
         where: {
-          dalcomSeasonId: In(Object.keys(byCode).map((x) => parseInt(x, 10))),
+          dalcomSeasonId: In(Object.keys(byCode).map(x => parseInt(x, 10))),
           gameId: game.id,
         },
       });
@@ -62,9 +62,7 @@ createConnection()
 
         const dateStartUpper = dateStart.clone().add(10, 'days');
         const dateStartLower = dateStart.clone().add(-10, 'days');
-        const similarSeasonsQuery = await WorldRecordSeasons.createQueryBuilder(
-          'season',
-        )
+        const similarSeasonsQuery = WorldRecordSeasons.createQueryBuilder('season')
           .where('season.dateStart < :upper AND season.dateStart > :lower', {
             lower: dateStartLower.toDate(),
             upper: dateStartUpper.toDate(),
@@ -91,10 +89,7 @@ createConnection()
         const season = WorldRecordSeasons.create({
           dateStart: dateStart.toDate(),
           dateEnd: dateEnd.toDate(),
-          bonusSystem:
-            seasonTypeByCode[dalcomSeasonId] === 100
-              ? 'top100-no-tie'
-              : 'top1-tie',
+          bonusSystem: seasonTypeByCode[dalcomSeasonId] === 100 ? 'top100-no-tie' : 'top1-tie',
           guid: generate_guid(),
           dalcomSeasonId,
           gameId: game.id,
@@ -107,7 +102,7 @@ createConnection()
     console.log('All done.');
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.abort();
   });

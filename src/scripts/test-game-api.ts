@@ -14,19 +14,11 @@ export interface ServerResponse<T> {
   invoke?: any;
 }
 
-export function doRequest<R = any, T = any>(
-  url: string,
-  encryptionKey: string,
-  body: T,
-): Promise<ServerResponse<R>> {
+export function doRequest<R = any, T = any>(url: string, encryptionKey: string, body: T): Promise<ServerResponse<R>> {
   const bodyStr = JSON.stringify(body);
 
   const iv = crypto.randomBytes(8).toString('hex');
-  const cipher = crypto.createCipheriv(
-    'aes-256-cbc',
-    Buffer.from(encryptionKey),
-    iv,
-  );
+  const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey), iv);
   const encrypted = cipher.update(bodyStr);
   const finalBuffer = Buffer.concat([encrypted, cipher.final()]);
 
@@ -39,7 +31,7 @@ export function doRequest<R = any, T = any>(
     throwHttpErrors: false,
   });
   return request
-    .then((res) => {
+    .then(res => {
       console.log(res.url);
       console.log(res.statusCode);
       console.log(res.headers);
@@ -47,7 +39,7 @@ export function doRequest<R = any, T = any>(
 
       return JSON.parse(res.body);
     })
-    .catch((reason) => {
+    .catch(reason => {
       if (reason instanceof HTTPError) {
         const res = reason.response;
         console.log(res.url);
@@ -85,7 +77,7 @@ createConnection()
     console.log(response);
   })
   .then(() => process.exit(0))
-  .catch((reason) => {
+  .catch(reason => {
     console.error(reason);
     process.exit(1);
   });

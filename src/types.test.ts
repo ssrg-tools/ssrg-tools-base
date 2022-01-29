@@ -34,9 +34,7 @@ const dataCardScore: [Card, number][] = [
 
 describe('Card Score test', () => {
   dataCardScore.forEach(([card, expectedScore]) => {
-    it(`Card score for ${JSON.stringify(
-      card,
-    )} should be ${expectedScore}`, () => {
+    it(`Card score for ${JSON.stringify(card)} should be ${expectedScore}`, () => {
       expect(card.score).toBe(expectedScore);
     });
   });

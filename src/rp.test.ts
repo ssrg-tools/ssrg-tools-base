@@ -165,11 +165,9 @@ const testData: {
 ];
 
 describe('Base RP calculator basic test', () => {
-  testData.forEach((test) => {
+  testData.forEach(test => {
     it(`calculates base rp for ${test.scoreTotal}`, () => {
-      expect(
-        calcBaseRP(test.scoreTotal, difficultyToEnum(test.difficulty)),
-      ).toBe(test.rpBase);
+      expect(calcBaseRP(test.scoreTotal, difficultyToEnum(test.difficulty))).toBe(test.rpBase);
     });
   });
 });

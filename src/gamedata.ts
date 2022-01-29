@@ -16,25 +16,15 @@ export async function downloadInfoFile(clearkey: string, url: string) {
   const unzipped = await gunzip(rawDl);
 
   const decipher = crypto.createDecipheriv(algorithm, clearkey, '');
-  const decrypted = Buffer.concat([
-    decipher.update(unzipped.toString(), 'base64'),
-    decipher.final(),
-  ]);
+  const decrypted = Buffer.concat([decipher.update(unzipped.toString(), 'base64'), decipher.final()]);
   return decrypted;
 }
 
-export async function processAggregate(
-  clearkey: string,
-  infoAggregate: InfoAggregate,
-  basedir: string,
-) {
+export async function processAggregate(clearkey: string, infoAggregate: InfoAggregate, basedir: string) {
   const aggregateVersion = infoAggregate.version;
   const dir = join(basedir, 'v' + aggregateVersion);
   mkdirSync(dir);
-  writeFileSync(
-    join(dir, 'Info.json'),
-    JSON.stringify(infoAggregate, null, jsonPrettyIndent),
-  );
+  writeFileSync(join(dir, 'Info.json'), JSON.stringify(infoAggregate, null, jsonPrettyIndent));
   for (const key in infoAggregate.context) {
     if (Object.prototype.hasOwnProperty.call(infoAggregate.context, key)) {
       const { file: url, version: contextVersion } = infoAggregate.context[key];
@@ -43,9 +33,7 @@ export async function processAggregate(
         contents = await downloadInfoFile(clearkey, url);
       } catch (error) {
         if (typeof error === 'object' && error instanceof RequestError) {
-          console.log(
-            `v${aggregateVersion}: Could not download ${key} - skipping`,
-          );
+          console.log(`v${aggregateVersion}: Could not download ${key} - skipping`);
           continue;
         }
 
@@ -53,11 +41,7 @@ export async function processAggregate(
         console.error(error);
         continue;
       }
-      const prettified = JSON.stringify(
-        JSON.parse(contents.toString()),
-        null,
-        jsonPrettyIndent,
-      );
+      const prettified = JSON.stringify(JSON.parse(contents.toString()), null, jsonPrettyIndent);
       writeFileSync(join(dir, key + '.json'), prettified);
       console.log(`v${aggregateVersion}: ${key} (v${contextVersion}) done.`);
     }

@@ -29,42 +29,20 @@ export class AddOAuth1598483673303 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `oauth_tokens` DROP FOREIGN KEY `FK_a8c200cc4c90d24e832caf0a180`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `oauth_tokens` DROP FOREIGN KEY `FK_3d9dfb37837e5dd891bbc81b324`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `oauth_codes` DROP FOREIGN KEY `FK_4dac391deea4c1f8d24a63107b2`',
-    );
-    await queryRunner.query(
-      'ALTER TABLE `oauth_codes` DROP FOREIGN KEY `FK_1e80210c80509097733e5194bda`',
-    );
+    await queryRunner.query('ALTER TABLE `oauth_tokens` DROP FOREIGN KEY `FK_a8c200cc4c90d24e832caf0a180`');
+    await queryRunner.query('ALTER TABLE `oauth_tokens` DROP FOREIGN KEY `FK_3d9dfb37837e5dd891bbc81b324`');
+    await queryRunner.query('ALTER TABLE `oauth_codes` DROP FOREIGN KEY `FK_4dac391deea4c1f8d24a63107b2`');
+    await queryRunner.query('ALTER TABLE `oauth_codes` DROP FOREIGN KEY `FK_1e80210c80509097733e5194bda`');
 
-    await queryRunner.query(
-      'DROP INDEX `IDX_62c7da4221e0387c13a5041f6d` ON `oauth_clients`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_eaa26672030dde4bbfe34a963d` ON `oauth_clients`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_b0c094fe1ef0a6c4af8f2b10be` ON `oauth_clients`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_62c7da4221e0387c13a5041f6d` ON `oauth_clients`');
+    await queryRunner.query('DROP INDEX `IDX_eaa26672030dde4bbfe34a963d` ON `oauth_clients`');
+    await queryRunner.query('DROP INDEX `IDX_b0c094fe1ef0a6c4af8f2b10be` ON `oauth_clients`');
     await queryRunner.query('DROP TABLE `oauth_clients`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_7ca9fdd6a8b2fb6a457b745ab7` ON `oauth_tokens`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_d41d9ae6c789d78311f4375457` ON `oauth_tokens`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_7ca9fdd6a8b2fb6a457b745ab7` ON `oauth_tokens`');
+    await queryRunner.query('DROP INDEX `IDX_d41d9ae6c789d78311f4375457` ON `oauth_tokens`');
     await queryRunner.query('DROP TABLE `oauth_tokens`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_1065caecafb63eab6c74d60814` ON `oauth_codes`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_422fb58499f35099912d8df191` ON `oauth_codes`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_1065caecafb63eab6c74d60814` ON `oauth_codes`');
+    await queryRunner.query('DROP INDEX `IDX_422fb58499f35099912d8df191` ON `oauth_codes`');
     await queryRunner.query('DROP TABLE `oauth_codes`');
   }
 }

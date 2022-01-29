@@ -1,11 +1,4 @@
-import {
-  Entity,
-  ManyToOne,
-  JoinColumn,
-  Index,
-  Column,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, Index, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './User';
 import { SqlBool } from '../types';
 
@@ -26,7 +19,7 @@ export class UserLogin {
   })
   meta: any;
 
-  @ManyToOne(() => User, (users) => users.logins, {
+  @ManyToOne(() => User, users => users.logins, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

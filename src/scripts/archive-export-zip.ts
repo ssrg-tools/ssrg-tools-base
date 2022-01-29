@@ -23,14 +23,13 @@ async function main() {
     throw err;
   });
 
-  const files = await fetchResolvedFiles(gameKey, version)
-    .then(
-      files => files.map(file => ({
-        ...file,
-        url: file.url.includes('://') ? file.url : apiConfig.endpoint + file.url,
-        originalUrl: new URL(file.originalUrl),
-      }))
-    );
+  const files = await fetchResolvedFiles(gameKey, version).then(files =>
+    files.map(file => ({
+      ...file,
+      url: file.url.includes('://') ? file.url : apiConfig.endpoint + file.url,
+      originalUrl: new URL(file.originalUrl),
+    })),
+  );
 
   const resultsCounts = {
     exists: 0,
@@ -40,7 +39,7 @@ async function main() {
     unknown: 0,
   };
 
-  const archiveDate = (new Date()).toISOString().replace(/[:T]/g, '-');
+  const archiveDate = new Date().toISOString().replace(/[:T]/g, '-');
   const archiveName = resolve(join(__dirname, '..', '..', '..', `archive-${gameKey}-${archiveDate}.zip`));
   console.log('Archiving to', archiveName);
   try {
@@ -61,7 +60,7 @@ async function main() {
       const addEntry = promisify(archive.entry.bind(archive));
       let ii = 1;
       for (const file of files) {
-        if (!awsList.some((aws) => file.originalUrl.hostname.includes(aws))) {
+        if (!awsList.some(aws => file.originalUrl.hostname.includes(aws))) {
           ignoredUrlList.add(file.originalUrl);
           continue;
         }
@@ -78,13 +77,10 @@ async function main() {
         const request = await got(file.url);
         const rawDl = request.rawBody;
 
-        const result = await addEntry(
-          rawDl,
-          {
-            name: zipPath,
-            date: file.sourceDateModified,
-          },
-        );
+        const result = await addEntry(rawDl, {
+          name: zipPath,
+          date: file.sourceDateModified,
+        });
 
         const fileTimeEnd = new Date();
         const timeTakenMs = fileTimeEnd.getTime() - fileTimeStart.getTime();
@@ -113,8 +109,7 @@ async function main() {
     }
   } finally {
     const timeEnd = new Date();
-    const logFilename = `log-archive-files-${archiveDate}-${gameKey}-${version
-      }.json`;
+    const logFilename = `log-archive-files-${archiveDate}-${gameKey}-${version}.json`;
     await writeFile(
       join(__dirname, '..', '..', '..', logFilename),
       JSON.stringify(

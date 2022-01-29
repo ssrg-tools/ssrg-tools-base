@@ -26,9 +26,9 @@ export class OAuthClient {
   })
   guid: string | null;
 
-  @OneToMany(() => OAuthCode, (code) => code.client)
+  @OneToMany(() => OAuthCode, code => code.client)
   codes: OAuthCode[];
 
-  @OneToMany(() => OAuthToken, (token) => token.client)
+  @OneToMany(() => OAuthToken, token => token.client)
   tokens: OAuthToken[];
 }

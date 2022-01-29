@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { Theme } from './Theme';
 import { User } from './User';
@@ -73,21 +66,21 @@ export class CardDrop {
   })
   guid: string | null;
 
-  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.logDrops, {
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 
-  @ManyToOne(() => Theme, (themes) => themes.logDrops, {
+  @ManyToOne(() => Theme, themes => themes.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
   theme: Theme;
 
-  @ManyToOne(() => User, (users) => users.logDrops, {
+  @ManyToOne(() => User, users => users.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })

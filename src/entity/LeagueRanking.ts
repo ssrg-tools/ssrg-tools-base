@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Division } from './Division';
 import { User } from './User';
 import { SuperstarGame } from './SuperstarGame';
@@ -80,25 +73,24 @@ export class LeagueRanking {
   })
   guid: string | null;
 
-  @ManyToOne(() => Division, (divisions) => divisions.leagueRankings, {
+  @ManyToOne(() => Division, divisions => divisions.leagueRankings, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'division_id', referencedColumnName: 'id' }])
   division: Division;
 
-  @ManyToOne(() => User, (users) => users.leagueRankings, {
+  @ManyToOne(() => User, users => users.leagueRankings, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: User;
 
-  @ManyToOne(
-    () => SuperstarGame,
-    (superstarGames) => superstarGames.leagueRankings,
-    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
-  )
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.leagueRankings, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
   game: SuperstarGame;
 }

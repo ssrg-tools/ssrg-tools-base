@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  JoinTable,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { LogCredit } from './LogCredit';
 import { LogDiamond } from './LogDiamond';
@@ -75,40 +68,37 @@ export class User {
   @Column('varchar', { name: 'guid', unique: true, length: 255 })
   guid: string | null;
 
-  @OneToMany(() => LeagueRanking, (leagueRanking) => leagueRanking.user)
+  @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.user)
   leagueRankings?: LeagueRanking[];
 
-  @OneToMany(() => LogCredit, (logCredits) => logCredits.user)
+  @OneToMany(() => LogCredit, logCredits => logCredits.user)
   logCredits: LogCredit[];
 
-  @OneToMany(() => LogDiamond, (logDiamonds) => logDiamonds.user)
+  @OneToMany(() => LogDiamond, logDiamonds => logDiamonds.user)
   logDiamonds: LogDiamond[];
 
-  @OneToMany(() => LogDiamondAd, (logDiamondsAds) => logDiamondsAds.user)
+  @OneToMany(() => LogDiamondAd, logDiamondsAds => logDiamondsAds.user)
   logDiamondsAds: LogDiamondAd[];
 
-  @OneToMany(() => CardDrop, (logDrops) => logDrops.user)
+  @OneToMany(() => CardDrop, logDrops => logDrops.user)
   logDrops: CardDrop[];
 
-  @OneToMany(() => SongClear, (songClearsV2) => songClearsV2.user)
+  @OneToMany(() => SongClear, songClearsV2 => songClearsV2.user)
   songClears: SongClear[];
 
-  @OneToMany(
-    () => SongWorldRecord,
-    (songWorldRecord) => songWorldRecord.observer,
-  )
+  @OneToMany(() => SongWorldRecord, songWorldRecord => songWorldRecord.observer)
   observedSongWorldRecords: SongWorldRecord[];
 
-  @OneToMany(() => UserCredential, (userCredentials) => userCredentials.user)
+  @OneToMany(() => UserCredential, userCredentials => userCredentials.user)
   userCredentials: UserCredential[];
 
-  @OneToMany(() => UserLogin, (userLogin) => userLogin.user)
+  @OneToMany(() => UserLogin, userLogin => userLogin.user)
   logins: UserLogin[];
 
-  @OneToMany(() => UserVerification, (verification) => verification.user)
+  @OneToMany(() => UserVerification, verification => verification.user)
   verifications: UserVerification[];
 
-  @OneToMany(() => File, (file) => file.user)
+  @OneToMany(() => File, file => file.user)
   files: File[];
 
   @ManyToMany(() => SuperstarGame)

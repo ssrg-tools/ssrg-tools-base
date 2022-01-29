@@ -29,47 +29,23 @@ export class AddBasicGamedata1620945124171 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query('DROP TABLE `gamedata_themetype`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_eab6692ceb8e0e3f0e937eba09` ON `gamedata_theme`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_eab6692ceb8e0e3f0e937eba09` ON `gamedata_theme`');
     await queryRunner.query('DROP TABLE `gamedata_theme`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_8710f5fe3b7728b4da0f8e160b` ON `gamedata_prism`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_8710f5fe3b7728b4da0f8e160b` ON `gamedata_prism`');
     await queryRunner.query('DROP TABLE `gamedata_prism`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_d1f1f9ebadc61c9d89320d6b43` ON `gamedata_music`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_56eade87e353beb0b4f8455cc6` ON `gamedata_music`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_8c229c9b431aab2763c74ea3ae` ON `gamedata_music`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_d1f1f9ebadc61c9d89320d6b43` ON `gamedata_music`');
+    await queryRunner.query('DROP INDEX `IDX_56eade87e353beb0b4f8455cc6` ON `gamedata_music`');
+    await queryRunner.query('DROP INDEX `IDX_8c229c9b431aab2763c74ea3ae` ON `gamedata_music`');
     await queryRunner.query('DROP TABLE `gamedata_music`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_7ba8e56d7f4539fc3c0c8dce24` ON `gamedata_group`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_0dc7a9c1e87b32151614c7a7a8` ON `gamedata_group`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_eaf7cb3a81295929b1865bdc32` ON `gamedata_group`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_7ba8e56d7f4539fc3c0c8dce24` ON `gamedata_group`');
+    await queryRunner.query('DROP INDEX `IDX_0dc7a9c1e87b32151614c7a7a8` ON `gamedata_group`');
+    await queryRunner.query('DROP INDEX `IDX_eaf7cb3a81295929b1865bdc32` ON `gamedata_group`');
     await queryRunner.query('DROP TABLE `gamedata_group`');
     await queryRunner.query('DROP TABLE `gamedata_card`');
-    await queryRunner.query(
-      'DROP INDEX `IDX_2d3c8a1ee28bd4278c40c96bfd` ON `gamedata_artist`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_8f9d20f3a644c29d0503f732ed` ON `gamedata_artist`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_78466e5075bd4c5518c4a06239` ON `gamedata_artist`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_8fa41d33254d1da36c8d605b97` ON `gamedata_artist`',
-    );
+    await queryRunner.query('DROP INDEX `IDX_2d3c8a1ee28bd4278c40c96bfd` ON `gamedata_artist`');
+    await queryRunner.query('DROP INDEX `IDX_8f9d20f3a644c29d0503f732ed` ON `gamedata_artist`');
+    await queryRunner.query('DROP INDEX `IDX_78466e5075bd4c5518c4a06239` ON `gamedata_artist`');
+    await queryRunner.query('DROP INDEX `IDX_8fa41d33254d1da36c8d605b97` ON `gamedata_artist`');
     await queryRunner.query('DROP TABLE `gamedata_artist`');
   }
 }

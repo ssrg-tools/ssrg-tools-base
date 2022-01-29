@@ -7,6 +7,6 @@ if (!path) {
   process.exit(1);
 }
 
-getAudioDurationInSeconds(path).then((duration) => {
+getAudioDurationInSeconds(path).then(duration => {
   console.log(resolve(path), duration);
 });

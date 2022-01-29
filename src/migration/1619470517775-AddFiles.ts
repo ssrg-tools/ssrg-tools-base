@@ -13,12 +13,8 @@ export class AddFiles1619470517775 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      'ALTER TABLE `files` DROP FOREIGN KEY `FK_7e7425b17f9e707331e9a6c7335`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_bbb0f2912c320f6b76e04091e3` ON `files`',
-    );
+    await queryRunner.query('ALTER TABLE `files` DROP FOREIGN KEY `FK_7e7425b17f9e707331e9a6c7335`');
+    await queryRunner.query('DROP INDEX `IDX_bbb0f2912c320f6b76e04091e3` ON `files`');
     await queryRunner.query('DROP INDEX `byKey` ON `files`');
     await queryRunner.query('DROP INDEX `byGuid` ON `files`');
     await queryRunner.query('DROP INDEX `byDateUploaded` ON `files`');

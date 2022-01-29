@@ -1,12 +1,4 @@
-import {
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-  Column,
-  Index,
-  OneToMany,
-  Entity,
-} from 'typeorm';
+import { PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, OneToMany, Entity } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { SongWorldRecord } from './SongWorldRecord';
 
@@ -23,7 +15,7 @@ export class WorldRecordSeason {
   @Column('datetime')
   dateEnd: Date;
 
-  @ManyToOne(() => SuperstarGame, (superstarGames) => superstarGames.songs, {
+  @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.songs, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
@@ -53,6 +45,6 @@ export class WorldRecordSeason {
   })
   guid: string | null;
 
-  @OneToMany(() => SongWorldRecord, (songs) => songs.season)
+  @OneToMany(() => SongWorldRecord, songs => songs.season)
   entries: SongWorldRecord[];
 }

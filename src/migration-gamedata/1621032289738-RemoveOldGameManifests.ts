@@ -5,18 +5,10 @@ export class RemoveOldGameManifests1621032289738 implements MigrationInterface {
     await queryRunner.query(
       'ALTER TABLE `superstar_log`.`zz_gamedata_manifests` DROP FOREIGN KEY `FK_b44767288778601ef1e49033985`',
     );
-    await queryRunner.query(
-      'DROP INDEX `perGameAndVersion` ON `superstar_log`.`zz_gamedata_manifests`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `IDX_5d6982d246b30150073a79d457` ON `superstar_log`.`zz_gamedata_manifests`',
-    );
-    await queryRunner.query(
-      'DROP INDEX `byDate` ON `superstar_log`.`zz_gamedata_manifests`',
-    );
-    await queryRunner.query(
-      'DROP TABLE `superstar_log`.`zz_gamedata_manifests`',
-    );
+    await queryRunner.query('DROP INDEX `perGameAndVersion` ON `superstar_log`.`zz_gamedata_manifests`');
+    await queryRunner.query('DROP INDEX `IDX_5d6982d246b30150073a79d457` ON `superstar_log`.`zz_gamedata_manifests`');
+    await queryRunner.query('DROP INDEX `byDate` ON `superstar_log`.`zz_gamedata_manifests`');
+    await queryRunner.query('DROP TABLE `superstar_log`.`zz_gamedata_manifests`');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
