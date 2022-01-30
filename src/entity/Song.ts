@@ -1,10 +1,10 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
-import { SongClear } from './SongClear';
-import { SongBeatmap } from './SongBeatmap';
-import { SongWorldRecord } from './SongWorldRecord';
 import { SqlBool } from '../types';
 import { Artist } from './Artist';
+import { SongBeatmap } from './SongBeatmap';
+import { SongClear } from './SongClear';
+import { SongWorldRecord } from './SongWorldRecord';
+import { SuperstarGame } from './SuperstarGame';
 
 @Index(['internalSongId', 'gameId'], { unique: true })
 @Entity('songs', { schema: 'superstar_log' })
@@ -78,6 +78,20 @@ export class Song {
     default: null,
   })
   imageId: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  imageUrl: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  audioUrl: string;
 
   @Column('varchar', {
     name: 'dalcom_song_filename',

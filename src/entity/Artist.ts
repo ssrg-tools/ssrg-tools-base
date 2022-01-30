@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { SuperstarGame } from './SuperstarGame';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ArtistMember } from './ArtistMember';
 import { Song } from './Song';
+import { SuperstarGame } from './SuperstarGame';
 import { Theme } from './Theme';
 
 @Entity('artists', { schema: 'superstar_log' })
@@ -25,6 +25,13 @@ export class Artist {
     default: null,
   })
   imageId: string | null;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  imageUrl: string;
 
   @Index('byDateDebut')
   @Column('datetime', { nullable: true })

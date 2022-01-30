@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Song } from './Song';
+import { SongBeatmapContents } from './SongBeatmapContents';
 
 @Entity('song_beatmaps', { schema: 'superstar_log' })
 export class SongBeatmap {
@@ -59,6 +60,20 @@ export class SongBeatmap {
   @Column('varchar', { name: 'dalcom_beatmap_fingerprint', length: 255 })
   beatmapFingerprint: string;
 
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  seqUrl: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  mapUrl: string;
+
   @Column('json', { default: '{}', select: false })
   meta: any;
 
@@ -74,4 +89,11 @@ export class SongBeatmap {
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
   song: Song;
+
+  @OneToOne(() => SongBeatmapContents, contents => contents.songBeatmap, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+    cascade: true,
+  })
+  data: SongBeatmapContents;
 }
