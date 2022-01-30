@@ -1,11 +1,11 @@
-import { StringUnion } from '../string-union';
-import { Entity, ManyToOne, JoinColumn, Index, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './User';
 import moment from 'moment';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { StringUnion } from '../string-union';
+import { User } from './User';
 
 @Entity('users_verifications', { schema: 'superstar_log' })
 export class UserVerification {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+  @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
   @Column('varchar', { length: 100 })
@@ -17,13 +17,13 @@ export class UserVerification {
 
   @Index('byCompleted')
   @Column('datetime', { nullable: true })
-  completed?: Date;
+  completed: Date | null;
 
   @Column('varchar', { length: 50 })
   intent: VerificationIntents;
 
   @Column({ nullable: true })
-  expire?: Date;
+  expire: Date | null;
 
   @ManyToOne(() => User, users => users.verifications, {
     onDelete: 'RESTRICT',

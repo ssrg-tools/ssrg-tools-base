@@ -24,7 +24,7 @@ export class Artist {
     nullable: true,
     default: null,
   })
-  imageId: string;
+  imageId: string | null;
 
   @Index('byDateDebut')
   @Column('datetime', { nullable: true })

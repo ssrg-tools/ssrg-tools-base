@@ -20,7 +20,7 @@ export class GamePopulation {
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.populationHistory, {
     onDelete: 'RESTRICT',

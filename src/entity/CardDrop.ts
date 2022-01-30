@@ -60,11 +60,10 @@ export class CardDrop {
 
   @Column('varchar', {
     name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.logDrops, {
     onDelete: 'RESTRICT',

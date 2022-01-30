@@ -1,18 +1,18 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { EncryptedVarchar } from '../entity-helpers';
+import { SqlBool } from '../types';
+import { CardDrop } from './CardDrop';
+import { File } from './Files/File';
 import { LeagueRanking } from './LeagueRanking';
 import { LogCredit } from './LogCredit';
 import { LogDiamond } from './LogDiamond';
 import { LogDiamondAd } from './LogDiamondAd';
-import { CardDrop } from './CardDrop';
 import { SongClear } from './SongClear';
-import { UserCredential } from './UserCredential';
-import { SqlBool } from '../types';
+import { SongWorldRecord } from './SongWorldRecord';
 import { SuperstarGame } from './SuperstarGame';
+import { UserCredential } from './UserCredential';
 import { UserLogin } from './UserLogin';
 import { UserVerification } from './UserVerification';
-import { SongWorldRecord } from './SongWorldRecord';
-import { File } from './Files/File';
-import { EncryptedVarchar } from '../entity-helpers';
 
 @Entity('users', { schema: 'superstar_log' })
 export class User {
@@ -54,9 +54,9 @@ export class User {
     length: 255,
     nullable: true,
   })
-  timezone?: string;
+  timezone: string | null;
 
-  @Column('tinyint', { name: 'active', default: () => 1, width: 1 })
+  @Column('tinyint', { default: 1, width: 1 })
   active: SqlBool;
 
   @Column('tinyint', { unsigned: true, default: 0, width: 1 })
@@ -65,8 +65,8 @@ export class User {
   @Column('tinyint', { unsigned: true, default: 0, width: 1 })
   isMod: SqlBool;
 
-  @Column('varchar', { name: 'guid', unique: true, length: 255 })
-  guid: string | null;
+  @Column('varchar', { unique: true, length: 255 })
+  guid: string;
 
   @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.user)
   leagueRankings?: LeagueRanking[];

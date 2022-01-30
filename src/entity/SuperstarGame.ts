@@ -173,7 +173,7 @@ export class SuperstarGame {
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.game)
   leagueRankings: LeagueRanking[];

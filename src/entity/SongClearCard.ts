@@ -58,12 +58,10 @@ export class SongClearCard {
   isPrism: SqlBool;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => SongClear, songClear => songClear.cards, {
     onDelete: 'RESTRICT',

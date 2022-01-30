@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Division } from './Division';
-import { User } from './User';
 import { SuperstarGame } from './SuperstarGame';
+import { User } from './User';
 
 /** possibly deprecated */
 @Entity('league_ranking', { schema: 'superstar_log' })
@@ -67,11 +67,10 @@ export class LeagueRanking {
 
   @Column('varchar', {
     name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => Division, divisions => divisions.leagueRankings, {
     onDelete: 'RESTRICT',

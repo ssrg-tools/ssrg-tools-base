@@ -1,9 +1,9 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Song } from './Song';
-import { Division } from './Division';
-import { User } from './User';
-import { SongClearCard } from './SongClearCard';
 import { SqlBool } from '../types';
+import { Division } from './Division';
+import { Song } from './Song';
+import { SongClearCard } from './SongClearCard';
+import { User } from './User';
 
 @Entity('song_clears_v2', { schema: 'superstar_log' })
 export class SongClear {
@@ -139,12 +139,10 @@ export class SongClear {
   meta: string;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid?: string;
+  guid: string;
 
   @ManyToOne(() => Song, songs => songs.songClears, {
     onDelete: 'RESTRICT',

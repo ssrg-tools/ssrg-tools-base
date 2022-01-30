@@ -23,7 +23,7 @@ export class PlayerNickname {
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => PlayerProfile, player => player.nicknameHistory, {
     onDelete: 'RESTRICT',

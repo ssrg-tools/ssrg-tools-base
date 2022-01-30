@@ -1,8 +1,8 @@
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SqlBool } from '../types';
-import { Entity, PrimaryGeneratedColumn, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { Division } from './Division';
-import { SuperstarGame } from './SuperstarGame';
 import { PlayerProfile } from './PlayerProfile';
+import { SuperstarGame } from './SuperstarGame';
 
 @Entity('league_tracker', { schema: 'superstar_log' })
 export class LeagueTrackerEntry {
@@ -60,11 +60,10 @@ export class LeagueTrackerEntry {
   gameId: number;
 
   @Column('varchar', {
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => PlayerProfile, player => player.nicknameHistory, {
     onDelete: 'RESTRICT',

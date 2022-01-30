@@ -34,10 +34,8 @@ export class OAuthToken {
   user: User;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 }

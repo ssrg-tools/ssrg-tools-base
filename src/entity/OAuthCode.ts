@@ -31,10 +31,8 @@ export class OAuthCode {
   user: User;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 }

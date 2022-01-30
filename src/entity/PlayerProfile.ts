@@ -53,7 +53,7 @@ export class PlayerProfile {
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @Index('byDateRegistered')
   @Column('datetime', { nullable: true, select: false })

@@ -1,10 +1,10 @@
-import { Entity, ManyToOne, JoinColumn, Index, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './User';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { SqlBool } from '../types';
+import { User } from './User';
 
 @Entity('users_logins', { schema: 'superstar_log' })
 export class UserLogin {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+  @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
   @Index('byDate')

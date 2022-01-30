@@ -63,12 +63,10 @@ export class SongBeatmap {
   meta: any;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => Song, songs => songs.beatmaps, {
     onDelete: 'RESTRICT',

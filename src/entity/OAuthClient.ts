@@ -20,11 +20,10 @@ export class OAuthClient {
   grants: string[];
 
   @Column('varchar', {
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @OneToMany(() => OAuthCode, code => code.client)
   codes: OAuthCode[];

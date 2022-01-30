@@ -48,11 +48,11 @@ export class Song {
 
   @Index('byDateReleasedGame')
   @Column('datetime', { nullable: true })
-  dateReleasedGame: Date;
+  dateReleasedGame: Date | null;
 
   @Index('byDateReleasedWorld')
   @Column('datetime', { nullable: true })
-  dateReleasedWorld: Date;
+  dateReleasedWorld: Date | null;
 
   @Column('tinyint', {
     name: 'ingame',
@@ -69,7 +69,7 @@ export class Song {
     nullable: true,
     default: null,
   })
-  internalSongId: string;
+  internalSongId: string | null;
 
   @Column('varchar', {
     comment: 'defaults to game internal song id',
@@ -104,11 +104,10 @@ export class Song {
   artistId: number;
 
   @Column('varchar', {
-    name: 'guid',
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @Column('varchar', {
     name: 'beatmap_fingerprint',

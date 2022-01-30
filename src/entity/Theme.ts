@@ -62,15 +62,13 @@ export class Theme {
     nullable: true,
     default: null,
   })
-  internalId: number;
+  internalId: number | null;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @ManyToOne(() => Artist, { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' })
   @JoinColumn([{ name: 'artist_id', referencedColumnName: 'id' }])

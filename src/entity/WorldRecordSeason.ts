@@ -38,12 +38,10 @@ export class WorldRecordSeason {
   gameId: number;
 
   @Column('varchar', {
-    name: 'guid',
-    nullable: true,
     unique: true,
     length: 255,
   })
-  guid: string | null;
+  guid: string;
 
   @OneToMany(() => SongWorldRecord, songs => songs.season)
   entries: SongWorldRecord[];
