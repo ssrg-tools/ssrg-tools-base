@@ -21,26 +21,6 @@ export class LeagueRanking {
   @Column('int', { name: 'diff_below', nullable: true, unsigned: true })
   diffBelow: number | null;
 
-  @Column({
-    type: 'int',
-    name: 'score_above',
-    nullable: true,
-    unsigned: true,
-    generatedType: 'STORED',
-    asExpression: '`score` + `diff_above`',
-  })
-  scoreAbove: number | null;
-
-  @Column({
-    type: 'int',
-    name: 'score_below',
-    nullable: true,
-    unsigned: true,
-    generatedType: 'STORED',
-    asExpression: '`score` - `diff_below`',
-  })
-  scoreBelow: number | null;
-
   @Index('byDate')
   @Column('datetime', { name: 'date', default: () => 'CURRENT_TIMESTAMP' })
   date: Date;
