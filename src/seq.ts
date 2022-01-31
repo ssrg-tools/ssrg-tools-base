@@ -208,7 +208,7 @@ function readDataCore(input: Buffer): {
 
 export interface Beatmap {
   info: SeqDataCore;
-  /** source file name (not related to game assets) */
+  /** song file name (not related to game assets) */
   filename: string;
 
   /** count includes all the bullshit notes. notes are not included in notes. */

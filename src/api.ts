@@ -115,6 +115,9 @@ export interface ArchiveAssetResultOk {
   fileEntity: {
     guid: string;
     fingerprint: string;
+    size: number;
+    key: string;
+    mime: string;
   };
   archiveEntity: {
     guid: string;

@@ -1,5 +1,6 @@
 import getAudioDurationInSeconds from 'get-audio-duration';
 import { cloneDeep, Dictionary, keyBy } from 'lodash';
+import { basename } from 'path';
 import { getRepository } from 'typeorm';
 import { ArchiveAssetResult, ArchiveAssetResultOk, BaseApiResponse } from '../api';
 import { api, apiConfig, fetchAllGameData } from '../backend-interface';
@@ -7,6 +8,7 @@ import { GroupData, MajorGroupData, MusicData } from '../definitions/data/gamein
 import { Artist } from '../entity/Artist';
 import { Song } from '../entity/Song';
 import { SongBeatmap } from '../entity/SongBeatmap';
+import { SongBeatmapContents } from '../entity/SongBeatmapContents';
 import { SuperstarGame } from '../entity/SuperstarGame';
 import { generate_guid } from '../guid';
 import { Beatmap, parseBeatmap, sliderStart } from '../seq';
@@ -22,7 +24,7 @@ interface ExtendedMusicData
 }
 
 export const beatmapKeys = ['seqEasy', 'seqNormal', 'seqHard'];
-export const downloadDataKeys = [...beatmapKeys, 'sound'];
+export const downloadDataKeys = [...beatmapKeys, 'sound', 'previewSound', 'album', 'image'];
 export const keyDifficultyMap = {
   seqEasy: Difficulty.Easy,
   seqNormal: Difficulty.Normal,
@@ -60,6 +62,7 @@ export function handleStreamDownload(
           beatmap: Beatmap | undefined;
           audioLength: number | undefined;
           fingerprint: string;
+          basename: string;
         }
       | undefined
     ),
@@ -98,6 +101,7 @@ export function handleStreamDownload(
         beatmap,
         audioLength,
         fingerprint: gameAssetInfoResponse.data.fileEntity.fingerprint,
+        basename: basename(gameAssetInfoResponse.data.fileEntity.key),
       },
     ];
   };
@@ -119,6 +123,7 @@ export async function processSongData(
   majorgroups: Dictionary<MajorGroupData>,
   Songs = getRepository(Song),
   SongBeatmaps = getRepository(SongBeatmap),
+  SongBeatmapContentsR = getRepository(SongBeatmapContents),
   Artists = getRepository(Artist),
   client: typeof api = api,
 ): Promise<ProcessedSongData> {
@@ -131,6 +136,7 @@ export async function processSongData(
     beatmap?: Beatmap;
     audioLength?: number;
     fingerprint: string;
+    basename: string;
   }> = Object.fromEntries(fileStreams$.filter(([, stream]) => stream !== undefined));
 
   const song: ExtendedMusicData = cloneDeep(songdata) as unknown as ExtendedMusicData;
@@ -142,6 +148,7 @@ export async function processSongData(
   let songEntity = await Songs.createQueryBuilder('song')
     .innerJoin('song.game', 'game')
     .leftJoinAndSelect('song.beatmaps', 'beatmaps')
+    .leftJoinAndSelect('beatmaps.data', 'data')
     .where('game.key = :gameKey AND song.internalSongId = :internalSongId', {
       gameKey: game.key,
       internalSongId: songdata.code,
@@ -185,7 +192,6 @@ export async function processSongData(
       existsChanged = true;
     }
 
-    // await Songs.save(songEntity);
     const existsChangedLabel = existsChanged ? 'exists changed' : 'not changed';
     console.log(`Song: Updated song '${songEntity.name}' (${songEntity.guid}): ${existsChangedLabel}`);
   } else {
@@ -215,6 +221,10 @@ export async function processSongData(
     const audioSecondsF = audioSeconds.toString().padStart(2, '0');
     songEntity.lengthDisplay = `${audioMinutesF}:${audioSecondsF}.${audioFraction}`;
   }
+  songEntity.audioUrl = streamMap.sound.gameAssetInfo.uri;
+  songEntity.audioPreviewUrl = streamMap.previewSound.gameAssetInfo.uri;
+  songEntity.imageUrl = streamMap.album.gameAssetInfo.uri;
+  songEntity.imageBackgroundUrl = streamMap.image.gameAssetInfo.uri;
 
   const beatmaps: SongBeatmap[] = [];
 
@@ -233,7 +243,7 @@ export async function processSongData(
       songBeatmap = SongBeatmaps.create({
         difficulty: difficultyName,
         songId: songEntity.id,
-        beatmapFilename: beatmap.filename,
+        beatmapFilename: streamMap[beatmapKey].basename,
         difficultyId: keyDifficultyMap[beatmapKey],
         beatmapDateProcessed: new Date(),
         countNotesTotal: beatmap.notes.length,
@@ -245,6 +255,23 @@ export async function processSongData(
         beatmapFingerprint: streamMap[beatmapKey].fingerprint,
         indexBeatMax: Math.max(...beatmap.notes.map(n => n.beat)),
         indexBeatMin: Math.min(...beatmap.notes.map(n => n.beat)),
+        guid: generate_guid(),
+      });
+    }
+    songBeatmap.beatmapFilename = streamMap[beatmapKey].basename;
+    songBeatmap.seqUrl = streamMap[beatmapKey].gameAssetInfo.uri;
+
+    if (!songBeatmap.data) {
+      console.log(`Beatmap: No data for ${beatmapKey}`);
+      songBeatmap.data = SongBeatmapContentsR.create({
+        id: songBeatmap.id,
+        beatmapDateProcessed: new Date(),
+        beatmapFingerprint: streamMap[beatmapKey].fingerprint,
+        parserVersion: beatmap.seqParserVersion,
+        data: beatmap,
+        meta: {
+          fileUrl: streamMap[beatmapKey].gameAssetInfo.uri,
+        },
         guid: generate_guid(),
       });
     }

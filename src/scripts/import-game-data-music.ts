@@ -1,6 +1,7 @@
 import { writeFile } from 'fs/promises';
 import { HTTPError } from 'got';
 import { Dictionary } from 'lodash';
+import { SongBeatmapContents } from '../entity/SongBeatmapContents';
 import { createConnection, getRepository, UpdateValuesMissingError } from 'typeorm';
 import { GroupData, LocaleData, MajorGroupData, MusicData } from '../definitions/data/gameinfo';
 import { Artist } from '../entity/Artist';
@@ -35,6 +36,7 @@ async function main() {
 
     const Songs = getRepository(Song);
     const SongBeatmaps = getRepository(SongBeatmap);
+    const SongBeatmapContentsR = getRepository(SongBeatmapContents);
     const SuperstarGames = getRepository(SuperstarGame);
     const Artists = getRepository(Artist);
 
@@ -58,6 +60,7 @@ async function main() {
         majorgroups,
         Songs,
         SongBeatmaps,
+        SongBeatmapContentsR,
         Artists,
       );
       console.log(
@@ -102,11 +105,11 @@ async function main() {
       for (const beatmap of beatmaps) {
         try {
           if (beatmap.id) {
-            console.log(`Skipping existing ${beatmap.difficulty} beatmap!`);
-            continue;
+            process.stdout.write(`Updating existing ${beatmap.difficulty} beatmap! `);
+          } else {
+            process.stdout.write(`Inserting new ${beatmap.difficulty} beatmap! `);
           }
 
-          process.stdout.write('Inserting new beatmap! ');
           beatmap.songId = song.id;
           await SongBeatmaps.save(beatmap);
           console.log(
@@ -118,7 +121,7 @@ async function main() {
           );
         } catch (error) {
           if (error instanceof UpdateValuesMissingError) {
-            console.log('Song not changed.');
+            console.log('Beatmap not changed. (UpdateValuesMissingError)');
             continue;
           }
           console.error('Error:', error);
