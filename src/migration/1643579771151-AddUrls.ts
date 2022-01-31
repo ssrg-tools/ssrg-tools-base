@@ -10,8 +10,10 @@ export class AddUrls1643579771151 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE \`artists\` ADD \`imageUrl\` varchar(255) NULL`);
     await queryRunner.query(`ALTER TABLE \`song_beatmaps\` ADD \`seqUrl\` varchar(255) NULL`);
     await queryRunner.query(`ALTER TABLE \`song_beatmaps\` ADD \`mapUrl\` varchar(255) NULL`);
-    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`imageUrl\` varchar(255) NULL`);
-    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`audioUrl\` varchar(255) NULL`);
+    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`imageUrl\` varchar(255) NULL AFTER \`imageId\``);
+    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`imageBackgroundUrl\` varchar(255) NULL AFTER \`imageUrl\``);
+    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`audioUrl\` varchar(255) NULL AFTER \`imageBackgroundUrl\``);
+    await queryRunner.query(`ALTER TABLE \`songs\` ADD \`audioPreviewUrl\` varchar(255) NULL AFTER \`audioUrl\``);
     await queryRunner.query(
       `ALTER TABLE \`song_beatmap_contents\` ADD CONSTRAINT \`FK_eadbb8f20cb6eedaa83ae9088b9\` FOREIGN KEY (\`id\`) REFERENCES \`song_beatmaps\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
@@ -22,7 +24,9 @@ export class AddUrls1643579771151 implements MigrationInterface {
       `ALTER TABLE \`song_beatmap_contents\` DROP FOREIGN KEY \`FK_eadbb8f20cb6eedaa83ae9088b9\``,
     );
     await queryRunner.query(`ALTER TABLE \`songs\` DROP COLUMN \`audioUrl\``);
+    await queryRunner.query(`ALTER TABLE \`songs\` DROP COLUMN \`audioPreviewUrl\``);
     await queryRunner.query(`ALTER TABLE \`songs\` DROP COLUMN \`imageUrl\``);
+    await queryRunner.query(`ALTER TABLE \`songs\` DROP COLUMN \`imageBackgroundUrl\``);
     await queryRunner.query(`ALTER TABLE \`song_beatmaps\` DROP COLUMN \`mapUrl\``);
     await queryRunner.query(`ALTER TABLE \`song_beatmaps\` DROP COLUMN \`seqUrl\``);
     await queryRunner.query(`ALTER TABLE \`artists\` DROP COLUMN \`imageUrl\``);

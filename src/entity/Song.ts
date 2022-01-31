@@ -91,7 +91,21 @@ export class Song {
     nullable: true,
     default: null,
   })
+  imageBackgroundUrl: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
   audioUrl: string;
+
+  @Column('varchar', {
+    length: 255,
+    nullable: true,
+    default: null,
+  })
+  audioPreviewUrl: string;
 
   @Column('varchar', {
     name: 'dalcom_song_filename',
