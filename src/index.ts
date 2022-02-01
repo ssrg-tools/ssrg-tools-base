@@ -18,3 +18,4 @@ export * from './definitions/data';
 export * from './entity';
 export * from './entity-gamedata';
 export * from './entity-helpers';
+export * from './entity-logs';
