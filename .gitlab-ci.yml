@@ -53,6 +53,23 @@ test-check-types-tsc:
     <<: *global_npm_cache
     policy: pull
 
+test-npm-audit:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_TAG == null
+  needs: ["npm-install"]
+  script:
+    - npm audit &2>1 > npm-audit.log
+    - cat npm-audit.log
+  cache:
+    <<: *global_npm_cache
+    policy: pull
+  artifacts:
+    untracked: false
+    expire_in: 1 year
+    paths:
+      - npm-audit.log
+
 publish:
   stage: publish
   rules:
