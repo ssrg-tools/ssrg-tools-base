@@ -9,6 +9,10 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { StringUnion } from '../string-union';
+
+export const taskResultStatus = StringUnion('finished', 'incomplete', 'error');
+export type TaskResultStatus = typeof taskResultStatus.type;
 
 @Entity('tasks_results', { schema: 'ssrg_tools_logs' })
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -41,6 +45,15 @@ export abstract class BaseTaskResult {
 
   @Column('longtext', { nullable: true })
   log: string | null;
+
+  @Column('varchar', { length: 255, nullable: true, comment: 'user who triggered this task' })
+  userGuid: string | null;
+
+  @Column('json', { default: '{}', comment: 'task specific (output) data' })
+  result: Record<string, unknown> | null;
+
+  @Column('json', { default: '{}' })
+  meta: Record<string, unknown>;
 }
 
 @ChildEntity('game-task')
@@ -59,3 +72,15 @@ export class GameTaskResult extends BaseTaskResult {
 
 @ChildEntity('import-season')
 export class ImportSeasonTaskResult extends GameTaskResult {}
+
+@ChildEntity('import-wr')
+export class ImportWRTaskResult extends GameTaskResult {}
+
+@ChildEntity('import-artists')
+export class ImportArtistsTaskResult extends GameTaskResult {}
+
+@ChildEntity('archive-assets')
+export class ArchiveAssetsTaskResult extends GameTaskResult {}
+
+@ChildEntity('generate-beatmap-chart')
+export class GenerateBeatmapChartTaskResult extends GameTaskResult {}
