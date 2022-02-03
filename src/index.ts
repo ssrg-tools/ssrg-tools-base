@@ -15,6 +15,7 @@ export * from './utils';
 export * from './wr';
 
 export * from './definitions/data';
+export * from './importers';
 export * from './entity';
 export * from './entity-gamedata';
 export * from './entity-helpers';
