@@ -26,9 +26,10 @@ export async function processSeasonData(
   game: SuperstarGame,
   gamedataSeasons: WorldRecordData[],
   WorldRecordSeasons: Repository<WorldRecordSeason> = getRepository(WorldRecordSeason),
+  { log, error } = console,
 ) {
   if (!gamedataSeasons || isEmpty(gamedataSeasons)) {
-    console.log(' No game data.');
+    log(' No game data.');
     return;
   }
 
@@ -50,7 +51,7 @@ export async function processSeasonData(
     const dateStart = moment(firstRank.startAt);
     const dateEnd = moment(firstRank.endAt);
     if (existingSeasonsByCode[dalcomSeasonId]) {
-      console.log(` [Skip] Game ${game.key} season #${dalcomSeasonId} already inserted, not adding. (${dateStart})`);
+      log(` [Skip] Game ${game.key} season #${dalcomSeasonId} already inserted, not adding. (${dateStart})`);
       continue;
     }
 
@@ -66,11 +67,11 @@ export async function processSeasonData(
     const similarSeasons = await similarSeasonsQuery.getMany();
 
     if (similarSeasons.length) {
-      console.log(
+      log(
         ` [Similar] Game ${game.key} season #${dalcomSeasonId} has similar season, updating, not adding. (${dateStart})`,
       );
       if (similarSeasons.length !== 1) {
-        console.error(':eunhuh:');
+        error(':eunhuh:');
         continue;
       }
       const similarSeason = similarSeasons[0];
@@ -79,7 +80,7 @@ export async function processSeasonData(
       continue;
     }
 
-    console.log(` [Add] Adding season #${dalcomSeasonId}. (${dateStart})`);
+    log(` [Add] Adding season #${dalcomSeasonId}. (${dateStart})`);
     const season = WorldRecordSeasons.create({
       dateStart: dateStart.toDate(),
       dateEnd: dateEnd.toDate(),

@@ -11,6 +11,7 @@ export async function getGroupFromData(
   majorgroupdata: Dictionary<MajorGroupData> | undefined,
   getLocaleString: (code: number) => string,
   Artists = getRepository(Artist),
+  { log } = console,
 ): Promise<Artist> {
   const name = getLocaleString(groupdata.localeName).replace(/[ _\-]\((?:event|hidden)\)/gi, '');
   const groupName =
@@ -45,7 +46,7 @@ export async function getGroupFromData(
       changed = true;
     }
     if (changed) {
-      console.log(`Artist: Updating group ${existingGroup.name}`);
+      log(`Artist: Updating group ${existingGroup.name}`);
       await Artists.save(existingGroup);
     }
     return existingGroup;
@@ -58,7 +59,7 @@ export async function getGroupFromData(
     .getOne();
 
   if (group2) {
-    console.log(`Artist: Group ${name} already exists, but no ID`);
+    log(`Artist: Group ${name} already exists, but no ID`);
     group2.internalIds = group2.internalIds.concat(groupdata.code);
     group2.group = groupName;
     group2.cardCount = groupdata.equipableSlot;
@@ -69,7 +70,7 @@ export async function getGroupFromData(
   }
 
   // Case 3: Create new group
-  console.log(`Artist: Creating new group ${name}`);
+  log(`Artist: Creating new group ${name}`);
   const newGroup = Artists.create({
     name,
     internalIds: [groupdata.code],

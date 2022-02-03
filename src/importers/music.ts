@@ -1,4 +1,5 @@
 import getAudioDurationInSeconds from 'get-audio-duration';
+import got from 'got';
 import { cloneDeep, Dictionary, keyBy } from 'lodash';
 import { basename } from 'path';
 import { getRepository } from 'typeorm';
@@ -42,12 +43,26 @@ export async function loadGamedataForMusicImport(gameKey: string, version: strin
   ]);
 }
 
+const httpApiArchiveGameAsset = (
+  fileCode: number | undefined,
+  gameKey: string,
+  gamedataVersion: string | number,
+  urlsVersion: string | number,
+): Promise<BaseApiResponse<ArchiveAssetResult> | undefined> => {
+  if (typeof fileCode !== 'number') {
+    return Promise.resolve(undefined);
+  }
+  return api.post<BaseApiResponse<ArchiveAssetResult>>(
+    `/v1/${gameKey}/gamedata/urls/${gamedataVersion}/${urlsVersion}/archiveAsset/${fileCode}`,
+  );
+};
+
 export function handleStreamDownload(
   gameKey: string,
   gamedataVersion: number,
   urlsVersion: number,
   songdata: MusicData,
-  client: typeof api = api,
+  archiveGameAsset = httpApiArchiveGameAsset,
 ): (
   value: string,
   index: number,
@@ -69,19 +84,16 @@ export function handleStreamDownload(
   ]
 > {
   return async key => {
-    const fileCode = songdata[key];
-    if (typeof fileCode !== 'number') {
+    const gameAssetInfoResponse = await archiveGameAsset(songdata[key], gameKey, gamedataVersion, urlsVersion);
+    if (!gameAssetInfoResponse) {
       return [key, undefined];
     }
-    const gameAssetInfoResponse = await client.post<BaseApiResponse<ArchiveAssetResult>>(
-      `/v1/${gameKey}/gamedata/urls/${gamedataVersion}/${urlsVersion}/archiveAsset/${fileCode}`,
-    );
 
     if (gameAssetInfoResponse.data.result === 'error') {
       throw new Error(String(gameAssetInfoResponse));
     }
 
-    const stream = await client.getRaw(gameAssetInfoResponse.data.uri);
+    const stream = await got(gameAssetInfoResponse.data.uri).buffer();
     let beatmap: Beatmap | undefined;
     let audioLength: number;
 
@@ -125,10 +137,11 @@ export async function processSongData(
   SongBeatmaps = getRepository(SongBeatmap),
   SongBeatmapContentsR = getRepository(SongBeatmapContents),
   Artists = getRepository(Artist),
-  client: typeof api = api,
+  archiveGameAsset = httpApiArchiveGameAsset,
+  { log } = console,
 ): Promise<ProcessedSongData> {
   const fileStreams$ = await Promise.all(
-    downloadDataKeys.map(handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, client)),
+    downloadDataKeys.map(handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, archiveGameAsset)),
   );
   const streamMap: Dictionary<{
     stream: Buffer;
@@ -159,7 +172,7 @@ export async function processSongData(
   const artist = await getGroupFromData(game, groups[songdata.groupData], majorgroups, getLocaleString, Artists);
 
   if (songEntity) {
-    console.log(`Song: Song '${song.localeName}' exists as '${songEntity.name}' (${songEntity.guid})`);
+    log(`Song: Song '${song.localeName}' exists as '${songEntity.name}' (${songEntity.guid})`);
     let existsChanged = false;
 
     if (!songEntity.artistId) {
@@ -193,7 +206,7 @@ export async function processSongData(
     }
 
     const existsChangedLabel = existsChanged ? 'exists changed' : 'not changed';
-    console.log(`Song: Updated song '${songEntity.name}' (${songEntity.guid}): ${existsChangedLabel}`);
+    log(`Song: Updated song '${songEntity.name}' (${songEntity.guid}): ${existsChangedLabel}`);
   } else {
     songEntity = Songs.create({
       album: song.localeDisplayGroupName,
@@ -207,7 +220,7 @@ export async function processSongData(
       guid: generate_guid(),
       artist,
     });
-    console.log(`Song: Creating song ${song.localeName} (${songEntity.guid})`);
+    log(`Song: Creating song ${song.localeName} (${songEntity.guid})`);
   }
 
   const audioLength = streamMap.sound.audioLength;
@@ -234,7 +247,7 @@ export async function processSongData(
     const beatmap = streamMap[beatmapKey]?.beatmap;
 
     if (!beatmap) {
-      console.log(`Beatmap: No beatmap for ${beatmapKey}`);
+      log(`Beatmap: No beatmap for ${beatmapKey}`);
       continue;
     }
 
@@ -262,7 +275,7 @@ export async function processSongData(
     songBeatmap.seqUrl = streamMap[beatmapKey].gameAssetInfo.uri;
 
     if (!songBeatmap.data) {
-      console.log(`Beatmap: No data for ${beatmapKey}`);
+      log(`Beatmap: No data for ${beatmapKey}`);
       songBeatmap.data = SongBeatmapContentsR.create({
         id: songBeatmap.id,
         beatmapDateProcessed: new Date(),
