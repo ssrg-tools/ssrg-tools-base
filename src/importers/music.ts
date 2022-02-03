@@ -138,7 +138,7 @@ export async function processSongData(
   SongBeatmapContentsR = getRepository(SongBeatmapContents),
   Artists = getRepository(Artist),
   archiveGameAsset = httpApiArchiveGameAsset,
-  { log } = console,
+  { log }: { log: (...data: any[]) => void } = console,
 ): Promise<ProcessedSongData> {
   const fileStreams$ = await Promise.all(
     downloadDataKeys.map(handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, archiveGameAsset)),

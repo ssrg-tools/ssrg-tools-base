@@ -26,7 +26,7 @@ export async function processSeasonData(
   game: SuperstarGame,
   gamedataSeasons: WorldRecordData[],
   WorldRecordSeasons: Repository<WorldRecordSeason> = getRepository(WorldRecordSeason),
-  { log, error } = console,
+  { log, error }: { log: (...data: any[]) => void; error: (...data: any[]) => void } = console,
 ) {
   if (!gamedataSeasons || isEmpty(gamedataSeasons)) {
     log(' No game data.');
