@@ -23,8 +23,16 @@ export abstract class BaseTaskResult {
   id: number;
 
   @Index('byDateCreated')
-  @CreateDateColumn()
+  @CreateDateColumn({ comment: 'time of record in database' })
   created: Date;
+
+  @Index('byDateStarted')
+  @Column('datetime', {
+    comment: 'time of task start (defaults to creation)',
+    precision: 6,
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  started: Date;
 
   @Index('byDateUpdated')
   @UpdateDateColumn()
