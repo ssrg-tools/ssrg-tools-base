@@ -1,7 +1,6 @@
 import { Buffer } from 'buffer';
 import * as crypto from 'crypto';
 import { mkdirSync, writeFileSync } from 'fs';
-import got, { RequestError } from 'got';
 import { join } from 'path';
 import * as util from 'util';
 import zlib from 'zlib';
@@ -12,6 +11,7 @@ const gunzip = util.promisify<zlib.InputType, Buffer>(zlib.gunzip);
 const jsonPrettyIndent = 2;
 
 export async function downloadInfoFile(clearkey: string, url: string) {
+  const { default: got } = await import('got');
   const request = await got(url);
   const rawDl = request.rawBody;
   const unzipped = await gunzip(rawDl);
@@ -33,6 +33,7 @@ export async function processAggregate(clearkey: string, infoAggregate: InfoAggr
       try {
         contents = await downloadInfoFile(clearkey, url);
       } catch (error) {
+        const { RequestError } = await import('got');
         if (typeof error === 'object' && error instanceof RequestError) {
           console.log(`v${aggregateVersion}: Could not download ${key} - skipping`);
           continue;

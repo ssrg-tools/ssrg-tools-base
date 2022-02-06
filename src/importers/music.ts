@@ -1,5 +1,4 @@
 import getAudioDurationInSeconds from 'get-audio-duration';
-import got from 'got';
 import { cloneDeep, Dictionary, keyBy } from 'lodash';
 import { basename } from 'path';
 import { getRepository } from 'typeorm';
@@ -73,6 +72,7 @@ export function handleStreamDownload(
       throw new Error(String(gameAssetInfoResponse));
     }
 
+    const { default: got } = await import('got');
     const stream = await got(gameAssetInfoResponse.data.uri).buffer();
     let beatmap: Beatmap | undefined;
     let audioLength: number;
