@@ -2,17 +2,17 @@
   "name": "@ssrg-tools/base",
   "version": "0.11.1",
   "description": "",
-  "main": "./cjs/src/index.js",
+  "main": "./cjs/index.js",
   "exports": {
     "*": {
-      "default": "./cjs/src/*.js",
-      "import": "./esm2015/src/*.js"
+      "default": "./cjs/*.js",
+      "import": "./esm2015/*.js"
     },
-    "default": "./cjs/src/index.js"
+    "default": "./cjs/index.js"
   },
-  "module": "./esm5/src/index.js",
-  "es2015": "./esm2015/src/index.js",
-  "typings": "./types/src/index.d.ts",
+  "module": "./esm5/index.js",
+  "es2015": "./esm2015/index.js",
+  "typings": "./types/index.d.ts",
   "scripts": {
     "build": "npm run build:cjs",
     "build:clean": "rimraf build",
