@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.prod.json",
   "compilerOptions": {
-    "module": "ES2015",
-    "outDir": "build/esm2015",
+    "module": "ES2020",
+    "outDir": "build/ES2020",
   },
 }

@@ -6,17 +6,17 @@
   "exports": {
     "*": {
       "default": "./cjs/*.js",
-      "import": "./esm2015/*.js"
+      "import": "./esm2020/*.js"
     },
     "default": "./cjs/index.js"
   },
-  "module": "./esm5/index.js",
-  "es2015": "./esm2015/index.js",
+  "module": "./esm2020/index.js",
+  "es2020": "./esm2020/index.js",
+  "esnext": "./esm2020/index.js",
   "typings": "./types/index.d.ts",
   "scripts": {
     "build": "npm run build:cjs",
-    "build:es2015": "tsc --project tsconfig.prod.esm2015.json",
-    "build:esm5": "tsc --project tsconfig.prod.esm5.json",
+    "build:esm2020": "tsc --project tsconfig.prod.esm2020.json",
     "build:cjs": "tsc --project tsconfig.prod.cjs.json",
     "build:types": "tsc --project tsconfig.prod.types.json",
     "test": "node --require ts-node/register ./node_modules/jasmine/bin/jasmine.js",

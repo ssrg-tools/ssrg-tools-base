@@ -80,8 +80,7 @@ publish:
     - npm ci
     - cp ./fixtures/config.api.json ./config.api.json
     - npm test
-    - npm run build:es2015
-    - npm run build:esm5
+    - npm run build:esm2020
     - npm run build:cjs
     - npm run build:types
     - jq 'del(.devDependencies) | del(.scripts) | del(.jest)' package.json > build/package.json
