@@ -81,11 +81,9 @@ import { promisify } from 'es6-promisify';
 import { readFile, exists } from 'fs';
 import { join } from 'path';
 
-const readFile$ = promisify(readFile);
-// tslint:disable-next-line: deprecation
-const exists$ = promisify(exists);
-
 async function loadFileGeneric<R>(key: string, dir: string): Promise<R[]> {
+  const readFile$ = promisify(readFile);
+  const exists$ = promisify(exists);
   const filepath = join(dir, key + '.json');
   if (!(await exists$(filepath))) {
     throw new Error(`File ${key}.json does not exist in ${dir}.`);
