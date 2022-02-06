@@ -1,4 +1,3 @@
-import getAudioDurationInSeconds from 'get-audio-duration';
 import { cloneDeep, Dictionary, keyBy } from 'lodash';
 import { basename } from 'path';
 import { getRepository } from 'typeorm';
@@ -82,6 +81,7 @@ export function handleStreamDownload(
     }
 
     if (key === 'sound') {
+      const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
       audioLength = await getAudioDurationInSeconds(apiEndpoint + gameAssetInfoResponse.data.uri);
     }
 
