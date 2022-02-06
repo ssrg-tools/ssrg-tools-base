@@ -4,7 +4,6 @@ import { cloneDeep, Dictionary, keyBy } from 'lodash';
 import { basename } from 'path';
 import { getRepository } from 'typeorm';
 import { ArchiveAssetResult, ArchiveAssetResultOk, BaseApiResponse } from '../api';
-import { api, apiConfig, fetchAllGameData } from '../backend-interface';
 import { GroupData, MajorGroupData, MusicData } from '../definitions/data/gameinfo';
 import { Artist } from '../entity/Artist';
 import { Song } from '../entity/Song';
@@ -32,37 +31,18 @@ export const keyDifficultyMap = {
   seqHard: Difficulty.Hard,
 };
 
-export async function loadGamedataForMusicImport(gameKey: string, version: string) {
-  return fetchAllGameData(gameKey, version, [
-    'artistdata',
-    'localedata',
-    // 'urls',
-    'musicdata',
-    'groupdata',
-    'majorgroupdata',
-  ]);
-}
-
-const httpApiArchiveGameAsset = (
-  fileCode: number | undefined,
-  gameKey: string,
-  gamedataVersion: string | number,
-  urlsVersion: string | number,
-): Promise<BaseApiResponse<ArchiveAssetResult> | undefined> => {
-  if (typeof fileCode !== 'number') {
-    return Promise.resolve(undefined);
-  }
-  return api.post<BaseApiResponse<ArchiveAssetResult>>(
-    `/v1/${gameKey}/gamedata/urls/${gamedataVersion}/${urlsVersion}/archiveAsset/${fileCode}`,
-  );
-};
-
 export function handleStreamDownload(
   gameKey: string,
   gamedataVersion: number,
   urlsVersion: number,
   songdata: MusicData,
-  archiveGameAsset = httpApiArchiveGameAsset,
+  apiEndpoint: string,
+  archiveGameAsset: (
+    fileCode: number | undefined,
+    gameKey: string,
+    gamedataVersion: string | number,
+    urlsVersion: string | number,
+  ) => Promise<BaseApiResponse<ArchiveAssetResult> | undefined>,
 ): (
   value: string,
   index: number,
@@ -102,7 +82,7 @@ export function handleStreamDownload(
     }
 
     if (key === 'sound') {
-      audioLength = await getAudioDurationInSeconds(apiConfig.endpoint + gameAssetInfoResponse.data.uri);
+      audioLength = await getAudioDurationInSeconds(apiEndpoint + gameAssetInfoResponse.data.uri);
     }
 
     return [
@@ -137,11 +117,19 @@ export async function processSongData(
   SongBeatmaps = getRepository(SongBeatmap),
   SongBeatmapContentsR = getRepository(SongBeatmapContents),
   Artists = getRepository(Artist),
-  archiveGameAsset = httpApiArchiveGameAsset,
+  apiEndpoint: string,
+  archiveGameAsset: (
+    fileCode: number | undefined,
+    gameKey: string,
+    gamedataVersion: string | number,
+    urlsVersion: string | number,
+  ) => Promise<BaseApiResponse<ArchiveAssetResult> | undefined>,
   { log }: { log: (...data: any[]) => void } = console,
 ): Promise<ProcessedSongData> {
   const fileStreams$ = await Promise.all(
-    downloadDataKeys.map(handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, archiveGameAsset)),
+    downloadDataKeys.map(
+      handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, apiEndpoint, archiveGameAsset),
+    ),
   );
   const streamMap: Dictionary<{
     stream: Buffer;
