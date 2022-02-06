@@ -1,17 +1,19 @@
 import { Buffer } from 'buffer';
-import * as crypto from 'crypto';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import * as util from 'util';
-import zlib from 'zlib';
-import { InfoAggregate } from './definitions/data/InfoAggregate';
+import { promisify } from 'util';
+import type { InputType } from 'zlib';
+import type { InfoAggregate } from './definitions/data/InfoAggregate';
 
 const algorithm = 'aes-256-ecb';
-const gunzip = util.promisify<zlib.InputType, Buffer>(zlib.gunzip);
 const jsonPrettyIndent = 2;
 
 export async function downloadInfoFile(clearkey: string, url: string) {
   const { default: got } = await import('got');
+  const crypto = await import('crypto');
+  const { default: zlib } = await import('zlib');
+  const gunzip = promisify<InputType, Buffer>(zlib.gunzip);
+
   const request = await got(url);
   const rawDl = request.rawBody;
   const unzipped = await gunzip(rawDl);
