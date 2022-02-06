@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { promisify } from 'util';
+import { promisify } from 'es6-promisify';
 import type { InputType } from 'zlib';
 import type { InfoAggregate } from './definitions/data/InfoAggregate';
 

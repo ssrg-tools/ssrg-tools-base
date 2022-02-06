@@ -77,7 +77,7 @@ import {
   WorldRecordData,
 } from './gameinfo';
 
-import { promisify } from 'util';
+import { promisify } from 'es6-promisify';
 import { readFile, exists } from 'fs';
 import { join } from 'path';
 
