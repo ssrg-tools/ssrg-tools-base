@@ -1,10 +1,11 @@
+import { Buffer } from 'buffer';
+import * as crypto from 'crypto';
+import { mkdirSync, writeFileSync } from 'fs';
+import got, { RequestError } from 'got';
+import { join } from 'path';
 import * as util from 'util';
 import zlib from 'zlib';
-import got, { RequestError } from 'got';
-import * as crypto from 'crypto';
 import { InfoAggregate } from './definitions/data/InfoAggregate';
-import { join } from 'path';
-import { mkdirSync, writeFileSync } from 'fs';
 
 const algorithm = 'aes-256-ecb';
 const gunzip = util.promisify<zlib.InputType, Buffer>(zlib.gunzip);

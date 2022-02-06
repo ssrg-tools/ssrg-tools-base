@@ -1,5 +1,6 @@
-import { Column } from 'typeorm';
+import { Buffer } from 'buffer';
 import _sodium from 'libsodium-wrappers';
+import { Column } from 'typeorm';
 
 export class EncryptedVarchar {
   @Column('tinyblob')
