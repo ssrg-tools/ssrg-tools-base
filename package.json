@@ -2,7 +2,6 @@
   "name": "@ssrg-tools/base",
   "version": "0.11.0",
   "description": "",
-  "sideEffects": false,
   "main": "./cjs/src/index.js",
   "exports": {
     "*": {
