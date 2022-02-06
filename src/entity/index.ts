@@ -18,6 +18,7 @@ export * from './PlayerProfile';
 export * from './PlayerProfileImage';
 export * from './Song';
 export * from './SongBeatmap';
+export * from './SongBeatmapContents';
 export * from './SongClear';
 export * from './SongClearCard';
 export * from './SongWorldRecord';
