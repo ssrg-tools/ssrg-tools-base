@@ -81,6 +81,9 @@ export class GameTaskResult extends BaseTaskResult {
 @ChildEntity('import-season')
 export class ImportSeasonTaskResult extends GameTaskResult {}
 
+@ChildEntity('import-songs')
+export class ImportSongTaskResult extends GameTaskResult {}
+
 @ChildEntity('import-wr')
 export class ImportWRTaskResult extends GameTaskResult {}
 
@@ -89,6 +92,9 @@ export class ImportArtistsTaskResult extends GameTaskResult {}
 
 @ChildEntity('archive-assets')
 export class ArchiveAssetsTaskResult extends GameTaskResult {}
+
+@ChildEntity('upload-game-info')
+export class UploadGameInfoTaskResult extends GameTaskResult {}
 
 @ChildEntity('generate-beatmap-chart')
 export class GenerateBeatmapChartTaskResult extends GameTaskResult {}
