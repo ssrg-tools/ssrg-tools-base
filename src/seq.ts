@@ -343,7 +343,7 @@ function readNoteData(
 }
 
 export async function parseBeatmapFile(filepath: string) {
-  const { readFile } = await import('fs/promises');
+  const { readFile } = await import('' + 'fs/promises');
   const contents = await readFile(filepath);
   return parseBeatmap(contents);
 }
