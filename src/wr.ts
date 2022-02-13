@@ -35,6 +35,8 @@ export async function fetchAndInsertSWRForGameAndSeason(
 
   const buildUrl = _.curry(buildUrlRanking(game.baseUrlRanking, season.bonusSystem))(season.dalcomSeasonId);
   const responseText: string[] = [];
+  const changedSongs: [songGuid: string, count: number][] = [];
+  const addedWRs: [songGuid: string, swrGuid: string][] = [];
 
   const songs = songList?.length
     ? songList
@@ -98,6 +100,10 @@ export async function fetchAndInsertSWRForGameAndSeason(
     const output = result?.dots?.join('') || '';
     if (result.result === 'ok' && result.entries?.length) {
       entries = result.entries;
+      changedSongs.push([song.guid, entries.length]);
+      entries.forEach(e => {
+        addedWRs.push([song.guid, e.guid]);
+      });
     } else if (result.result === 'ok') {
       responseText.push('  No changes - Done!');
       continue;
@@ -124,6 +130,8 @@ export async function fetchAndInsertSWRForGameAndSeason(
 
   return {
     responseText,
+    changedSongs,
+    addedWRs,
   };
 }
 
