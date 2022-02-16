@@ -72,7 +72,7 @@ export function handleStreamDownload(
     }
 
     const { default: got } = await import('got');
-    const stream = await got(gameAssetInfoResponse.data.uri).buffer();
+    const stream = await got(apiEndpoint + gameAssetInfoResponse.data.uri).buffer();
     let beatmap: Beatmap | undefined;
     let audioLength: number;
 
