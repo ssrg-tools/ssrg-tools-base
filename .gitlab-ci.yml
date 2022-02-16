@@ -25,9 +25,11 @@ npm-install:
   cache: &global_npm_cache
     key:
       files:
-        - package-lock.json
+        - yarn.lock
     paths:
       - node_modules/
+      - .yarn/cache/
+      - .yarn/install-state.gz
     policy: pull-push
 
 test-test-jasmine:
