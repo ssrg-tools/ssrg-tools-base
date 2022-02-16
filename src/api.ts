@@ -12,17 +12,38 @@ export interface BaseApiResponse<T> {
 }
 
 export class PaginationResult<T> implements BaseApiResponse<T[]> {
-  data: T[];
-  total: number;
-  page: number | string;
-  pageSize: number;
+  readonly data: T[];
+  readonly total: number;
+  readonly page: number | string;
+  readonly pageSize: number;
 
-  timeTakenMs: number;
+  readonly timeTakenMs: number;
 
-  constructor([data, total]: [T[], number], pageSize: NumberLike, page: number | string = 0) {
+  constructor([data, total]: [data: T[], total: number], pageSize: NumberLike, page: number | string = 0) {
     this.data = data;
     this.total = total;
     this.page = page;
+    this.pageSize = typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
+  }
+}
+
+export class PaginationResultByStringKey<T> implements BaseApiResponse<T[]> {
+  readonly data: T[];
+  readonly total: number;
+  readonly pageSize: number;
+
+  readonly timeTakenMs: number;
+
+  constructor(
+    [data, total]: [data: T[], total: number],
+    pageSize: NumberLike,
+    public readonly orderKey: string,
+    public readonly currentAfter: string,
+    public readonly nextAfter?: string,
+    public readonly afterKey?: string,
+  ) {
+    this.data = data;
+    this.total = total;
     this.pageSize = typeof pageSize === 'number' ? pageSize : parseInt(pageSize, 10);
   }
 }
