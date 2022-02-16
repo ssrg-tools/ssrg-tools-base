@@ -93,7 +93,6 @@ export class SongBeatmap {
   @OneToOne(() => SongBeatmapContents, contents => contents.songBeatmap, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
-    cascade: true,
   })
   data: SongBeatmapContents;
 }
