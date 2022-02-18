@@ -261,6 +261,7 @@ export async function processSongData(
     }
     songBeatmap.beatmapFilename = streamMap[beatmapKey].basename;
     songBeatmap.seqUrl = streamMap[beatmapKey].gameAssetInfo.uri;
+    songBeatmap.mapUrl = `/v1/beatmaps/${songBeatmap.guid}/map.svg`;
 
     if (!songBeatmap.data) {
       log(`Beatmap: No data for ${beatmapKey}`);
