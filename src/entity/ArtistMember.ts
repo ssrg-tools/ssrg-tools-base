@@ -19,7 +19,15 @@ export class ArtistMember {
 
   @Index('byDateBirthday')
   @Column('datetime', { nullable: true })
-  dateBirthday: Date;
+  dateBirthday: Date | null;
+
+  @Index('byCode')
+  @Column('simple-json', {
+    comment: 'game internal artist ids',
+    nullable: true,
+    default: '[]',
+  })
+  internalIds: number[];
 
   @Column('varchar', {
     name: 'guid',
