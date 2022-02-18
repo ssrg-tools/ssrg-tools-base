@@ -65,14 +65,14 @@ export class SongBeatmap {
     nullable: true,
     default: null,
   })
-  seqUrl: string;
+  seqUrl: string | null;
 
   @Column('varchar', {
     length: 255,
     nullable: true,
     default: null,
   })
-  mapUrl: string;
+  mapUrl: string | null;
 
   @Column('json', { default: '{}', select: false })
   meta: any;

@@ -77,35 +77,35 @@ export class Song {
     nullable: true,
     default: null,
   })
-  imageId: string;
+  imageId: string | null;
 
   @Column('varchar', {
     length: 255,
     nullable: true,
     default: null,
   })
-  imageUrl: string;
+  imageUrl: string | null;
 
   @Column('varchar', {
     length: 255,
     nullable: true,
     default: null,
   })
-  imageBackgroundUrl: string;
+  imageBackgroundUrl: string | null;
 
   @Column('varchar', {
     length: 255,
     nullable: true,
     default: null,
   })
-  audioUrl: string;
+  audioUrl: string | null;
 
   @Column('varchar', {
     length: 255,
     nullable: true,
     default: null,
   })
-  audioPreviewUrl: string;
+  audioPreviewUrl: string | null;
 
   @Column('varchar', {
     name: 'dalcom_song_filename',
@@ -115,7 +115,7 @@ export class Song {
     default: null,
     select: false,
   })
-  songFilename: string;
+  songFilename: string | null;
 
   @Column('datetime', {
     name: 'beatmap_date_processed',

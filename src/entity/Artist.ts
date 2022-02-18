@@ -31,7 +31,7 @@ export class Artist {
     nullable: true,
     default: null,
   })
-  imageUrl: string;
+  imageUrl: string | null;
 
   @Index('byDateDebut')
   @Column('datetime', { nullable: true })
@@ -45,7 +45,7 @@ export class Artist {
   group: string;
 
   @Column('json', { default: '{}', select: false })
-  meta: any;
+  meta: Record<string, unknown>;
 
   @Index('byCode')
   @Column('simple-json', {
