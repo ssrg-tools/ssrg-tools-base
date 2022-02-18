@@ -223,6 +223,7 @@ __metadata:
     mime-types: ^2.1.34
     moment: ^2.28.0
     moment-timezone: ^0.5.33
+    mysql2: ^2.3.3
     prettier: ^2.5.1
     reflect-metadata: ^0.1.13
     ts-node: ^8.10.2
@@ -230,7 +231,7 @@ __metadata:
     typeorm: ^0.2.25
     typescript: ^4.2.4
   peerDependencies:
-    mysql2: ^2.1.0
+    mysql2: ^2.3.3
   languageName: unknown
   linkType: soft
 
@@ -775,6 +776,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"denque@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "denque@npm:2.0.1"
+  checksum: ec398d1e3c6c8d4f5213dcf9ad74d7faa3b461e29a0019c9742b49a97ac5e16aa7134db45fa9d841e318e7722dd1ba670a474fde9a5b0d870b3a5fc6fe914c30
+  languageName: node
+  linkType: hard
+
 "diff@npm:^4.0.1":
   version: 4.0.2
   resolution: "diff@npm:4.0.2"
@@ -1156,6 +1164,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"generate-function@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "generate-function@npm:2.3.1"
+  dependencies:
+    is-property: ^1.0.2
+  checksum: 652f083de206ead2bae4caf9c7eeb465e8d98c0b8ed2a29c6afc538cef0785b5c6eea10548f1e13cc586d3afd796c13c830c2cb3dc612ec2457b2aadda5f57c9
+  languageName: node
+  linkType: hard
+
 "get-audio-duration@npm:^2.0.3":
   version: 2.0.3
   resolution: "get-audio-duration@npm:2.0.3"
@@ -1293,6 +1310,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"iconv-lite@npm:^0.6.3":
+  version: 0.6.3
+  resolution: "iconv-lite@npm:0.6.3"
+  dependencies:
+    safer-buffer: ">= 2.1.2 < 3.0.0"
+  checksum: 3f60d47a5c8fc3313317edfd29a00a692cc87a19cac0159e2ce711d0ebc9019064108323b5e493625e25594f11c6236647d8e256fbe7a58f4a3b33b89e6d30bf
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -1375,6 +1401,13 @@ __metadata:
   version: 7.0.0
   resolution: "is-number@npm:7.0.0"
   checksum: 456ac6f8e0f3111ed34668a624e45315201dff921e5ac181f8ec24923b99e9f32ca1a194912dc79d539c97d33dba17dc635202ff0b2cf98326f608323276d27a
+  languageName: node
+  linkType: hard
+
+"is-property@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "is-property@npm:1.0.2"
+  checksum: 33b661a3690bcc88f7e47bb0a21b9e3187e76a317541ea7ec5e8096d954f441b77a46d8930c785f7fbf4ef8dfd624c25495221e026e50f74c9048fe501773be5
   languageName: node
   linkType: hard
 
@@ -1532,10 +1565,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"long@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "long@npm:4.0.0"
+  checksum: 16afbe8f749c7c849db1f4de4e2e6a31ac6e617cead3bdc4f9605cb703cd20e1e9fc1a7baba674ffcca57d660a6e5b53a9e236d7b25a295d3855cca79cc06744
+  languageName: node
+  linkType: hard
+
 "lowercase-keys@npm:^2.0.0":
   version: 2.0.0
   resolution: "lowercase-keys@npm:2.0.0"
   checksum: 24d7ebd56ccdf15ff529ca9e08863f3c54b0b9d1edb97a3ae1af34940ae666c01a1e6d200707bce730a8ef76cb57cc10e65f245ecaaf7e6bc8639f2fb460ac23
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^4.1.3":
+  version: 4.1.5
+  resolution: "lru-cache@npm:4.1.5"
+  dependencies:
+    pseudomap: ^1.0.2
+    yallist: ^2.1.2
+  checksum: 4bb4b58a36cd7dc4dcec74cbe6a8f766a38b7426f1ff59d4cf7d82a2aa9b9565cd1cb98f6ff60ce5cd174524868d7bc9b7b1c294371851356066ca9ac4cf135a
   languageName: node
   linkType: hard
 
@@ -1657,6 +1707,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mysql2@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "mysql2@npm:2.3.3"
+  dependencies:
+    denque: ^2.0.1
+    generate-function: ^2.3.1
+    iconv-lite: ^0.6.3
+    long: ^4.0.0
+    lru-cache: ^6.0.0
+    named-placeholders: ^1.1.2
+    seq-queue: ^0.0.5
+    sqlstring: ^2.3.2
+  checksum: 45e479d0cbdb24ceb9d1846a1708ae2c33aa64f603f7899279b33560b1eec441f1b7a596075896f1305f701cfbc083bceb88bc72ba5d2f3656a3d6102611286a
+  languageName: node
+  linkType: hard
+
 "mz@npm:^2.4.0":
   version: 2.7.0
   resolution: "mz@npm:2.7.0"
@@ -1665,6 +1731,15 @@ __metadata:
     object-assign: ^4.0.1
     thenify-all: ^1.0.0
   checksum: 8427de0ece99a07e9faed3c0c6778820d7543e3776f9a84d22cf0ec0a8eb65f6e9aee9c9d353ff9a105ff62d33a9463c6ca638974cc652ee8140cd1e35951c87
+  languageName: node
+  linkType: hard
+
+"named-placeholders@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "named-placeholders@npm:1.1.2"
+  dependencies:
+    lru-cache: ^4.1.3
+  checksum: c9317d1b479d6733b3baedfde209c6c866cf387c2d625837f93355fdb6a9055b1e8180b883fe00bcb20edb3ba4dd21128ec2f1ed8cb884385cef7698cbcadcc4
   languageName: node
   linkType: hard
 
@@ -1829,6 +1904,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pseudomap@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "pseudomap@npm:1.0.2"
+  checksum: 856c0aae0ff2ad60881168334448e898ad7a0e45fe7386d114b150084254c01e200c957cf378378025df4e052c7890c5bd933939b0e0d2ecfcc1dc2f0b2991f5
+  languageName: node
+  linkType: hard
+
 "pump@npm:^3.0.0":
   version: 3.0.0
   resolution: "pump@npm:3.0.0"
@@ -1945,6 +2027,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"safer-buffer@npm:>= 2.1.2 < 3.0.0":
+  version: 2.1.2
+  resolution: "safer-buffer@npm:2.1.2"
+  checksum: cab8f25ae6f1434abee8d80023d7e72b598cf1327164ddab31003c51215526801e40b66c5e65d658a0af1e9d6478cadcb4c745f4bd6751f97d8644786c0978b0
+  languageName: node
+  linkType: hard
+
 "sax@npm:>=0.6.0":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
@@ -1960,6 +2049,13 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 5eafe6102bea2a7439897c1856362e31cc348ccf96efd455c8b5bc2c61e6f7e7b8250dc26b8828c1d76a56f818a7ee907a36ae9fb37a599d3d24609207001d60
+  languageName: node
+  linkType: hard
+
+"seq-queue@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "seq-queue@npm:0.0.5"
+  checksum: f8695a6cb613e1b378b9686cde4ea626944091a412fc1c9d24c5039283d4351dd115f4505e4cf103d3a2e4a9a6a72fc7698fdce703839fb1fec9627aa4ce5563
   languageName: node
   linkType: hard
 
@@ -2037,6 +2133,13 @@ __metadata:
   version: 1.0.3
   resolution: "sprintf-js@npm:1.0.3"
   checksum: 19d79aec211f09b99ec3099b5b2ae2f6e9cdefe50bc91ac4c69144b6d3928a640bb6ae5b3def70c2e85a2c3d9f5ec2719921e3a59d3ca3ef4b2fd1a4656a0df3
+  languageName: node
+  linkType: hard
+
+"sqlstring@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "sqlstring@npm:2.3.2"
+  checksum: 6d17a604dcf724046ff0f0dec562164fc217968e7a962e6ed6cca6ae8d8cd7b264c595627fe74d485200274ad8913f88d4fb9e75469d0305b1a647492b7168e0
   languageName: node
   linkType: hard
 
@@ -2376,6 +2479,13 @@ __metadata:
   version: 5.0.8
   resolution: "y18n@npm:5.0.8"
   checksum: 54f0fb95621ee60898a38c572c515659e51cc9d9f787fb109cef6fde4befbe1c4602dc999d30110feee37456ad0f1660fa2edcfde6a9a740f86a290999550d30
+  languageName: node
+  linkType: hard
+
+"yallist@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "yallist@npm:2.1.2"
+  checksum: 9ba99409209f485b6fcb970330908a6d41fa1c933f75e08250316cce19383179a6b70a7e0721b89672ebb6199cc377bf3e432f55100da6a7d6e11902b0a642cb
   languageName: node
   linkType: hard
 
