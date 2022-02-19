@@ -81,8 +81,9 @@ export function handleStreamDownload(
     }
 
     if (key === 'sound') {
+      const { Readable } = await import('stream');
       const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
-      audioLength = await getAudioDurationInSeconds(apiEndpoint + gameAssetInfoResponse.data.uri);
+      audioLength = await getAudioDurationInSeconds(Readable.from(stream));
     }
 
     return [
