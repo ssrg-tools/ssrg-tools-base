@@ -1,0 +1,763 @@
+diff --git a/node_modules/typeorm/browser/driver/DriverFactory.js b/node_modules/typeorm/browser/driver/DriverFactory.js
+index 1b98eb4..3facf7b 100644
+--- a/node_modules/typeorm/browser/driver/DriverFactory.js
++++ b/node_modules/typeorm/browser/driver/DriverFactory.js
+@@ -5,7 +5,6 @@ import { SqlServerDriver } from "./sqlserver/SqlServerDriver";
+ import { OracleDriver } from "./oracle/OracleDriver";
+ import { SqliteDriver } from "./sqlite/SqliteDriver";
+ import { CordovaDriver } from "./cordova/CordovaDriver";
+-import { ReactNativeDriver } from "./react-native/ReactNativeDriver";
+ import { NativescriptDriver } from "./nativescript/NativescriptDriver";
+ import { SqljsDriver } from "./sqljs/SqljsDriver";
+ import { MysqlDriver } from "./mysql/MysqlDriver";
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.d.ts b/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.d.ts
+deleted file mode 100644
+index be71ac8..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.d.ts
++++ /dev/null
+@@ -1,23 +0,0 @@
+-import { BaseConnectionOptions } from "../../connection/BaseConnectionOptions";
+-/**
+- * Sqlite-specific connection options.
+- */
+-export interface ReactNativeConnectionOptions extends BaseConnectionOptions {
+-    /**
+-     * Database type.
+-     */
+-    readonly type: "react-native";
+-    /**
+-     * Database name.
+-     */
+-    readonly database: string;
+-    /**
+-     * The driver object
+-     * This defaults to require("react-native-sqlite-storage")
+-     */
+-    readonly driver?: any;
+-    /**
+-     * Storage Location
+-     */
+-    readonly location: string;
+-}
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js b/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js
+deleted file mode 100644
+index 337bffd..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js
++++ /dev/null
+@@ -1,3 +0,0 @@
+-export {};
+-
+-//# sourceMappingURL=ReactNativeConnectionOptions.js.map
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js.map b/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js.map
+deleted file mode 100644
+index 9b97609..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeConnectionOptions.js.map
++++ /dev/null
+@@ -1 +0,0 @@
+-{"version":3,"sources":["../browser/src/driver/react-native/ReactNativeConnectionOptions.ts"],"names":[],"mappings":"","file":"ReactNativeConnectionOptions.js","sourcesContent":["import {BaseConnectionOptions} from \"../../connection/BaseConnectionOptions\";\n\n/**\n * Sqlite-specific connection options.\n */\nexport interface ReactNativeConnectionOptions extends BaseConnectionOptions {\n\n    /**\n     * Database type.\n     */\n    readonly type: \"react-native\";\n\n    /**\n     * Database name.\n     */\n    readonly database: string;\n\n    /**\n     * The driver object\n     * This defaults to require(\"react-native-sqlite-storage\")\n     */\n    readonly driver?: any;\n\n    /**\n     * Storage Location\n     */\n    readonly location: string;\n}"],"sourceRoot":"../.."}
+\ No newline at end of file
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.d.ts b/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.d.ts
+deleted file mode 100644
+index 6a99b65..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.d.ts
++++ /dev/null
+@@ -1,25 +0,0 @@
+-import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
+-import { ReactNativeConnectionOptions } from "./ReactNativeConnectionOptions";
+-import { QueryRunner } from "../../query-runner/QueryRunner";
+-import { Connection } from "../../connection/Connection";
+-import { ReplicationMode } from "../types/ReplicationMode";
+-export declare class ReactNativeDriver extends AbstractSqliteDriver {
+-    options: ReactNativeConnectionOptions;
+-    constructor(connection: Connection);
+-    /**
+-     * Closes connection with database.
+-     */
+-    disconnect(): Promise<void>;
+-    /**
+-     * Creates a query runner used to execute database queries.
+-     */
+-    createQueryRunner(mode: ReplicationMode): QueryRunner;
+-    /**
+-     * Creates connection with the database.
+-     */
+-    protected createDatabaseConnection(): Promise<void>;
+-    /**
+-     * If driver dependency is not given explicitly, then try to load it via "require".
+-     */
+-    protected loadDependencies(): void;
+-}
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js b/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js
+deleted file mode 100644
+index 4e781a2..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js
++++ /dev/null
+@@ -1,91 +0,0 @@
+-import { __awaiter, __extends, __generator } from "tslib";
+-import { AbstractSqliteDriver } from "../sqlite-abstract/AbstractSqliteDriver";
+-import { ReactNativeQueryRunner } from "./ReactNativeQueryRunner";
+-import { DriverOptionNotSetError } from "../../error/DriverOptionNotSetError";
+-import { DriverPackageNotInstalledError } from "../../error/DriverPackageNotInstalledError";
+-var ReactNativeDriver = /** @class */ (function (_super) {
+-    __extends(ReactNativeDriver, _super);
+-    // -------------------------------------------------------------------------
+-    // Constructor
+-    // -------------------------------------------------------------------------
+-    function ReactNativeDriver(connection) {
+-        var _this = _super.call(this, connection) || this;
+-        _this.database = _this.options.database;
+-        // validate options to make sure everything is set
+-        if (!_this.options.database)
+-            throw new DriverOptionNotSetError("database");
+-        if (!_this.options.location)
+-            throw new DriverOptionNotSetError("location");
+-        // load sqlite package
+-        _this.loadDependencies();
+-        return _this;
+-    }
+-    // -------------------------------------------------------------------------
+-    // Public Methods
+-    // -------------------------------------------------------------------------
+-    /**
+-     * Closes connection with database.
+-     */
+-    ReactNativeDriver.prototype.disconnect = function () {
+-        return __awaiter(this, void 0, void 0, function () {
+-            var _this = this;
+-            return __generator(this, function (_a) {
+-                return [2 /*return*/, new Promise(function (ok, fail) {
+-                        _this.queryRunner = undefined;
+-                        _this.databaseConnection.close(ok, fail);
+-                    })];
+-            });
+-        });
+-    };
+-    /**
+-     * Creates a query runner used to execute database queries.
+-     */
+-    ReactNativeDriver.prototype.createQueryRunner = function (mode) {
+-        if (!this.queryRunner)
+-            this.queryRunner = new ReactNativeQueryRunner(this);
+-        return this.queryRunner;
+-    };
+-    // -------------------------------------------------------------------------
+-    // Protected Methods
+-    // -------------------------------------------------------------------------
+-    /**
+-     * Creates connection with the database.
+-     */
+-    ReactNativeDriver.prototype.createDatabaseConnection = function () {
+-        var _this = this;
+-        return new Promise(function (ok, fail) {
+-            var options = Object.assign({}, {
+-                name: _this.options.database,
+-                location: _this.options.location,
+-            }, _this.options.extra || {});
+-            _this.sqlite.openDatabase(options, function (db) {
+-                var databaseConnection = db;
+-                // we need to enable foreign keys in sqlite to make sure all foreign key related features
+-                // working properly. this also makes onDelete work with sqlite.
+-                databaseConnection.executeSql("PRAGMA foreign_keys = ON;", [], function (result) {
+-                    ok(databaseConnection);
+-                }, function (error) {
+-                    fail(error);
+-                });
+-            }, function (error) {
+-                fail(error);
+-            });
+-        });
+-    };
+-    /**
+-     * If driver dependency is not given explicitly, then try to load it via "require".
+-     */
+-    ReactNativeDriver.prototype.loadDependencies = function () {
+-        try {
+-            var sqlite = this.options.driver || require("react-native-sqlite-storage");
+-            this.sqlite = sqlite;
+-        }
+-        catch (e) {
+-            throw new DriverPackageNotInstalledError("React-Native", "react-native-sqlite-storage");
+-        }
+-    };
+-    return ReactNativeDriver;
+-}(AbstractSqliteDriver));
+-export { ReactNativeDriver };
+-
+-//# sourceMappingURL=ReactNativeDriver.js.map
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js.map b/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js.map
+deleted file mode 100644
+index 501b084..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeDriver.js.map
++++ /dev/null
+@@ -1 +0,0 @@
+-{"version":3,"sources":["../browser/src/driver/react-native/ReactNativeDriver.ts"],"names":[],"mappings":"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","file":"ReactNativeDriver.js","sourcesContent":["import {AbstractSqliteDriver} from \"../sqlite-abstract/AbstractSqliteDriver\";\nimport {ReactNativeConnectionOptions} from \"./ReactNativeConnectionOptions\";\nimport {ReactNativeQueryRunner} from \"./ReactNativeQueryRunner\";\nimport {QueryRunner} from \"../../query-runner/QueryRunner\";\nimport {Connection} from \"../../connection/Connection\";\nimport {DriverOptionNotSetError} from \"../../error/DriverOptionNotSetError\";\nimport {DriverPackageNotInstalledError} from \"../../error/DriverPackageNotInstalledError\";\nimport {ReplicationMode} from \"../types/ReplicationMode\";\n\nexport class ReactNativeDriver extends AbstractSqliteDriver {\n    options: ReactNativeConnectionOptions;\n\n    // -------------------------------------------------------------------------\n    // Constructor\n    // -------------------------------------------------------------------------\n\n    constructor(connection: Connection) {\n        super(connection);\n\n        this.database = this.options.database;\n\n        // validate options to make sure everything is set\n        if (!this.options.database)\n            throw new DriverOptionNotSetError(\"database\");\n\n        if (!this.options.location)\n            throw new DriverOptionNotSetError(\"location\");\n\n        // load sqlite package\n        this.loadDependencies();\n    }\n\n\n    // -------------------------------------------------------------------------\n    // Public Methods\n    // -------------------------------------------------------------------------\n\n    /**\n     * Closes connection with database.\n     */\n    async disconnect(): Promise<void> {\n        return new Promise<void>((ok, fail) => {\n            this.queryRunner = undefined;\n            this.databaseConnection.close(ok, fail);\n        });\n    }\n\n    /**\n     * Creates a query runner used to execute database queries.\n     */\n    createQueryRunner(mode: ReplicationMode): QueryRunner {\n        if (!this.queryRunner)\n            this.queryRunner = new ReactNativeQueryRunner(this);\n\n        return this.queryRunner;\n    }\n\n    // -------------------------------------------------------------------------\n    // Protected Methods\n    // -------------------------------------------------------------------------\n\n    /**\n     * Creates connection with the database.\n     */\n    protected createDatabaseConnection() {\n        return new Promise<void>((ok, fail) => {\n            const options = Object.assign({}, {\n                name: this.options.database,\n                location: this.options.location,\n            }, this.options.extra || {});\n\n            this.sqlite.openDatabase(options, (db: any) => {\n                const databaseConnection = db;\n\n                // we need to enable foreign keys in sqlite to make sure all foreign key related features\n                // working properly. this also makes onDelete work with sqlite.\n                databaseConnection.executeSql(`PRAGMA foreign_keys = ON;`, [], (result: any) => {\n                    ok(databaseConnection);\n                }, (error: any) => {\n                    fail(error);\n                });\n            }, (error: any) => {\n                fail(error);\n            });\n        });\n    }\n\n    /**\n     * If driver dependency is not given explicitly, then try to load it via \"require\".\n     */\n    protected loadDependencies(): void {\n        try {\n            const sqlite = this.options.driver || require(\"react-native-sqlite-storage\");\n            this.sqlite = sqlite;\n\n        } catch (e) {\n            throw new DriverPackageNotInstalledError(\"React-Native\", \"react-native-sqlite-storage\");\n        }\n    }\n}\n"],"sourceRoot":"../.."}
+\ No newline at end of file
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.d.ts b/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.d.ts
+deleted file mode 100644
+index f49a29e..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.d.ts
++++ /dev/null
+@@ -1,29 +0,0 @@
+-import { ObjectLiteral } from "../../common/ObjectLiteral";
+-import { AbstractSqliteQueryRunner } from "../sqlite-abstract/AbstractSqliteQueryRunner";
+-import { ReactNativeDriver } from "./ReactNativeDriver";
+-/**
+- * Runs queries on a single sqlite database connection.
+- */
+-export declare class ReactNativeQueryRunner extends AbstractSqliteQueryRunner {
+-    /**
+-     * Database driver used by connection.
+-     */
+-    driver: ReactNativeDriver;
+-    constructor(driver: ReactNativeDriver);
+-    /**
+-     * Called before migrations are run.
+-     */
+-    beforeMigration(): Promise<void>;
+-    /**
+-     * Called after migrations are run.
+-     */
+-    afterMigration(): Promise<void>;
+-    /**
+-     * Executes a given SQL query.
+-     */
+-    query(query: string, parameters?: any[], useStructuredResult?: boolean): Promise<any>;
+-    /**
+-     * Parametrizes given object of values. Used to create column=value queries.
+-     */
+-    protected parametrize(objectLiteral: ObjectLiteral, startIndex?: number): string[];
+-}
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js b/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js
+deleted file mode 100644
+index e9f1ed1..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js
++++ /dev/null
+@@ -1,122 +0,0 @@
+-import { __awaiter, __extends, __generator } from "tslib";
+-import { QueryRunnerAlreadyReleasedError } from "../../error/QueryRunnerAlreadyReleasedError";
+-import { QueryFailedError } from "../../error/QueryFailedError";
+-import { AbstractSqliteQueryRunner } from "../sqlite-abstract/AbstractSqliteQueryRunner";
+-import { Broadcaster } from "../../subscriber/Broadcaster";
+-import { QueryResult } from "../../query-runner/QueryResult";
+-/**
+- * Runs queries on a single sqlite database connection.
+- */
+-var ReactNativeQueryRunner = /** @class */ (function (_super) {
+-    __extends(ReactNativeQueryRunner, _super);
+-    // -------------------------------------------------------------------------
+-    // Constructor
+-    // -------------------------------------------------------------------------
+-    function ReactNativeQueryRunner(driver) {
+-        var _this = _super.call(this) || this;
+-        _this.driver = driver;
+-        _this.connection = driver.connection;
+-        _this.broadcaster = new Broadcaster(_this);
+-        return _this;
+-    }
+-    /**
+-     * Called before migrations are run.
+-     */
+-    ReactNativeQueryRunner.prototype.beforeMigration = function () {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                switch (_a.label) {
+-                    case 0: return [4 /*yield*/, this.query("PRAGMA foreign_keys = OFF")];
+-                    case 1:
+-                        _a.sent();
+-                        return [2 /*return*/];
+-                }
+-            });
+-        });
+-    };
+-    /**
+-     * Called after migrations are run.
+-     */
+-    ReactNativeQueryRunner.prototype.afterMigration = function () {
+-        return __awaiter(this, void 0, void 0, function () {
+-            return __generator(this, function (_a) {
+-                switch (_a.label) {
+-                    case 0: return [4 /*yield*/, this.query("PRAGMA foreign_keys = ON")];
+-                    case 1:
+-                        _a.sent();
+-                        return [2 /*return*/];
+-                }
+-            });
+-        });
+-    };
+-    /**
+-     * Executes a given SQL query.
+-     */
+-    ReactNativeQueryRunner.prototype.query = function (query, parameters, useStructuredResult) {
+-        var _this = this;
+-        if (useStructuredResult === void 0) { useStructuredResult = false; }
+-        if (this.isReleased)
+-            throw new QueryRunnerAlreadyReleasedError();
+-        return new Promise(function (ok, fail) { return __awaiter(_this, void 0, void 0, function () {
+-            var databaseConnection, queryStartTime;
+-            var _this = this;
+-            return __generator(this, function (_a) {
+-                switch (_a.label) {
+-                    case 0: return [4 /*yield*/, this.connect()];
+-                    case 1:
+-                        databaseConnection = _a.sent();
+-                        this.driver.connection.logger.logQuery(query, parameters, this);
+-                        queryStartTime = +new Date();
+-                        databaseConnection.executeSql(query, parameters, function (raw) {
+-                            // log slow queries if maxQueryExecution time is set
+-                            var maxQueryExecutionTime = _this.driver.options.maxQueryExecutionTime;
+-                            var queryEndTime = +new Date();
+-                            var queryExecutionTime = queryEndTime - queryStartTime;
+-                            if (maxQueryExecutionTime && queryExecutionTime > maxQueryExecutionTime)
+-                                _this.driver.connection.logger.logQuerySlow(queryExecutionTime, query, parameters, _this);
+-                            var result = new QueryResult();
+-                            // return id of inserted row, if query was insert statement.
+-                            if (query.substr(0, 11) === "INSERT INTO") {
+-                                result.raw = raw.insertId;
+-                            }
+-                            if (raw === null || raw === void 0 ? void 0 : raw.hasOwnProperty('rowsAffected')) {
+-                                result.affected = raw.rowsAffected;
+-                            }
+-                            if (raw === null || raw === void 0 ? void 0 : raw.hasOwnProperty('rows')) {
+-                                var records = [];
+-                                for (var i = 0; i < raw.rows.length; i++) {
+-                                    records.push(raw.rows.item(i));
+-                                }
+-                                result.raw = records;
+-                                result.records = records;
+-                            }
+-                            if (useStructuredResult) {
+-                                ok(result);
+-                            }
+-                            else {
+-                                ok(result.raw);
+-                            }
+-                        }, function (err) {
+-                            _this.driver.connection.logger.logQueryError(err, query, parameters, _this);
+-                            fail(new QueryFailedError(query, parameters, err));
+-                        });
+-                        return [2 /*return*/];
+-                }
+-            });
+-        }); });
+-    };
+-    // -------------------------------------------------------------------------
+-    // Protected Methods
+-    // -------------------------------------------------------------------------
+-    /**
+-     * Parametrizes given object of values. Used to create column=value queries.
+-     */
+-    ReactNativeQueryRunner.prototype.parametrize = function (objectLiteral, startIndex) {
+-        if (startIndex === void 0) { startIndex = 0; }
+-        return Object.keys(objectLiteral).map(function (key, index) { return "\"" + key + "\"" + "=?"; });
+-    };
+-    return ReactNativeQueryRunner;
+-}(AbstractSqliteQueryRunner));
+-export { ReactNativeQueryRunner };
+-
+-//# sourceMappingURL=ReactNativeQueryRunner.js.map
+diff --git a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js.map b/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js.map
+deleted file mode 100644
+index 57c47ec..0000000
+--- a/node_modules/typeorm/browser/driver/react-native/ReactNativeQueryRunner.js.map
++++ /dev/null
+@@ -1 +0,0 @@
+-{"version":3,"sources":["../browser/src/driver/react-native/ReactNativeQueryRunner.ts"],"names":[],"mappings":"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","file":"ReactNativeQueryRunner.js","sourcesContent":["import {ObjectLiteral} from \"../../common/ObjectLiteral\";\nimport {QueryRunnerAlreadyReleasedError} from \"../../error/QueryRunnerAlreadyReleasedError\";\nimport {QueryFailedError} from \"../../error/QueryFailedError\";\nimport {AbstractSqliteQueryRunner} from \"../sqlite-abstract/AbstractSqliteQueryRunner\";\nimport {ReactNativeDriver} from \"./ReactNativeDriver\";\nimport {Broadcaster} from \"../../subscriber/Broadcaster\";\nimport { QueryResult } from \"../../query-runner/QueryResult\";\n\n/**\n * Runs queries on a single sqlite database connection.\n */\nexport class ReactNativeQueryRunner extends AbstractSqliteQueryRunner {\n\n    /**\n     * Database driver used by connection.\n     */\n    driver: ReactNativeDriver;\n\n    // -------------------------------------------------------------------------\n    // Constructor\n    // -------------------------------------------------------------------------\n\n    constructor(driver: ReactNativeDriver) {\n        super();\n        this.driver = driver;\n        this.connection = driver.connection;\n        this.broadcaster = new Broadcaster(this);\n    }\n\n    /**\n     * Called before migrations are run.\n     */\n    async beforeMigration(): Promise<void> {\n        await this.query(`PRAGMA foreign_keys = OFF`);\n    }\n\n    /**\n     * Called after migrations are run.\n     */\n    async afterMigration(): Promise<void> {\n        await this.query(`PRAGMA foreign_keys = ON`);\n    }\n\n    /**\n     * Executes a given SQL query.\n     */\n    query(query: string, parameters?: any[], useStructuredResult = false): Promise<any> {\n        if (this.isReleased)\n            throw new QueryRunnerAlreadyReleasedError();\n\n        return new Promise(async (ok, fail) => {\n            const databaseConnection = await this.connect();\n            this.driver.connection.logger.logQuery(query, parameters, this);\n            const queryStartTime = +new Date();\n            databaseConnection.executeSql(query, parameters, (raw: any) => {\n\n                // log slow queries if maxQueryExecution time is set\n                const maxQueryExecutionTime = this.driver.options.maxQueryExecutionTime;\n                const queryEndTime = +new Date();\n                const queryExecutionTime = queryEndTime - queryStartTime;\n                if (maxQueryExecutionTime && queryExecutionTime > maxQueryExecutionTime)\n                    this.driver.connection.logger.logQuerySlow(queryExecutionTime, query, parameters, this);\n\n                const result = new QueryResult();\n\n                // return id of inserted row, if query was insert statement.\n                if (query.substr(0, 11) === \"INSERT INTO\") {\n                    result.raw = raw.insertId;\n                }\n\n                if (raw?.hasOwnProperty('rowsAffected')) {\n                    result.affected = raw.rowsAffected;\n                }\n\n                if (raw?.hasOwnProperty('rows')) {\n                    let records = [];\n                    for (let i = 0; i < raw.rows.length; i++) {\n                        records.push(raw.rows.item(i));\n                    }\n\n                    result.raw = records;\n                    result.records = records;\n                }\n\n                if (useStructuredResult) {\n                    ok(result);\n                } else {\n                    ok(result.raw);\n                }\n            }, (err: any) => {\n                this.driver.connection.logger.logQueryError(err, query, parameters, this);\n                fail(new QueryFailedError(query, parameters, err));\n            });\n        });\n    }\n\n    // -------------------------------------------------------------------------\n    // Protected Methods\n    // -------------------------------------------------------------------------\n\n    /**\n     * Parametrizes given object of values. Used to create column=value queries.\n     */\n    protected parametrize(objectLiteral: ObjectLiteral, startIndex: number = 0): string[] {\n        return Object.keys(objectLiteral).map((key, index) => `\"${key}\"` + \"=?\");\n    }\n}\n"],"sourceRoot":"../.."}
+\ No newline at end of file
+diff --git a/node_modules/typeorm/browser/index.js b/node_modules/typeorm/browser/index.js
+index 897406b..30014d0 100644
+--- a/node_modules/typeorm/browser/index.js
++++ b/node_modules/typeorm/browser/index.js
+@@ -115,10 +115,6 @@ export * from "./schema-builder/options/TableIndexOptions";
+ export * from "./schema-builder/options/TableOptions";
+ export * from "./schema-builder/options/TableUniqueOptions";
+ export * from "./schema-builder/options/ViewOptions";
+-export * from "./driver/mongodb/typings";
+-export * from "./driver/types/DatabaseType";
+-export * from "./driver/types/ReplicationMode";
+-export * from "./driver/sqlserver/MssqlParameter";
+ export { ConnectionOptionsReader } from "./connection/ConnectionOptionsReader";
+ export { Connection } from "./connection/Connection";
+ export { ConnectionManager } from "./connection/ConnectionManager";
+diff --git a/node_modules/typeorm/index.js b/node_modules/typeorm/index.js
+index 4135ea5..ae54793 100644
+--- a/node_modules/typeorm/index.js
++++ b/node_modules/typeorm/index.js
+@@ -119,10 +119,6 @@ require("reflect-metadata");
+ (0, tslib_1.__exportStar)(require("./schema-builder/options/TableOptions"), exports);
+ (0, tslib_1.__exportStar)(require("./schema-builder/options/TableUniqueOptions"), exports);
+ (0, tslib_1.__exportStar)(require("./schema-builder/options/ViewOptions"), exports);
+-(0, tslib_1.__exportStar)(require("./driver/mongodb/typings"), exports);
+-(0, tslib_1.__exportStar)(require("./driver/types/DatabaseType"), exports);
+-(0, tslib_1.__exportStar)(require("./driver/types/ReplicationMode"), exports);
+-(0, tslib_1.__exportStar)(require("./driver/sqlserver/MssqlParameter"), exports);
+ var ConnectionOptionsReader_1 = require("./connection/ConnectionOptionsReader");
+ Object.defineProperty(exports, "ConnectionOptionsReader", { enumerable: true, get: function () { return ConnectionOptionsReader_1.ConnectionOptionsReader; } });
+ var Connection_1 = require("./connection/Connection");
+diff --git a/node_modules/typeorm/index.mjs b/node_modules/typeorm/index.mjs
+deleted file mode 100644
+index 29fe72d..0000000
+--- a/node_modules/typeorm/index.mjs
++++ /dev/null
+@@ -1,362 +0,0 @@
+-import TypeORM from "./index.js";
+-const {
+-    ConnectionOptionsReader,
+-    Connection,
+-    ConnectionManager,
+-    QueryBuilder,
+-    SelectQueryBuilder,
+-    DeleteQueryBuilder,
+-    InsertQueryBuilder,
+-    UpdateQueryBuilder,
+-    RelationQueryBuilder,
+-    Brackets,
+-    NotBrackets,
+-    InsertResult,
+-    UpdateResult,
+-    DeleteResult,
+-    QueryResult,
+-    MongoEntityManager,
+-    Migration,
+-    MigrationExecutor,
+-    DefaultNamingStrategy,
+-    EntitySchema,
+-    EntitySchemaEmbeddedColumnOptions,
+-    getMetadataArgsStorage,
+-    getConnectionOptions,
+-    getConnectionManager,
+-    createConnection,
+-    createConnections,
+-    getConnection,
+-    getManager,
+-    getMongoManager,
+-    getSqljsManager,
+-    getRepository,
+-    getTreeRepository,
+-    getCustomRepository,
+-    getMongoRepository,
+-    createQueryBuilder,
+-    useContainer,
+-    getFromContainer,
+-    CannotReflectMethodParameterTypeError,
+-    AlreadyHasActiveConnectionError,
+-    SubjectWithoutIdentifierError,
+-    CannotConnectAlreadyConnectedError,
+-    LockNotSupportedOnGivenDriverError,
+-    ConnectionIsNotSetError,
+-    CannotCreateEntityIdMapError,
+-    MetadataAlreadyExistsError,
+-    CannotDetermineEntityError,
+-    UpdateValuesMissingError,
+-    TreeRepositoryNotSupportedError,
+-    CustomRepositoryNotFoundError,
+-    TransactionNotStartedError,
+-    TransactionAlreadyStartedError,
+-    EntityNotFoundError,
+-    EntityMetadataNotFoundError,
+-    MustBeEntityError,
+-    OptimisticLockVersionMismatchError,
+-    LimitOnUpdateNotSupportedError,
+-    PrimaryColumnCannotBeNullableError,
+-    CustomRepositoryCannotInheritRepositoryError,
+-    QueryRunnerProviderAlreadyReleasedError,
+-    CannotAttachTreeChildrenEntityError,
+-    CustomRepositoryDoesNotHaveEntityError,
+-    MissingDeleteDateColumnError,
+-    NoConnectionForRepositoryError,
+-    CircularRelationsError,
+-    ReturningStatementNotSupportedError,
+-    UsingJoinTableIsNotAllowedError,
+-    MissingJoinColumnError,
+-    MissingPrimaryColumnError,
+-    EntityColumnNotFound,
+-    MissingDriverError,
+-    DriverPackageNotInstalledError,
+-    CannotGetEntityManagerNotConnectedError,
+-    ConnectionNotFoundError,
+-    NoVersionOrUpdateDateColumnError,
+-    InsertValuesMissingError,
+-    OptimisticLockCanNotBeUsedError,
+-    MetadataWithSuchNameAlreadyExistsError,
+-    DriverOptionNotSetError,
+-    FindRelationsNotFoundError,
+-    RepositoryNotFoundError,
+-    NamingStrategyNotFoundError,
+-    PessimisticLockTransactionRequiredError,
+-    RepositoryNotTreeError,
+-    DataTypeNotSupportedError,
+-    InitializedRelationError,
+-    MissingJoinTableError,
+-    QueryFailedError,
+-    NoNeedToReleaseEntityManagerError,
+-    UsingJoinColumnOnlyOnOneSideAllowedError,
+-    UsingJoinTableOnlyOnOneSideAllowedError,
+-    SubjectRemovedAndUpdatedError,
+-    PersistedEntityNotFoundError,
+-    UsingJoinColumnIsNotAllowedError,
+-    ColumnTypeUndefinedError,
+-    QueryRunnerAlreadyReleasedError,
+-    OffsetWithoutLimitNotSupportedError,
+-    CannotExecuteNotConnectedError,
+-    NoConnectionOptionError,
+-    TypeORMError,
+-    Column,
+-    CreateDateColumn,
+-    DeleteDateColumn,
+-    PrimaryGeneratedColumn,
+-    PrimaryColumn,
+-    UpdateDateColumn,
+-    VersionColumn,
+-    ViewColumn,
+-    ObjectIdColumn,
+-    AfterInsert,
+-    AfterLoad,
+-    AfterRemove,
+-    AfterSoftRemove,
+-    AfterRecover,
+-    AfterUpdate,
+-    BeforeInsert,
+-    BeforeRemove,
+-    BeforeSoftRemove,
+-    BeforeRecover,
+-    BeforeUpdate,
+-    EventSubscriber,
+-    JoinColumn,
+-    JoinTable,
+-    ManyToMany,
+-    ManyToOne,
+-    OneToMany,
+-    OneToOne,
+-    RelationCount,
+-    RelationId,
+-    Entity,
+-    ChildEntity,
+-    TableInheritance,
+-    ViewEntity,
+-    Transaction,
+-    TransactionManager,
+-    TransactionRepository,
+-    TreeLevelColumn,
+-    TreeParent,
+-    TreeChildren,
+-    Tree,
+-    Index,
+-    Unique,
+-    Check,
+-    Exclusion,
+-    Generated,
+-    EntityRepository,
+-    Any,
+-    Between,
+-    Equal,
+-    In,
+-    IsNull,
+-    LessThan,
+-    LessThanOrEqual,
+-    ILike,
+-    Like,
+-    MoreThan,
+-    MoreThanOrEqual,
+-    Not,
+-    Raw,
+-    FindOperator,
+-    FindOptionsUtils,
+-    AdvancedConsoleLogger,
+-    SimpleConsoleLogger,
+-    FileLogger,
+-    EntityMetadata,
+-    EntityManager,
+-    AbstractRepository,
+-    Repository,
+-    BaseEntity,
+-    TreeRepository,
+-    MongoRepository,
+-    TableCheck,
+-    TableColumn,
+-    TableExclusion,
+-    TableForeignKey,
+-    TableIndex,
+-    TableUnique,
+-    Table,
+-    MssqlParameter
+-} = TypeORM;
+-export {
+-    ConnectionOptionsReader,
+-    Connection,
+-    ConnectionManager,
+-    QueryBuilder,
+-    SelectQueryBuilder,
+-    DeleteQueryBuilder,
+-    InsertQueryBuilder,
+-    UpdateQueryBuilder,
+-    RelationQueryBuilder,
+-    Brackets,
+-    NotBrackets,
+-    InsertResult,
+-    UpdateResult,
+-    DeleteResult,
+-    QueryResult,
+-    MongoEntityManager,
+-    Migration,
+-    MigrationExecutor,
+-    DefaultNamingStrategy,
+-    EntitySchema,
+-    EntitySchemaEmbeddedColumnOptions,
+-    getMetadataArgsStorage,
+-    getConnectionOptions,
+-    getConnectionManager,
+-    createConnection,
+-    createConnections,
+-    getConnection,
+-    getManager,
+-    getMongoManager,
+-    getSqljsManager,
+-    getRepository,
+-    getTreeRepository,
+-    getCustomRepository,
+-    getMongoRepository,
+-    createQueryBuilder,
+-    useContainer,
+-    getFromContainer,
+-    CannotReflectMethodParameterTypeError,
+-    AlreadyHasActiveConnectionError,
+-    SubjectWithoutIdentifierError,
+-    CannotConnectAlreadyConnectedError,
+-    LockNotSupportedOnGivenDriverError,
+-    ConnectionIsNotSetError,
+-    CannotCreateEntityIdMapError,
+-    MetadataAlreadyExistsError,
+-    CannotDetermineEntityError,
+-    UpdateValuesMissingError,
+-    TreeRepositoryNotSupportedError,
+-    CustomRepositoryNotFoundError,
+-    TransactionNotStartedError,
+-    TransactionAlreadyStartedError,
+-    EntityNotFoundError,
+-    EntityMetadataNotFoundError,
+-    MustBeEntityError,
+-    OptimisticLockVersionMismatchError,
+-    LimitOnUpdateNotSupportedError,
+-    PrimaryColumnCannotBeNullableError,
+-    CustomRepositoryCannotInheritRepositoryError,
+-    QueryRunnerProviderAlreadyReleasedError,
+-    CannotAttachTreeChildrenEntityError,
+-    CustomRepositoryDoesNotHaveEntityError,
+-    MissingDeleteDateColumnError,
+-    NoConnectionForRepositoryError,
+-    CircularRelationsError,
+-    ReturningStatementNotSupportedError,
+-    UsingJoinTableIsNotAllowedError,
+-    MissingJoinColumnError,
+-    MissingPrimaryColumnError,
+-    EntityColumnNotFound,
+-    MissingDriverError,
+-    DriverPackageNotInstalledError,
+-    CannotGetEntityManagerNotConnectedError,
+-    ConnectionNotFoundError,
+-    NoVersionOrUpdateDateColumnError,
+-    InsertValuesMissingError,
+-    OptimisticLockCanNotBeUsedError,
+-    MetadataWithSuchNameAlreadyExistsError,
+-    DriverOptionNotSetError,
+-    FindRelationsNotFoundError,
+-    RepositoryNotFoundError,
+-    NamingStrategyNotFoundError,
+-    PessimisticLockTransactionRequiredError,
+-    RepositoryNotTreeError,
+-    DataTypeNotSupportedError,
+-    InitializedRelationError,
+-    MissingJoinTableError,
+-    QueryFailedError,
+-    NoNeedToReleaseEntityManagerError,
+-    UsingJoinColumnOnlyOnOneSideAllowedError,
+-    UsingJoinTableOnlyOnOneSideAllowedError,
+-    SubjectRemovedAndUpdatedError,
+-    PersistedEntityNotFoundError,
+-    UsingJoinColumnIsNotAllowedError,
+-    ColumnTypeUndefinedError,
+-    QueryRunnerAlreadyReleasedError,
+-    OffsetWithoutLimitNotSupportedError,
+-    CannotExecuteNotConnectedError,
+-    NoConnectionOptionError,
+-    TypeORMError,
+-    Column,
+-    CreateDateColumn,
+-    DeleteDateColumn,
+-    PrimaryGeneratedColumn,
+-    PrimaryColumn,
+-    UpdateDateColumn,
+-    VersionColumn,
+-    ViewColumn,
+-    ObjectIdColumn,
+-    AfterInsert,
+-    AfterLoad,
+-    AfterRemove,
+-    AfterSoftRemove,
+-    AfterRecover,
+-    AfterUpdate,
+-    BeforeInsert,
+-    BeforeRemove,
+-    BeforeSoftRemove,
+-    BeforeRecover,
+-    BeforeUpdate,
+-    EventSubscriber,
+-    JoinColumn,
+-    JoinTable,
+-    ManyToMany,
+-    ManyToOne,
+-    OneToMany,
+-    OneToOne,
+-    RelationCount,
+-    RelationId,
+-    Entity,
+-    ChildEntity,
+-    TableInheritance,
+-    ViewEntity,
+-    Transaction,
+-    TransactionManager,
+-    TransactionRepository,
+-    TreeLevelColumn,
+-    TreeParent,
+-    TreeChildren,
+-    Tree,
+-    Index,
+-    Unique,
+-    Check,
+-    Exclusion,
+-    Generated,
+-    EntityRepository,
+-    Any,
+-    Between,
+-    Equal,
+-    In,
+-    IsNull,
+-    LessThan,
+-    LessThanOrEqual,
+-    ILike,
+-    Like,
+-    MoreThan,
+-    MoreThanOrEqual,
+-    Not,
+-    Raw,
+-    FindOperator,
+-    FindOptionsUtils,
+-    AdvancedConsoleLogger,
+-    SimpleConsoleLogger,
+-    FileLogger,
+-    EntityMetadata,
+-    EntityManager,
+-    AbstractRepository,
+-    Repository,
+-    BaseEntity,
+-    TreeRepository,
+-    MongoRepository,
+-    TableCheck,
+-    TableColumn,
+-    TableExclusion,
+-    TableForeignKey,
+-    TableIndex,
+-    TableUnique,
+-    Table,
+-    MssqlParameter
+-};
+-export default TypeORM;

@@ -19,7 +19,7 @@ export class PaginationResult<T> implements BaseApiResponse<T[]> {
 
   readonly timeTakenMs: number;
 
-  constructor([data, total]: [data: T[], total: number], pageSize: NumberLike, page: number | string = 0) {
+  constructor([data, total]: [T[], number], pageSize: NumberLike, page: number | string = 0) {
     this.data = data;
     this.total = total;
     this.page = page;
@@ -35,7 +35,7 @@ export class PaginationResultByStringKey<T> implements BaseApiResponse<T[]> {
   readonly timeTakenMs: number;
 
   constructor(
-    [data, total]: [data: T[], total: number],
+    [data, total]: [T[], number],
     pageSize: NumberLike,
     public readonly orderKey: string,
     public readonly currentAfter: string,

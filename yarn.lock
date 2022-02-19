@@ -241,7 +241,7 @@ __metadata:
     tmp-promise: ^3.0.3
     ts-node: ^8.10.2
     tslib: ^2.3.1
-    typeorm: ^0.2.25
+    typeorm: ^0.2.43
     typescript: ^4.2.4
   peerDependencies:
     mysql2: ^2.3.3
@@ -2551,9 +2551,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typeorm@npm:^0.2.25":
-  version: 0.2.42
-  resolution: "typeorm@npm:0.2.42"
+"typeorm@npm:^0.2.43":
+  version: 0.2.43
+  resolution: "typeorm@npm:0.2.43"
   dependencies:
     "@sqltools/formatter": ^1.2.2
     app-root-path: ^3.0.0
@@ -2621,7 +2621,7 @@ __metadata:
       optional: true
   bin:
     typeorm: cli.js
-  checksum: 6bec3a1c58658cd0d2bfa2fe89486f0b3d8d6b480a7a30bb26bd2faf0fc768d2fa454b87280b02ad9bb861ec848f94b7ea616a6f40e92073dae0abff2f248f8e
+  checksum: cd9dd1f5804ac2b56f8b913d5fe58cb371d27f28fe31297c2588d875927de92ad3dbb00b10e0cd8ed638e570ddc0e6813e69cf9251aefc97406f1f3578cbfa81
   languageName: node
   linkType: hard
 
