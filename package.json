@@ -1,6 +1,6 @@
 {
   "name": "@ssrg-tools/base",
-  "version": "0.12.19",
+  "version": "0.12.20",
   "sideEffects": false,
   "description": "",
   "main": "./cjs/index.js",
