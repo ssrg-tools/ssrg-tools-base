@@ -81,13 +81,13 @@ export function handleStreamDownload(
     }
 
     if (key === 'sound') {
-      const { file } = await import('tmp-promise');
-      const tmpFile = await file();
-      const { writeFile } = await import('fs/promises');
-      await writeFile(tmpFile.path, stream);
-      const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
-      audioLength = await getAudioDurationInSeconds(tmpFile.path);
-      await tmpFile.cleanup();
+      const { withFile } = await import('tmp-promise');
+      await withFile(async ({ path }) => {
+        const { writeFile } = await import('fs/promises');
+        await writeFile(path, stream);
+        const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
+        audioLength = await getAudioDurationInSeconds(path);
+      });
     }
 
     return [
