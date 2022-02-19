@@ -92,6 +92,12 @@ export abstract class BaseTaskResult {
     comment: 'whether this task result is inconsequential (e.g. a task that was skipped, or produced no output)',
   })
   markIgnored: SqlBool;
+
+  @Column('tinyint', {
+    default: 0,
+    comment: 'whether this task did finish but had issues, e.g. skipped errors',
+  })
+  hasIssues: SqlBool;
 }
 
 @ChildEntity('game-task')
