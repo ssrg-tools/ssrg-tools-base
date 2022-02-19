@@ -1,8 +1,8 @@
 diff --git a/node_modules/typeorm/browser/index.js b/node_modules/typeorm/browser/index.js
-index 25f7161..a2629d7 100644
+index 897406b..0c6cf10 100644
 --- a/node_modules/typeorm/browser/index.js
 +++ b/node_modules/typeorm/browser/index.js
-@@ -60,69 +60,6 @@ export * from "./decorator/Check";
+@@ -65,69 +65,6 @@ export * from "./decorator/Check";
  export * from "./decorator/Exclusion";
  export * from "./decorator/Generated";
  export * from "./decorator/EntityRepository";
@@ -70,5 +70,5 @@ index 25f7161..a2629d7 100644
 -export { UpdateQueryBuilder } from "./query-builder/UpdateQueryBuilder";
 -export { RelationQueryBuilder } from "./query-builder/RelationQueryBuilder";
  export { Brackets } from "./query-builder/Brackets";
+ export { NotBrackets } from "./query-builder/NotBrackets";
  export { InsertResult } from "./query-builder/result/InsertResult";
- export { UpdateResult } from "./query-builder/result/UpdateResult";
