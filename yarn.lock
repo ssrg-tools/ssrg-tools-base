@@ -5,6 +5,16 @@ __metadata:
   version: 5
   cacheKey: 8
 
+"@anhnyan/libanh@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@anhnyan/libanh@npm:0.3.1::__archiveUrl=https%3A%2F%2Fserver.nellman.net%2Fapi%2Fv4%2Fprojects%2F56%2Fpackages%2Fnpm%2F%40anhnyan%2Flibanh%2F-%2F%40anhnyan%2Flibanh-0.3.1.tgz"
+  dependencies:
+    lodash: ^4.17.21
+    tslib: ^2.3.1
+  checksum: 80329bb957ce85c8ab3aab93162a8f1fe60e5dd9afe2cb4035ed72a40324e14c7acce96174614193362bfec941fc6a17fa0b9cb2fc3908e79a361bd13bf6d170
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:7.12.11":
   version: 7.12.11
   resolution: "@babel/code-frame@npm:7.12.11"
@@ -201,6 +211,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ssrg-tools/base@workspace:."
   dependencies:
+    "@anhnyan/libanh": ^0.3.1
     "@types/es6-promisify": ^6.0.1
     "@types/jasmine": ^3.5.12
     "@types/lodash": ^4.14.158
@@ -1559,7 +1570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.19":
+"lodash@npm:^4.17.19, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7

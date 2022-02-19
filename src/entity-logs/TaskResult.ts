@@ -1,3 +1,4 @@
+import { StringUnion } from '@anhnyan/libanh';
 import {
   ChildEntity,
   Column,
@@ -9,10 +10,32 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { StringUnion } from '../string-union';
 
-export const taskResultStatus = StringUnion('finished', 'incomplete', 'error');
+export const taskResultStatus = StringUnion('finished', 'incomplete', 'error', 'queued', 'stalled');
 export type TaskResultStatus = typeof taskResultStatus.type;
+
+export const taskResultTypes = StringUnion(
+  'game-task',
+  'import-season',
+  'import-songs',
+  'import-wr',
+  'import-artists',
+  'archive-assets',
+  'upload-game-info',
+  'generate-beatmap-chart',
+);
+export type TaskResultType = typeof taskResultTypes.type;
+
+export const gameTaskResultType = StringUnion(
+  'import-season',
+  'import-songs',
+  'import-wr',
+  'import-artists',
+  'archive-assets',
+  'upload-game-info',
+  'generate-beatmap-chart',
+);
+export type GameTaskResultType = typeof gameTaskResultType.type;
 
 @Entity('tasks_results', { schema: 'ssrg_tools_logs' })
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })

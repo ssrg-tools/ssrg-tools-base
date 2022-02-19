@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { StringUnion } from '../string-union';
+import { StringUnion } from '@anhnyan/libanh';
 import { User } from './User';
 
 @Entity('users_verifications', { schema: 'superstar_log' })

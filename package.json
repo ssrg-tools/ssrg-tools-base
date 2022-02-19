@@ -32,6 +32,7 @@
     "registry": "https://server.nellman.net/api/v4/projects/6/packages/npm/"
   },
   "dependencies": {
+    "@anhnyan/libanh": "^0.3.1",
     "buffer": "^6.0.3",
     "es6-promisify": "^7.0.0",
     "get-audio-duration": "^2.0.3",

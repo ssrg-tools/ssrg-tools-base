@@ -1,5 +1,5 @@
 import { Dictionary } from 'lodash';
-import { StringUnion } from './string-union';
+import { StringUnion } from '@anhnyan/libanh';
 
 export const GradeNonEmpty = StringUnion('C', 'B', 'A', 'S', 'R');
 export type GradeNonEmpty = typeof GradeNonEmpty.type;
