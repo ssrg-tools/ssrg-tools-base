@@ -10,6 +10,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { SqlBool } from '..';
 
 export const taskResultStatus = StringUnion('finished', 'incomplete', 'error', 'queued', 'stalled');
 export type TaskResultStatus = typeof taskResultStatus.type;
@@ -85,6 +86,12 @@ export abstract class BaseTaskResult {
 
   @Column('json', { default: '{}' })
   meta: Record<string, unknown>;
+
+  @Column('tinyint', {
+    default: 0,
+    comment: 'whether this task result is inconsequential (e.g. a task that was skipped, or produced no output)',
+  })
+  markIgnored: SqlBool;
 }
 
 @ChildEntity('game-task')
