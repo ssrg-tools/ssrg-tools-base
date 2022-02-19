@@ -288,8 +288,8 @@ function readNoteData(
   noteData: Buffer,
   noteDataLength: number,
 ): { notes: Note[]; noteCountRaw: number; issues?: SeqIssue[] } {
-  if (noteData.length % noteDataLength !== 0) {
-    throw new Error(`Beatmap note data (${noteData.length} bytes) not divisible by ${noteDataLength} bytes.`);
+  if (noteData.byteLength % noteDataLength !== 0) {
+    throw new Error(`Beatmap note data (${noteData.byteLength} bytes) not divisible by ${noteDataLength} bytes.`);
   }
   const notes: Note[] = [];
   const issues: SeqIssue[] = [];

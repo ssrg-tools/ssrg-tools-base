@@ -41,6 +41,7 @@ export function handleStreamDownload(
     gamedataVersion: string | number,
     urlsVersion: string | number,
   ) => Promise<BaseApiResponse<ArchiveAssetResult> | undefined>,
+  { log }: { log: (...data: any[]) => void } = console,
 ): (
   value: string,
   index: number,
@@ -72,22 +73,41 @@ export function handleStreamDownload(
     }
 
     const { default: got } = await import('got');
-    const stream = await got(apiEndpoint + gameAssetInfoResponse.data.uri).buffer();
+    const streamUrl = apiEndpoint + gameAssetInfoResponse.data.uri;
+    const stream = await got(streamUrl).buffer();
     let beatmap: Beatmap | undefined;
     let audioLength: number;
 
     if (beatmapKeys.includes(key)) {
-      beatmap = parseBeatmap(stream);
+      try {
+        beatmap = parseBeatmap(stream);
+      } catch (e) {
+        log(
+          'Could not parse beatmap:',
+          JSON.stringify({ gameKey, gamedataVersion, urlsVersion, key, streamUrl }, null, 2),
+        );
+        log(e);
+        throw e;
+      }
     }
 
     if (key === 'sound') {
-      const { withFile } = await import('tmp-promise');
-      await withFile(async ({ path }) => {
-        const { writeFile } = await import('fs/promises');
-        await writeFile(path, stream);
-        const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
-        audioLength = await getAudioDurationInSeconds(path);
-      });
+      try {
+        const { withFile } = await import('tmp-promise');
+        await withFile(async ({ path }) => {
+          const { writeFile } = await import('fs/promises');
+          await writeFile(path, stream);
+          const { default: getAudioDurationInSeconds } = await import('get-audio-duration');
+          audioLength = await getAudioDurationInSeconds(path);
+        });
+      } catch (e) {
+        log(
+          'Could not get audio length:',
+          JSON.stringify({ gameKey, gamedataVersion, urlsVersion, key, streamUrl }, null, 2),
+        );
+        log(e);
+        throw e;
+      }
     }
 
     return [
@@ -133,7 +153,7 @@ export async function processSongData(
 ): Promise<ProcessedSongData> {
   const fileStreams$ = await Promise.all(
     downloadDataKeys.map(
-      handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, apiEndpoint, archiveGameAsset),
+      handleStreamDownload(game.key, gamedataVersion, urlsVersion, songdata, apiEndpoint, archiveGameAsset, { log }),
     ),
   );
   const streamMap: Dictionary<{
