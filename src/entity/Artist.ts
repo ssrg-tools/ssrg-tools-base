@@ -1,15 +1,16 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { ArtistMember } from './ArtistMember';
 import { Song } from './Song';
 import { SuperstarGame } from './SuperstarGame';
 import { Theme } from './Theme';
 
 @Entity('artists', { schema: 'superstar_log' })
+@Unique('artistName', ['name', 'gameId'])
 export class Artist {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', unsigned: true })
+  @PrimaryGeneratedColumn({ type: 'int', unsigned: true })
   id: number;
 
-  @Column('varchar', { name: 'name', length: 255, unique: true })
+  @Column('varchar', { name: 'name', length: 255 })
   name: string;
 
   @Column('tinyint', { unsigned: true, nullable: true })
