@@ -1,4 +1,4 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 
 @Entity('superstar_games_populations', { schema: 'superstar_log' })
@@ -27,5 +27,5 @@ export class GamePopulation {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 }

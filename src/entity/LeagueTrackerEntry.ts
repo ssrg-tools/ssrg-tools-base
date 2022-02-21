@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SqlBool } from '../types';
 import { Division } from './Division';
 import { PlayerProfile } from './PlayerProfile';
@@ -70,19 +70,19 @@ export class LeagueTrackerEntry {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
-  profile: PlayerProfile;
+  profile: Relation<PlayerProfile>;
 
   @ManyToOne(() => Division, divisions => divisions.leagueTrackerEntries, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
-  division: Division;
+  division: Relation<Division>;
 
   @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.leagueTrackerEntries, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 }

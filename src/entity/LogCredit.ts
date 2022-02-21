@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { User } from './User';
 
@@ -49,12 +49,12 @@ export class LogCredit {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 
   @ManyToOne(() => User, users => users.logCredits, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 }

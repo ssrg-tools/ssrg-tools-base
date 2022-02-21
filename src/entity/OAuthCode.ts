@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Relation } from 'typeorm';
 import { User } from './User';
 import { OAuthClient } from './OAuthClient';
 
@@ -21,14 +21,14 @@ export class OAuthCode {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'clientId', referencedColumnName: 'id' }])
-  client: OAuthClient;
+  client: Relation<OAuthClient>;
 
   @ManyToOne(() => User, users => users.userCredentials, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 
   @Column('varchar', {
     unique: true,

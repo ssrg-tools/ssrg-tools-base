@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  Relation,
   TableInheritance,
   Unique,
 } from 'typeorm';
@@ -72,10 +73,10 @@ export abstract class File {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 
   @OneToOne(() => GameArchivedAsset, gameAsset => gameAsset.file)
-  gameAsset: GameArchivedAsset;
+  gameAsset: Relation<GameArchivedAsset>;
 }
 
 export interface FileWithUri extends File {

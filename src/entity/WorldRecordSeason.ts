@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, OneToMany, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, ManyToOne, JoinColumn, Column, Index, OneToMany, Entity, Relation } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { SongWorldRecord } from './SongWorldRecord';
 
@@ -20,7 +20,7 @@ export class WorldRecordSeason {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 
   @Column('varchar', { length: 255, default: 'top100-no-tie' })
   bonusSystem: 'top1-tie' | 'top100-no-tie' | 'top100-tie';
@@ -44,5 +44,5 @@ export class WorldRecordSeason {
   guid: string;
 
   @OneToMany(() => SongWorldRecord, songs => songs.season)
-  entries: SongWorldRecord[];
+  entries: Relation<SongWorldRecord>[];
 }

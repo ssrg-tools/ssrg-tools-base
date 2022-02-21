@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SqlBool } from '../types';
 import { Division } from './Division';
 import { Song } from './Song';
@@ -149,22 +149,22 @@ export class SongClear {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
-  song: Song;
+  song: Relation<Song>;
 
   @ManyToOne(() => Division, divisions => divisions.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'division_id', referencedColumnName: 'id' }])
-  division?: Division;
+  division?: Relation<Division>;
 
   @ManyToOne(() => User, users => users.songClears, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 
   @OneToMany(() => SongClearCard, songClearCard => songClearCard.songClear)
-  cards: SongClearCard[];
+  cards: Relation<SongClearCard>[];
 }

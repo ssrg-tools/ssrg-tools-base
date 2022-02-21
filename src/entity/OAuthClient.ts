@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Relation } from 'typeorm';
 import { OAuthCode } from './OAuthCode';
 import { OAuthToken } from './OAuthToken';
 
@@ -26,8 +26,8 @@ export class OAuthClient {
   guid: string;
 
   @OneToMany(() => OAuthCode, code => code.client)
-  codes: OAuthCode[];
+  codes: Relation<OAuthCode>[];
 
   @OneToMany(() => OAuthToken, token => token.client)
-  tokens: OAuthToken[];
+  tokens: Relation<OAuthToken>[];
 }

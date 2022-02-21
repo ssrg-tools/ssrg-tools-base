@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Song } from './Song';
 import { SongBeatmapContents } from './SongBeatmapContents';
 
@@ -88,11 +88,11 @@ export class SongBeatmap {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
-  song: Song;
+  song: Relation<Song>;
 
   @OneToOne(() => SongBeatmapContents, contents => contents.songBeatmap, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
-  data: SongBeatmapContents;
+  data: Relation<SongBeatmapContents>;
 }

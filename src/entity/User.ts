@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { EncryptedVarchar } from '../entity-helpers';
 import { SqlBool } from '../types';
 import { CardDrop } from './CardDrop';
@@ -69,41 +69,41 @@ export class User {
   guid: string;
 
   @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.user)
-  leagueRankings?: LeagueRanking[];
+  leagueRankings?: Relation<LeagueRanking>[];
 
   @OneToMany(() => LogCredit, logCredits => logCredits.user)
-  logCredits: LogCredit[];
+  logCredits: Relation<LogCredit>[];
 
   @OneToMany(() => LogDiamond, logDiamonds => logDiamonds.user)
-  logDiamonds: LogDiamond[];
+  logDiamonds: Relation<LogDiamond>[];
 
   @OneToMany(() => LogDiamondAd, logDiamondsAds => logDiamondsAds.user)
-  logDiamondsAds: LogDiamondAd[];
+  logDiamondsAds: Relation<LogDiamondAd>[];
 
   @OneToMany(() => CardDrop, logDrops => logDrops.user)
-  logDrops: CardDrop[];
+  logDrops: Relation<CardDrop>[];
 
   @OneToMany(() => SongClear, songClearsV2 => songClearsV2.user)
-  songClears: SongClear[];
+  songClears: Relation<SongClear>[];
 
   @OneToMany(() => SongWorldRecord, songWorldRecord => songWorldRecord.observer)
-  observedSongWorldRecords: SongWorldRecord[];
+  observedSongWorldRecords: Relation<SongWorldRecord>[];
 
   @OneToMany(() => UserCredential, userCredentials => userCredentials.user)
-  userCredentials: UserCredential[];
+  userCredentials: Relation<UserCredential>[];
 
   @OneToMany(() => UserLogin, userLogin => userLogin.user)
-  logins: UserLogin[];
+  logins: Relation<UserLogin>[];
 
   @OneToMany(() => UserVerification, verification => verification.user)
-  verifications: UserVerification[];
+  verifications: Relation<UserVerification>[];
 
   @OneToMany(() => File, file => file.user)
-  files: File[];
+  files: Relation<File>[];
 
   @ManyToMany(() => SuperstarGame)
   @JoinTable()
-  activeGames: SuperstarGame[];
+  activeGames: Relation<SuperstarGame>[];
 }
 
 /** allow alphanumeric, underscore and Hangul, at least 3 digits */

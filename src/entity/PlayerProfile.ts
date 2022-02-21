@@ -1,5 +1,5 @@
 import { SqlBool } from '../types';
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { PlayerNickname } from './PlayerNickname';
 import { PlayerProfileImage } from './PlayerProfileImage';
@@ -64,13 +64,13 @@ export class PlayerProfile {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 
   @OneToMany(() => PlayerNickname, nickname => nickname.profile)
-  nicknameHistory: PlayerNickname[];
+  nicknameHistory: Relation<PlayerNickname>[];
 
   @OneToMany(() => PlayerProfileImage, profileImage => profileImage.profile)
-  profileImageHistory: PlayerProfileImage[];
+  profileImageHistory: Relation<PlayerProfileImage>[];
 }
 
 interface NicknameHistory {

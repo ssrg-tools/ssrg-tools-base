@@ -1,4 +1,14 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Relation,
+  Unique,
+} from 'typeorm';
 import { ArtistMember } from './ArtistMember';
 import { Song } from './Song';
 import { SuperstarGame } from './SuperstarGame';
@@ -71,14 +81,14 @@ export class Artist {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 
   @OneToMany(() => ArtistMember, member => member.artist)
-  members: ArtistMember[];
+  members: Relation<ArtistMember>[];
 
   @OneToMany(() => Song, song => song.artist)
-  songs: Song[];
+  songs: Relation<Song>[];
 
   @OneToMany(() => Theme, theme => theme.artist)
-  themes: Theme[];
+  themes: Relation<Theme>[];
 }

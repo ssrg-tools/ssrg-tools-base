@@ -1,4 +1,4 @@
-import { Unique, Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
+import { Unique, Entity, Column, Index, ManyToOne, JoinColumn, PrimaryColumn, Relation } from 'typeorm';
 import { SuperstarGame } from '../SuperstarGame';
 import { GameArchivedAsset } from './GameArchivedAsset';
 
@@ -50,12 +50,12 @@ export class GameArchivedAssetLink {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'assetId', referencedColumnName: 'id' }])
-  asset: GameArchivedAsset;
+  asset: Relation<GameArchivedAsset>;
 
   @ManyToOne(() => SuperstarGame, superstarGames => superstarGames.gameArchivedAssetLinks, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'gameId', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 }

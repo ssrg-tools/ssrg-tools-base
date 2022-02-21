@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { StringUnion } from '@anhnyan/libanh';
 import { User } from './User';
 
@@ -30,7 +30,7 @@ export class UserVerification {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 }
 
 export const VerificationIntents = StringUnion('2fa', 'verify-account', 'pw-reset');

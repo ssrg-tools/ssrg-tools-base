@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, Index } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne, Index, Relation } from 'typeorm';
 import { Artist } from './Artist';
 
 @Index(['artistId', 'name'], { unique: true })
@@ -42,5 +42,5 @@ export class ArtistMember {
     nullable: false,
   })
   @JoinColumn([{ name: 'artistId', referencedColumnName: 'id' }])
-  artist: Artist;
+  artist: Relation<Artist>;
 }

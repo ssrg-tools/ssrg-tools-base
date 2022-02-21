@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SqlBool } from '../types';
 import { User } from './User';
 
@@ -24,5 +24,5 @@ export class UserLogin {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, Unique } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, Relation, Unique } from 'typeorm';
 import { Beatmap } from '../seq';
 import { SongBeatmap } from './SongBeatmap';
 
@@ -34,5 +34,5 @@ export class SongBeatmapContents {
 
   @OneToOne(() => SongBeatmap, beatmap => beatmap.data)
   @JoinColumn([{ name: 'id', referencedColumnName: 'id' }])
-  songBeatmap: SongBeatmap;
+  songBeatmap: Relation<SongBeatmap>;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SongClear } from './SongClear';
 import { Theme } from './Theme';
 import { Grade, MembersGFriend, SqlBool } from './../types';
@@ -68,14 +68,14 @@ export class SongClearCard {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_clear_id', referencedColumnName: 'id' }])
-  songClear: SongClear;
+  songClear: Relation<SongClear>;
 
   @ManyToOne(() => Theme, themes => themes.songClearCards, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
-  theme: Theme;
+  theme: Relation<Theme>;
 
   get canIncreaseGrade() {
     switch (this.grade) {

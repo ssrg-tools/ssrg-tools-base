@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, ManyToMany, JoinTable, Relation } from 'typeorm';
 import { LeagueRanking } from './LeagueRanking';
 import { LogCredit } from './LogCredit';
 import { LogDiamond } from './LogDiamond';
@@ -176,42 +176,42 @@ export class SuperstarGame {
   guid: string;
 
   @OneToMany(() => LeagueRanking, leagueRanking => leagueRanking.game)
-  leagueRankings: LeagueRanking[];
+  leagueRankings: Relation<LeagueRanking>[];
 
   @OneToMany(() => LeagueTrackerEntry, leagueTrackerEntry => leagueTrackerEntry.game)
-  leagueTrackerEntries: LeagueTrackerEntry[];
+  leagueTrackerEntries: Relation<LeagueTrackerEntry>[];
 
   @OneToMany(() => LogCredit, logCredits => logCredits.game)
-  logCredits: LogCredit[];
+  logCredits: Relation<LogCredit>[];
 
   @OneToMany(() => LogDiamond, logDiamonds => logDiamonds.game)
-  logDiamonds: LogDiamond[];
+  logDiamonds: Relation<LogDiamond>[];
 
   @OneToMany(() => LogDiamondAd, logDiamondsAds => logDiamondsAds.game)
-  logDiamondsAds: LogDiamondAd[];
+  logDiamondsAds: Relation<LogDiamondAd>[];
 
   @OneToMany(() => CardDrop, logDrops => logDrops.game)
-  logDrops: CardDrop[];
+  logDrops: Relation<CardDrop>[];
 
   @OneToMany(() => Song, songs => songs.game)
-  songs: Song[];
+  songs: Relation<Song>[];
 
   @OneToMany(() => Theme, themes => themes.game)
-  themes: Theme[];
+  themes: Relation<Theme>[];
 
   @OneToMany(() => Artist, artist => artist.game)
-  artists: Artist[];
+  artists: Relation<Artist>[];
 
   @OneToMany(() => GamePopulation, pop => pop.game)
-  populationHistory: GamePopulation[];
+  populationHistory: Relation<GamePopulation>[];
 
   @OneToMany(() => PlayerProfile, pop => pop.game)
-  playerProfiles: PlayerProfile[];
+  playerProfiles: Relation<PlayerProfile>[];
 
   @OneToMany(() => GameArchivedAssetLink, dataFileLink => dataFileLink.game)
-  gameArchivedAssetLinks: GameArchivedAssetLink[];
+  gameArchivedAssetLinks: Relation<GameArchivedAssetLink>[];
 
   @ManyToMany(() => Division)
   @JoinTable()
-  divisions: Division[];
+  divisions: Relation<Division>[];
 }

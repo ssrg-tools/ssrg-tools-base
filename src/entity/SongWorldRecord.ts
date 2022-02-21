@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Index, Entity, Relation } from 'typeorm';
 import { Song } from './Song';
 import { CardDisplay } from './CardDisplay.embed';
 import { WorldRecordSeason } from './WorldRecordSeason';
@@ -59,14 +59,14 @@ export class SongWorldRecord {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'season_id', referencedColumnName: 'id' }])
-  season: WorldRecordSeason;
+  season: Relation<WorldRecordSeason>;
 
   @ManyToOne(() => User, users => users.observedSongWorldRecords, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'observerUserId', referencedColumnName: 'id' }])
-  observer: User;
+  observer: Relation<User>;
 
   @Column('longtext', { name: 'meta', default: '{}' })
   meta: string;
@@ -82,12 +82,12 @@ export class SongWorldRecord {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
-  profile: PlayerProfile;
+  profile: Relation<PlayerProfile>;
 
   @ManyToOne(() => Song, songs => songs.worldRecords, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'song_id', referencedColumnName: 'id' }])
-  song: Song;
+  song: Relation<Song>;
 }

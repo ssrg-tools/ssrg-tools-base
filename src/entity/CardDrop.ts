@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { SuperstarGame } from './SuperstarGame';
 import { Theme } from './Theme';
 import { User } from './User';
@@ -70,21 +70,21 @@ export class CardDrop {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'game_id', referencedColumnName: 'id' }])
-  game: SuperstarGame;
+  game: Relation<SuperstarGame>;
 
   @ManyToOne(() => Theme, themes => themes.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'theme_id', referencedColumnName: 'id' }])
-  theme: Theme;
+  theme: Relation<Theme>;
 
   @ManyToOne(() => User, users => users.logDrops, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
-  user: User;
+  user: Relation<User>;
 
   get canIncreaseGrade() {
     switch (this.grade) {

@@ -1,4 +1,4 @@
-import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { CardDisplay } from './CardDisplay.embed';
 import { PlayerProfile } from './PlayerProfile';
 
@@ -31,5 +31,5 @@ export class PlayerProfileImage {
     onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'profileId', referencedColumnName: 'id' }])
-  profile: PlayerProfile;
+  profile: Relation<PlayerProfile>;
 }
