@@ -35,8 +35,8 @@ export async function fetchAndInsertSWRForGameAndSeason(
 
   const buildUrl = _.curry(buildUrlRanking(game.baseUrlRanking, season.bonusSystem))(season.dalcomSeasonId);
   const responseText: string[] = [];
-  const changedSongs: [songGuid: string, count: number][] = [];
-  const addedWRs: [songGuid: string, swrGuid: string][] = [];
+  const changedSongs: [string, number][] = [];
+  const addedWRs: [string, string][] = [];
 
   const songs = songList?.length
     ? songList

@@ -10,8 +10,8 @@ $size-card-frame-large-height: $size-card-large-height;
 $offset-card-level-small-left: 76px;
 $offset-card-level-small-top: 115px;
 $size-card-level-font: 16px;
-$size-factor-chip: 64px / $size-card-frame-small-height;
-$size-factor-cardbook: 120px / $size-card-frame-small-height;
+$size-factor-chip: calc(64px / $size-card-frame-small-height);
+$size-factor-cardbook: calc(120px / $size-card-frame-small-height);
 
 :root {
   --size-card-small-width: $size-card-small-width;
