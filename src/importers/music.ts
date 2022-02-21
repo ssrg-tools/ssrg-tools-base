@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { cloneDeep, Dictionary, keyBy } from 'lodash';
 import { basename } from 'path';
 import { getRepository } from 'typeorm';
@@ -12,6 +13,7 @@ import { generate_guid } from '../guid';
 import { Beatmap, parseBeatmap, sliderStart } from '../seq';
 import { Difficulty, difficultyNames } from '../types';
 import { getGroupFromData } from './group';
+import { Buffer } from 'buffer';
 
 interface ExtendedMusicData
   extends Omit<MusicData, 'albumName' | 'releaseDate' | 'localeName' | 'localeDisplayGroupName'> {
@@ -72,9 +74,8 @@ export function handleStreamDownload(
       throw new Error(String(gameAssetInfoResponse));
     }
 
-    const { default: got } = await import('got');
     const streamUrl = apiEndpoint + gameAssetInfoResponse.data.uri;
-    const stream = await got(streamUrl).buffer();
+    const stream = await axios(streamUrl, { responseType: 'arraybuffer' }).then(res => Buffer.from(res.data, 'binary'));
     let beatmap: Beatmap | undefined;
     let audioLength: number;
 

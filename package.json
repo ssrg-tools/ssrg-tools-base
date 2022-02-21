@@ -6,6 +6,7 @@
   "main": "./cjs/index.js",
   "exports": {
     "*": {
+      "types": "./types/index.d.ts",
       "default": "./cjs/*.js",
       "import": "./esm2020/*.js"
     },
@@ -34,10 +35,10 @@
   },
   "dependencies": {
     "@anhnyan/libanh": "^0.3.1",
+    "axios": "^0.26.0",
     "buffer": "^6.0.3",
     "es6-promisify": "^7.0.0",
     "get-audio-duration": "^3.0.0",
-    "got": "^11.7.0",
     "kuuid": "^0.6.0",
     "libsodium-wrappers": "^0.7.9",
     "lodash": "^4.17.21",

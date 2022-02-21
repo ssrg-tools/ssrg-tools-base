@@ -4,18 +4,18 @@ import { join } from 'path';
 import { promisify } from 'es6-promisify';
 import type { InputType } from 'zlib';
 import type { InfoAggregate } from './definitions/data/InfoAggregate';
+import axios from 'axios';
 
 const algorithm = 'aes-256-ecb';
 const jsonPrettyIndent = 2;
 
 export async function downloadInfoFile(clearkey: string, url: string) {
-  const { default: got } = await import('got');
   const crypto = await import('crypto');
   const { default: zlib } = await import('zlib');
   const gunzip = promisify<InputType, Buffer>(zlib.gunzip);
 
-  const request = await got(url);
-  const rawDl = request.rawBody;
+  const response = await axios(url, { responseType: 'arraybuffer' });
+  const rawDl = Buffer.from(response.data, 'binary');
   const unzipped = await gunzip(rawDl);
 
   const decipher = crypto.createDecipheriv(algorithm, clearkey, '');
@@ -35,8 +35,7 @@ export async function processAggregate(clearkey: string, infoAggregate: InfoAggr
       try {
         contents = await downloadInfoFile(clearkey, url);
       } catch (error) {
-        const { RequestError } = await import('got');
-        if (typeof error === 'object' && error instanceof RequestError) {
+        if (typeof error === 'object' && axios.isAxiosError(error)) {
           console.log(`v${aggregateVersion}: Could not download ${key} - skipping`);
           continue;
         }

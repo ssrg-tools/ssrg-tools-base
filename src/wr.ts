@@ -1,3 +1,4 @@
+import axios from 'axios';
 import _ from 'lodash';
 import { DeepPartial, getRepository, IsNull, Not, Repository } from 'typeorm';
 import { dalcomGradeMap, WRRecordEntry } from './dalcom';
@@ -52,9 +53,8 @@ export async function fetchAndInsertSWRForGameAndSeason(
     const label = `${game.key}/${season.dalcomSeasonId}/${song.internalSongId}/${song.album}/${song.name}`;
     responseText.push(`Fetching ${label}`);
     const endpoint = buildUrl(song.internalSongId);
-    const { default: got, HTTPError } = await import('got');
-    const resp = await got(endpoint).catch(e => {
-      if (e instanceof HTTPError && e.response.statusCode === 403) {
+    const resp = await axios(endpoint).catch(e => {
+      if (axios.isAxiosError(e) && e.response.status === 403) {
         responseText.push(`[SKIP] Song has no WR`);
         return 'skip';
       }
@@ -77,14 +77,14 @@ export async function fetchAndInsertSWRForGameAndSeason(
       responseText.push(errStr);
       continue;
     }
-    if (!resp.body) {
+    if (!resp.data) {
       const errStr = `Song ${song.internalSongId} Empty body?`;
       console.error(errStr);
       responseText.push(errStr);
       continue;
     }
 
-    const rankingData: WRRecordEntry[] = JSON.parse(resp.body);
+    const rankingData: WRRecordEntry[] = JSON.parse(resp.data);
     writeRankingDataToCache(
       game,
       song,
