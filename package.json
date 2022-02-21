@@ -48,7 +48,7 @@
     "reflect-metadata": "^0.1.13",
     "tmp-promise": "^3.0.3",
     "tslib": "^2.3.1",
-    "typeorm": "^0.2.43"
+    "typeorm": "0.2.43"
   },
   "peerDependencies": {
     "mysql2": "^2.3.3"
